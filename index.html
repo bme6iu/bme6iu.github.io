@@ -991,9 +991,163 @@
       color: var(--text-muted);
     }
     .info-banner-icon { font-size: 1.4rem; flex-shrink: 0; }
-  </style>
+  
+  /* ── LIGHT THEME ── */
+  [data-theme="light"] {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8edf3;
+    --border: rgba(0,100,200,0.15);
+    --accent: #0066cc;
+    --accent2: #00995c;
+    --accent3: #6d28d9;
+    --text: #0d1e33;
+    --text-muted: #3a5a7a;
+    --text-dim: #8aabcc;
+    --glow: rgba(0,100,200,0.1);
+    --card-bg: rgba(255,255,255,0.9);
+  }
+  [data-theme="light"] body::before {
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(0,120,255,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 80%, rgba(100,50,200,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(0,180,120,0.04) 0%, transparent 70%);
+  }
+  [data-theme="light"] body::after {
+    background-image:
+      linear-gradient(rgba(0,100,200,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,100,200,0.05) 1px, transparent 1px);
+  }
+  [data-theme="light"] nav { background: rgba(240,244,248,0.92); }
+  [data-theme="light"] .modal-box { background: #fff; }
+  [data-theme="light"] .modal-header,
+  [data-theme="light"] .modal-bottom-bar { background: #e8edf3; }
+  [data-theme="light"] .modal-iframe { background: #fff; }
+  [data-theme="light"] footer { background: #e8edf3; }
+  [data-theme="light"] .chapter-block { background: rgba(255,255,255,0.9); }
+  [data-theme="light"] .teacher-photo-placeholder { background: linear-gradient(135deg,rgba(0,100,200,0.2),rgba(100,50,200,0.2)); }
+  [data-theme="light"] .course-hero { background: #e8edf3; }
+
+  /* ── THEME SWITCH BUTTON ── */
+  #themeSwitchBtn {
+    position: fixed;
+    top: 14px;
+    right: 60px;
+    z-index: 1100;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0,200,255,0.10);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  #themeSwitchBtn:hover { background: rgba(0,200,255,0.22); transform: scale(1.1); }
+
+  /* ── INTRO ANIMATION OVERLAY ── */
+  #introOverlay {
+    position: fixed;
+    inset: 0;
+    background: #050d1a;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    animation: introFadeOut 0.6s ease 3.5s forwards;
+  }
+  @keyframes introFadeOut {
+    to { opacity: 0; pointer-events: none; visibility: hidden; }
+  }
+  .intro-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem,5vw,3rem);
+    font-weight: 800;
+    color: #00c8ff;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: introSlideUp 0.6s ease 0.3s forwards;
+  }
+  .intro-logo span { color: #00ff9d; }
+  .intro-byline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.78rem, 2vw, 0.95rem);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    max-width: 420px;
+    line-height: 1.7;
+    padding: 0 20px;
+    opacity: 0;
+    animation: introSlideUp 0.6s ease 0.7s forwards;
+  }
+  .intro-byline strong {
+    color: #00c8ff;
+    font-weight: 600;
+  }
+  .intro-bar {
+    width: 200px;
+    height: 2px;
+    background: rgba(0,200,255,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+    animation: introSlideUp 0.5s ease 1.1s forwards;
+  }
+  .intro-bar-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #00c8ff, #00ff9d);
+    border-radius: 2px;
+    animation: introBarFill 2s ease 1.3s forwards;
+  }
+  @keyframes introBarFill { to { width: 100%; } }
+  @keyframes introSlideUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .intro-ecg {
+    opacity: 0;
+    animation: introSlideUp 0.5s ease 0.5s forwards;
+  }
+  .intro-ecg-path {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: drawIntroECG 1.5s ease 0.9s forwards;
+  }
+  @keyframes drawIntroECG {
+    to { stroke-dashoffset: 0; }
+  }
+
+</style>
 </head>
 <body>
+
+<!-- ── INTRO ANIMATION OVERLAY ── -->
+<div id="introOverlay" role="presentation" aria-hidden="true">
+  <div class="intro-logo">BME<span>6</span>·IU</div>
+  <svg class="intro-ecg" width="280" height="40" viewBox="0 0 280 40" fill="none">
+    <path class="intro-ecg-path"
+      d="M0,20 L45,20 L52,20 L58,4 L64,36 L70,20 L100,20 L107,20 L113,4 L119,36 L125,20 L155,20 L162,2 L168,38 L174,20 L204,20 L211,7 L217,33 L223,20 L280,20"
+      stroke="#00c8ff" stroke-width="1.5" fill="none"/>
+  </svg>
+  <div class="intro-byline">
+    This website is designed and maintained by<br>
+    <strong>Md. Minhazur Rahman Mahim</strong><br>
+    <span style="font-size:0.8rem;color:rgba(255,255,255,0.35);">6th Batch · Dept. of Biomedical Engineering · Islamic University</span>
+  </div>
+  <div class="intro-bar"><div class="intro-bar-fill"></div></div>
+</div>
+
+<!-- ── THEME SWITCH BUTTON ── -->
+<button id="themeSwitchBtn" title="Toggle Light/Dark Mode" onclick="toggleTheme()">🌙</button>
+
 
 <!-- Animated background particles -->
 <div class="particles" id="particles"></div>
@@ -1465,76 +1619,1753 @@
     </div>
   </div>
 
-  <!-- Generic course pages for remaining courses (1103–3109) -->
-  <!-- These will be handled by the JS generic course renderer -->
-  <div class="page" id="page-course-generic">
-    <div id="generic-course-content"></div>
-  </div>
-
-  <!-- ════════════════════════════════ TEACHERS PAGE ════════════════════════════════ -->
-  <div class="page" id="page-teachers">
+  <!-- ══ EEE-1103 ══ -->
+  <div class="page" id="page-course-1103">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.1 / <span style="color:var(--text-muted)">EEE-1103</span></div>
+        <div class="course-badge">EEE-1103 · 1st Year, 1st Semester</div>
+        <h2 class="course-title">Electrical Fundamentals for Biomedical Engineering</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the First Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Dr. Md Khairul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Chairman, Associate Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1s38CFoY_GtBaIwHmxHxAIS5YqhQujxXD/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1YHlxvUNOxjm5LdEtdSQx2Mr8OEX1ibXD/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Course Book</a></div>
+        
+      </div>
+    </div>
     <div class="section">
-      <div class="section-title">Teacher's <span>Index</span></div>
-      <div class="section-subtitle">Department of Biomedical Engineering, Islamic University</div>
-
-      <div class="teachers-grid">
-        <div class="teacher-card">
-          <img src="images/dr-khairul-islam.jpg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Dr. Md. Khairul Islam" />
-          <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
-          <div class="teacher-name">Dr. Md. Khairul Islam</div>
-          <div class="teacher-role">Chairman<br>Associate Professor</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Electrical Fundamentals for Biomedical Engineering</span>
+          <span class="chapter-toggle">▼</span>
         </div>
-
-        <div class="teacher-card">
-          <img src="images/md-rabiul-islam.jpg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Md Rabiul Islam" />
-          <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
-          <div class="teacher-name">Md Rabiul Islam</div>
-          <div class="teacher-role">Assistant Professor</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
-        </div>
-
-        <div class="teacher-card">
-          <img src="images/sm-jahurul-haque.png" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="S M Jahurul Haque" />
-          <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
-          <div class="teacher-name">S M Jahurul Haque</div>
-          <div class="teacher-role">Assistant Professor</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
-        </div>
-
-        <div class="teacher-card">
-          <img src="images/ariful-islam.jpg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Ariful Islam" />
-          <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
-          <div class="teacher-name">Ariful Islam</div>
-          <div class="teacher-role">Assistant Professor</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
-        </div>
-
-        <div class="teacher-card">
-          <img src="images/md-abu-sayed.jpg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Md. Abu Sayed" />
-          <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
-          <div class="teacher-name">Md. Abu Sayed</div>
-          <div class="teacher-role">Lecturer</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
-        </div>
-
-        <div class="teacher-card">
-          <img src="images/afiya-mubasharah.jpg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Afiya Mubasharah" />
-          <div class="teacher-photo-placeholder" style="display:none">👩‍🏫</div>
-          <div class="teacher-name">Afiya Mubasharah</div>
-          <div class="teacher-role">Lecturer</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
-        </div>
-
-        <div class="teacher-card">
-          <img src="images/sathi-rahman.jpeg" class="teacher-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Sathi Rahman" />
-          <div class="teacher-photo-placeholder" style="display:none">👩‍🏫</div>
-          <div class="teacher-name">Sathi Rahman</div>
-          <div class="teacher-role">Lecturer</div>
-          <div class="teacher-dept">Dept. of Biomedical Engineering<br>Islamic University</div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the provided course book</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1YHlxvUNOxjm5LdEtdSQx2Mr8OEX1ibXD/preview','EEE-1103 Course Book')">📄 View Book</button></div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ══ CHE-1105 ══ -->
+  <div class="page" id="page-course-1105">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.1 / <span style="color:var(--text-muted)">CHE-1105</span></div>
+        <div class="course-badge">CHE-1105 · 1st Year, 1st Semester</div>
+        <h2 class="course-title">Physical and Inorganic Chemistry</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the First Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Dr. Md. Azizul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Associate Professor, Dept. of Biotechnology and Genetic Engineering, IU <a href="https://drive.google.com/file/d/1pmqlbpbLScT06I_lsjC2lOYsIQV1gt9c/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/13QuaLKBbrt9wS9MaH9PYyJ4KjNfHvDOK/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Course Book</a></div>
+        
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Physical and Inorganic Chemistry</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the provided course book</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/13QuaLKBbrt9wS9MaH9PYyJ4KjNfHvDOK/preview','CHE-1105 Course Book')">📄 View Book</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MATH-1107 ══ -->
+  <div class="page" id="page-course-1107">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.1 / <span style="color:var(--text-muted)">MATH-1107</span></div>
+        <div class="course-badge">MATH-1107 · 1st Year, 1st Semester</div>
+        <h2 class="course-title">Applied Mathematics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the First Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/11Aad5uNIm3U4JSlgCCx7hs-1MzyBTk1l/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Advanced Engineering Mathematics</a><a href="https://drive.google.com/file/d/1CiQJsR5RafArvQQrV6aTy5n6ySF7sCLl/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Numerical Analysis</a><a href="https://drive.google.com/file/d/1km3H1jbOevfaB-84CIKuLlBrX76KJjCB/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Differential Calculus</a></div>
+        
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Applied Mathematics</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the provided books</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/11Aad5uNIm3U4JSlgCCx7hs-1MzyBTk1l/preview','Advanced Engineering Mathematics')">📄 Book 1</button></div>
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Numerical Analysis</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1CiQJsR5RafArvQQrV6aTy5n6ySF7sCLl/preview','Numerical Analysis')">📄 Book 2</button></div>
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Differential Calculus</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1km3H1jbOevfaB-84CIKuLlBrX76KJjCB/preview','Differential Calculus')">📄 Book 3</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HUM-1109 ══ -->
+  <div class="page" id="page-course-1109">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.1 / <span style="color:var(--text-muted)">HUM-1109</span></div>
+        <div class="course-badge">HUM-1109 · 1st Year, 1st Semester</div>
+        <h2 class="course-title">Communicative Skills</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the First Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Lectures</span>
+          <span class="chapter-name">Class Lectures</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Listening 1</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/15XCxMxtSLLLvDeY1v3FviJGd-h2sWZvw/preview','HUM-1109 – Listening 1')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Listening 2</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ItSWbFfdyhcxc7Qiytcw-litDD76uv8S/preview','HUM-1109 – Listening 2')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EEE-1201 ══ -->
+  <div class="page" id="page-course-1201">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.2 / <span style="color:var(--text-muted)">EEE-1201</span></div>
+        <div class="course-badge">EEE-1201 · 1st Year, 2nd Semester</div>
+        <h2 class="course-title">Electronics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the First Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1FrrGm5Vck6tt5W6Z7cAKahLJZ_QJzMvN/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Principles of Electronics</a><a href="https://drive.google.com/file/d/1tq5r0Bxndhs4GiM0NMIZ9aQLeTu3Nh61/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 A Textbook of Electrical Technology Vol IV</a><a href="https://drive.google.com/file/d/16CHypeW8E5KcOIMy2kLTQEU4w-6vqTVo/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Fundamentals of Electric Circuits</a></div>
+        <a href="https://drive.google.com/drive/folders/1iDRd9InVHtIZ_TD0htET87xABXmpnLfH?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Semiconductor Diodes</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1 (Part 1)</span><span class="lec-label">Semiconductor Diodes (Part 1)</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/15bZJTH8Xl25n6-0MeTvQs75V-hy10u7e/preview','BME-1201 – Semiconductor Diodes (Part 1)')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 1 (Part 2)</span><span class="lec-label">Semiconductor Highlighted</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1vTNueOT6YVXIt404JgWNkonuttHS7rj5/preview','BME-1201 – Semiconductor Highlighted')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Semiconductor Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1eHERdktKFHF6rupo52NpxZh33kSaDDLx/preview','BME-1201 – Semiconductor Diodes')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Semiconductor Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1m-PiV0o1XXUzC8iDRS7CZTVklvZJR2-4/preview','BME-1201 – Semiconductor Diodes')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Semiconductor Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1kgXIkR8aTbLyKYPKylYDnQN3sSSzTTa3/preview','BME-1201 – Semiconductor Diodes')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Semiconductor Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1rnixkJiedvSg6G9CJNlmaTkdT6qM-oKx/preview','BME-1201 – Semiconductor Diodes')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Special Diodes and Optoelectronic Devices</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Special Diodes and Optoelectronic Devices</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1IFM6mYTN5YaZGNFB5dbTCf7Fx6JUxxOm/preview','BME-1201 – Special Diodes and Optoelectronic Devices')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Special Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Zr9G_QPVQb8ztzAxR0cIEjTH8zKe4aQP/preview','BME-1201 – Special Diodes')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Special Diodes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/16uzgjhKT1tq2v5FcfqahwgjrPexq2X06/preview','BME-1201 – Special Diodes')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">DC Power Supply</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">DC Power Supply</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1DHAD7sDia2VGkUBLbPUphjpKX7vb6_w6/preview','BME-1201 – DC Power Supply')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">DC Power Supply</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/17P3S5x69b4CFqOE70isKXJBum21NgjM5/preview','BME-1201 – DC Power Supply')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Bipolar Junction Transistor</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Bipolar Junction Transistor</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/15i29FrSLEeYW-JqZN3KmiwoZkMA6A-2O/preview','BME-1201 – Bipolar Junction Transistor')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Bipolar Junction Transistor</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1LLbtqfgxpZ9T2FlgON9croNF26Rq7WhV/preview','BME-1201 – Bipolar Junction Transistor')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Transistor Amplifiers</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Transistor Amplifiers</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1QxsdLh7rF7EgncKNjvmLxLQzdniO6s50/preview','BME-1201 – Transistor Amplifiers')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Transistor Amplifiers</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Hzhm9VvQTJ33wayl8Tb-WJSEkwATZ4OE/preview','BME-1201 – Transistor Amplifiers')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Oscillators</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Oscillators</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1eVvLIbzftrkoYIzTYRN3p7AvqjNNfqd4/preview','BME-1201 – Oscillators')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Operational Amplifiers</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Operational Amplifiers</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1dg_hIyzvXSHBY2pDNe2GR9EUEsEKh0JW/preview','BME-1201 – Operational Amplifiers')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Operational Amplifiers</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1XyFia7prR0iI0fEjZU2_oyLS2cjdwQJM/preview','BME-1201 – Operational Amplifiers')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Extra PDF 1</span><span class="lec-label">Extra Reference</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1GvEcJw515pLRm0ekl-yiIxp6ww_SKyuI/preview','BME-1201 – Extra Reference')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Extra PDF 2</span><span class="lec-label">Extra Reference</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1e6aqorbl526EfypXr08Ergm2Rcd9qeFs/preview','BME-1201 – Extra Reference')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CHE-1203 ══ -->
+  <div class="page" id="page-course-1203">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.2 / <span style="color:var(--text-muted)">CHE-1203</span></div>
+        <div class="course-badge">CHE-1203 · 1st Year, 2nd Semester</div>
+        <h2 class="course-title">Biochemistry</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the First Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">S M Jahurul Haque</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1aews5vvVDX0FzFREK7g7czjJo-S7LZzk/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1LkgG1DOCw3ubTZ3_6rGmYz-IK-IDw69J/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Principles of Biochemistry</a></div>
+        <a href="https://drive.google.com/drive/folders/1nyCW4Qtu10tqTdZVp315qBpbE76IVzwQ?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1nN9cJEk32OKmSUQuCNVUmaYXP0k5YYeo/preview','CHE-1203 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1P7-dsAq04rCE1-zRfpAWQjxN0nAih8bp/preview','CHE-1203 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Carbohydrate</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Carbohydrate</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1JXVzWc-hpEiATa_qamjj9Ww11d3IR-Lu/preview','CHE-1203 – Carbohydrate')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Carbohydrate</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1P7j_1npxHpMjwxCSMnRZxtdG9LpEhQs2/preview','CHE-1203 – Carbohydrate')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Carbohydrate</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1cw50sbQK2u2wFSGyVoEhrsOj0zWXLN5f/preview','CHE-1203 – Carbohydrate')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Protein</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Protein</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1JVFKlY_b6dK9to0JhTk02SZe0Sl5eanP/preview','CHE-1203 – Protein')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Protein</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1cSB9tSdh6HP7UvPtkAGOi1v13fApYT_e/preview','CHE-1203 – Protein')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Protein</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZdIXnrZ5vfFyyoOqEtSE3SRssHSFBRK4/preview','CHE-1203 – Protein')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Lipid</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Lipid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1lwYC57unGzA8_8djIKHpUuy6lrWxIOf0/preview','CHE-1203 – Lipid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Lipid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Gt9H-qpQg8raCZcJriLpTBkBqvx_00Vw/preview','CHE-1203 – Lipid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Lipid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1aaVJk_VDk5FuXf5g54uW5iAhgNr1tmYC/preview','CHE-1203 – Lipid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Lipid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1xjSd_lXJhJ-2eMOG3BPPa_iQqUHGNJyY/preview','CHE-1203 – Lipid')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Nucleic Acid</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Nucleic Acid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1-MA4JEG-SHB5OOVZW8VHmhV1E9KAx4J3/preview','CHE-1203 – Nucleic Acid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Nucleic Acid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1x6iSKTOAOKpZkISJQAj33Ny_xJ5zJugX/preview','CHE-1203 – Nucleic Acid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Nucleic Acid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1-W3ufgo4kWrLn3AqkkKxO40TvdcMltHL/preview','CHE-1203 – Nucleic Acid')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Nucleic Acid</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1SeW26aTFVDdVEQg2V_6BWm-Jygc0n2YD/preview','CHE-1203 – Nucleic Acid')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ICT-1205 ══ -->
+  <div class="page" id="page-course-1205">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.2 / <span style="color:var(--text-muted)">ICT-1205</span></div>
+        <div class="course-badge">ICT-1205 · 1st Year, 2nd Semester</div>
+        <h2 class="course-title">Basic Computer and Information Technology</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the First Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1KaGY2nsL4KA86FTch5EAeZfFiq2FYeBC/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Using Information Technology 9th Edition</a></div>
+        <a href="https://drive.google.com/drive/folders/1SjQVpxmBrMPPrDlo_egFCSzp_F7cKXei?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1qnw3fmuoiWm8Nk3nTmn6wEhQttUF2zWn/preview','ICT-1205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1OAwzQuNgosm_1a1y0fLIZDDLdgC489B1/preview','ICT-1205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1-himfC15o_bc-kfDej2MXr3hE5RvoZLY/preview','ICT-1205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uns-z6GOanA_nvYY9zOkqA9MQHcvKjeQ/preview','ICT-1205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1T8opjycRKWZU9zF5KDJhBjcojW-hyrsM/preview','ICT-1205 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Computer Systems</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Computer Systems</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1AyAE5yFQ4xB9M4N2RKYgfoN1jnDpvTNV/preview','ICT-1205 – Computer Systems')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Computer Hardware</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Computer Hardware</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1u-KWVzaHhQETf3ySp9-L3wbzkAX7cdFt/preview','ICT-1205 – Computer Hardware')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Computer Hardware</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1c3W4P_gWjtkJrWdxtGgiBDP_8S05rqYK/preview','ICT-1205 – Computer Hardware')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Computer Software</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Computer Software</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1U1RVWRrXj7zZ4XsgnYv4snMft8eY5m8c/preview','ICT-1205 – Computer Software')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Computer Software</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/12R0HEc72lGA03NlA_P1E6NvmOfVIFzIq/preview','ICT-1205 – Computer Software')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Basic Communication Systems</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Basic Communication Systems</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1IWjYjYRPxB523RbbAjZ13VFD7y3EWd3A/preview','ICT-1205 – Basic Communication Systems')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">IoT</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">IoT</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1KneBKEn-34BeNOAgFVFI2EEtr1uuJx__/preview','ICT-1205 – IoT')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Real-Life IT Applications</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Real-Life IT Applications</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1yopz8qPONu6yMx3NL2MRXr8xV3DE8571/preview','ICT-1205 – Real-Life IT Applications')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Real-Life IT Applications</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1mNRBXS18xiCFPthYf5mMOJaCoFR5eJ4Q/preview','ICT-1205 – Real-Life IT Applications')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Real-Life IT Applications</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Xrk7ryzupu4jscmWAqqA8adBMLCZbAy2/preview','ICT-1205 – Real-Life IT Applications')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MATH-1207 ══ -->
+  <div class="page" id="page-course-1207">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.2 / <span style="color:var(--text-muted)">MATH-1207</span></div>
+        <div class="course-badge">MATH-1207 · 1st Year, 2nd Semester</div>
+        <h2 class="course-title">Mathematics for Engineering</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the First Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Dr. Atish Kumar Joardar</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Associate Professor, Dept. of Math, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1KG0MJUeeI14ZfgQgqvd0rZN60DccykOQ?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1 & 2</span>
+          <span class="chapter-name">Beta and Gamma functions and Differential Calculus</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Beta and Gamma functions and Differential Calculus</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1LIpIVjWgYPkuRvVrBqJMvXzexkCk5Guu/preview','MATH-1207 – Beta and Gamma functions and Differential Calculus')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Differential Calculus</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZpUZCA-h3S2WYZWAjHiFYVy6KcVOcWis/preview','MATH-1207 – Differential Calculus')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Differential Calculus</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/18R5MqWriprGuR_ii-1MATieIOM1IEhGP/preview','MATH-1207 – Differential Calculus')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Numerical solution of ordinary differential equations</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Numerical solution of ordinary differential equations</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1gQzE_l2C9vwc3MMgXdlVuurN5Y9lJS_V/preview','MATH-1207 – Numerical solution of ordinary differential equations')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HUM-1209 ══ -->
+  <div class="page" id="page-course-1209">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 1.2 / <span style="color:var(--text-muted)">HUM-1209</span></div>
+        <div class="course-badge">HUM-1209 · 1st Year, 2nd Semester</div>
+        <h2 class="course-title">Sociology and Economics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the First Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md. Humaun Kabir</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Assistant Professor, Dept. of Economics, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1JhZLboAcDhhYIVFkh3y405gLEsrgh1bI/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Modern Economic Theory</a><a href="https://drive.google.com/file/d/1a7zsFtYFxf2L1qpHWkUWMGB2tV8J_Eu1/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Sociology</a></div>
+        <a href="https://drive.google.com/drive/folders/1-gQMXc8tFDH_bsKZIV8pdcwrvo72eomk?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Economics Ch.1</span>
+          <span class="chapter-name">Economics – Chapter 1</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Chapter</span><span class="lec-label">Economics Ch.1</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sgU7eIM6Zc5DRvoBtG_-pTEnqTexp3XL/preview','HUM-1209 – Economics Ch.1')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Economics Ch.2</span>
+          <span class="chapter-name">Economics – Chapter 2</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Economics Ch.2</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1xNjcG75J6VXPyrWZSloIKnx40WUu76NC/preview','HUM-1209 – Economics Ch.2')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Economics Ch.2</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1la-MLA3FjOSTThuAbpwDyhClxDze05op/preview','HUM-1209 – Economics Ch.2')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Economics Ch.3</span>
+          <span class="chapter-name">Economics – Chapter 3</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Economics Ch.3</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1fpYzKyxosxnBsUC6YO2WUf5xEtkvLeOU/preview','HUM-1209 – Economics Ch.3')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Economics Ch.3</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1gLEYGKaJcRotOsUg8Vk8Thrt7CZFqRyC/preview','HUM-1209 – Economics Ch.3')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Economics Ch.4</span>
+          <span class="chapter-name">Economics – Chapter 4</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1 & 2</span><span class="lec-label">Economics Ch.4</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1W3os8KtSpp0vDWHBZ9uMm8TVQkJEH6I1/preview','HUM-1209 – Economics Ch.4')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Economics Ch.5</span>
+          <span class="chapter-name">Economics – Chapter 5</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Economics Ch.5</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sfUASnsF86z8mE4qaC5gf_DjBMBWpZSJ/preview','HUM-1209 – Economics Ch.5')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Economics Ch.5</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sVnIGr0JFr2o3c6JMp_olUTmtyvERkv7/preview','HUM-1209 – Economics Ch.5')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Sociology Ch.6</span>
+          <span class="chapter-name">Sociology – Chapter 6</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Sociology Ch.6</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1JxkB7Jcf8fgG88HlbTzeyZ3OW6wRMssB/preview','HUM-1209 – Sociology Ch.6')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Sociology Ch.7</span>
+          <span class="chapter-name">Sociology – Chapter 7</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Sociology Ch.7</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1vkDjHlnX3oh4xSNp5IWI5tc9uywFLCwZ/preview','HUM-1209 – Sociology Ch.7')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BIO-2101 ══ -->
+  <div class="page" id="page-course-2101">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.1 / <span style="color:var(--text-muted)">BIO-2101</span></div>
+        <div class="course-badge">BIO-2101 · 2nd Year, 1st Semester</div>
+        <h2 class="course-title">Human Anatomy and Physiology</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Second Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">S M Jahurul Haque</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1YOXMAvAtieH7fqd2--W1dAoqH2a1G5fQ/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Lauralee Sherwood – Human Physiology</a></div>
+        <a href="https://drive.google.com/drive/folders/1JY1RmT6kllHP9f_rHylHU4IDZXnOHQ6E?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Organization of Human Body</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Organization of Human Body</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1FOdU2Fwo_zXgogWgYpOaSmOy48yH_nsz/preview','BIO-2101 – Organization of Human Body')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Cardiovascular System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Cardiovascular System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1FW366cUSTnkfsKcT-YgbXSyp6NoIPDm2/preview','BIO-2101 – Cardiovascular System')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Cardiovascular System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1PfDXTfPSrmbgk2zrCjZDYr6dw8_kTcuj/preview','BIO-2101 – Cardiovascular System')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Respiratory System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Respiratory System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1W--LJ8BBio2hfxDdh0PKziQQ_dVsvk9Z/preview','BIO-2101 – Respiratory System')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Respiratory System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1SA3A1p_ahQDwa664Hkk7Oeiwn5iWR39T/preview','BIO-2101 – Respiratory System')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Respiratory System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/156Td_DYbbwRAhD8wKRhctOChHYrF8qSD/preview','BIO-2101 – Respiratory System')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Blood</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Blood</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZIUSt-hmeJoWcYq1norFaloJOXepFd5U/preview','BIO-2101 – Blood')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Muscle Physiology</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Muscle Physiology</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1W872rfTwku-nj2E1Yp2RXuFGg-MyWzNK/preview','BIO-2101 – Muscle Physiology')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Excretory System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Excretory System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1NTXKOKhdK9WGfHvUQi04wwulEtj6ETpl/preview','BIO-2101 – Excretory System')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Nervous System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Nervous System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ICanvshjey21EK0-DdSOrrUPKokX4ULY/preview','BIO-2101 – Nervous System')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CSE-2103 ══ -->
+  <div class="page" id="page-course-2103">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.1 / <span style="color:var(--text-muted)">CSE-2103</span></div>
+        <div class="course-badge">CSE-2103 · 2nd Year, 1st Semester</div>
+        <h2 class="course-title">Digital Electronics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Second Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Kazi Mowdud Ahmed</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Assistant Professor, Dept. of ICT, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1zAky1rhp4vsnnqKb9H5ykKHdyUAhSHbm/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Digital Systems</a></div>
+        <a href="https://drive.google.com/drive/folders/1Qlg69MO9hVq2YKdvo6mpK5WC9AfFgIne?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the book Digital Systems</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1zAky1rhp4vsnnqKb9H5ykKHdyUAhSHbm/preview','Digital Systems Book')">📄 View Book</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Binary Codes</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1 & 2</span><span class="lec-label">Binary Codes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1tk1v8PFjsPYrfPq9YtPDMgq3CMlpawRq/preview','CSE-2103 – Binary Codes')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Binary Codes</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/165gs0yVx_7ApDGaRB8eEY1_P5YesYyvD/preview','CSE-2103 – Binary Codes')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Boolean Algebra Logic Gates</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the book Digital Systems</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1zAky1rhp4vsnnqKb9H5ykKHdyUAhSHbm/preview','Digital Systems')">📄 View Book</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Combinational Logic Circuit & Design</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Combinational Logic Circuit & Design</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1WryZTi-G8p7_XczhpMOKATLB2fL778Vh/preview','CSE-2103 – Combinational Logic Circuit & Design')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Combinational Logic Circuit & Design</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1P-q4xRm7PxwDEEySJeuoCZ80_3qbijg9/preview','CSE-2103 – Combinational Logic Circuit & Design')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Combinational Logic Circuit & Design</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1BdojYcKdVdCgxMC-_VJBGKnhVOeeLrqF/preview','CSE-2103 – Combinational Logic Circuit & Design')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Sequential Logic Circuits</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📘</span><span class='lec-label'>Read from the book Digital Systems</span><button class='view-btn' onclick="openDoc('https://drive.google.com/file/d/1zAky1rhp4vsnnqKb9H5ykKHdyUAhSHbm/preview','Digital Systems')">📄 View Book</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Registers and Memories</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📌</span><span class='lec-label'>Suggestion provided in class</span></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Logic Families</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class='lecture-row'><span class='lec-num'>📌</span><span class='lec-label'>Suggestion provided in class</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CSE-2105 ══ -->
+  <div class="page" id="page-course-2105">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.1 / <span style="color:var(--text-muted)">CSE-2105</span></div>
+        <div class="course-badge">CSE-2105 · 2nd Year, 1st Semester</div>
+        <h2 class="course-title">Programming Concepts and Python</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the Second Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1VdGr_hGjZd1rwtHXZEAKCrlCroTUgJ7I?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction to Computer Programming and Data Structure</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction to Computer Programming and Data Structure</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1FXx70bfYfAl6N7Xt26bOewNzsrhwJEzi/preview','CSE-2105 – Introduction to Computer Programming and Data Structure')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Data Structure</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1f2gZV3oabkDfcaI3xSEjoxqVYwyn-0h-/preview','CSE-2105 – Data Structure')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Data Structure</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1MmLsFXltc0uh_AgwL5brepou9T3h3F4W/preview','CSE-2105 – Data Structure')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Data Structure</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/128tXOJ1IaLxTfPE59TSB_8rZ3vEV4KNr/preview','CSE-2105 – Data Structure')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Data Structure</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1vLT3x83_0APh_gSJKOCaz-ayhiETOCS_/preview','CSE-2105 – Data Structure')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2, 3 & 4</span>
+          <span class="chapter-name">Data Types, Variables, Operators, Loops, Lists, Tuples, Dictionaries</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Data Types, Variables, Basic I/O, Operators, Boolean, Loops, Lists, etc.</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1XM3cNsty_-zPVf9b51v41Q1hLBMl_U0L/preview','CSE-2105 – Data Types, Variables, Basic I/O, Operators, Boolean, Loops, Lists, etc.')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Ch.4 Part</span><span class="lec-label">4th Chapter Additional Lecture</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uvkWBSqi6Obw95-vfAlRgvrrqwi9Flzb/preview','CSE-2105 – 4th Chapter Additional Lecture')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">OOP, Exception Handling, and Working with Files</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">OOP, Exception Handling, Working with Files</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1pIIAgK1gRAZNjgvAei3EVmCSIIngsKWb/preview','CSE-2105 – OOP, Exception Handling, Working with Files')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">OOP</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1HE2H_Wm8-_2VbItZdRBM4HF8gP_eMZM1/preview','CSE-2105 – OOP')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">OOP</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1JDwr8oIqED9OYYHV7B2HKL_w9NR0pX1c/preview','CSE-2105 – OOP')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PHY-2107 ══ -->
+  <div class="page" id="page-course-2107">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.1 / <span style="color:var(--text-muted)">PHY-2107</span></div>
+        <div class="course-badge">PHY-2107 · 2nd Year, 1st Semester</div>
+        <h2 class="course-title">Waves and Oscillations, Optics and Thermal Physics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the Second Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Prof. Md. Khalilur Rahman</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Professor, Dept. of Electrical and Electronic Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1WVeHt2PS96SnjHSVeVGQxGFc4GLm_YCB/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 A textbook of Sound</a><a href="https://drive.google.com/file/d/1fpEFZQxvkUP-7BGLChtytmEgHh4WE7hu/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 A textbook of Optics</a><a href="https://drive.google.com/file/d/15KR7Akup5_R97EI9IWoD0kGbPjzvCKGd/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Heat Thermodynamics and Statistical Physics</a></div>
+        <a href="https://drive.google.com/drive/folders/1CnK7LFkaKC0m6_9m8Eewb6WIwiKeL9Ol?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Waves and Oscillations</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Waves and Oscillations</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1gzLjmSozS65vHP580KQP6819l3JpusFx/preview','PHY-2107 – Waves and Oscillations')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Optics</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Optics</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1KSDIk__BsK_fEeSUHVh2vKj9sv5t9Vq7/preview','PHY-2107 – Optics')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Thermal Physics</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Thermal Physics</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1hBY3bko82fKYuDrkjzlKL5qTdCb0je7r/preview','PHY-2107 – Thermal Physics')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HUM-2109 ══ -->
+  <div class="page" id="page-course-2109">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.1 / <span style="color:var(--text-muted)">HUM-2109</span></div>
+        <div class="course-badge">HUM-2109 · 2nd Year, 1st Semester</div>
+        <h2 class="course-title">Managerial and Financial Accounting</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the Second Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Mithun Bairagi</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Lecturer, Dept. of Finance and Banking, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1aIzFSP05F0tY-9SkVzgthNFkAEUOsfid?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Financial Accounting</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Financial Accounting</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Vi1tsAHDYFUHZL-Zjo6WQPAo2MxOq5Cs/preview','HUM-2109 – Financial Accounting')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Financial Accounting</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1M5Qs5-XfXgnCQHg7sF4SgXuxjW_SoZMS/preview','HUM-2109 – Financial Accounting')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Recording System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Recording System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1XHVRr-UjrW0sBbFLOcugiBUGygjCilcs/preview','HUM-2109 – Recording System')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Financial Statements Analysis and Interpretation</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Financial Statements Analysis and Interpretation</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1jo2-KRPjAlF7yzpB4YeG1f2Dh4IwIFsH/preview','HUM-2109 – Financial Statements Analysis and Interpretation')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Financial Statements Analysis</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Cspcr4Yj3XlVZ85GLz-CFPHhSfCM8Bva/preview','HUM-2109 – Financial Statements Analysis')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Costs and Management Accounting</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Costs and Management Accounting</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1BcAaFQkQRGkx5c_kkxf-zdgePCtaNNYf/preview','HUM-2109 – Costs and Management Accounting')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BME-2201 ══ -->
+  <div class="page" id="page-course-2201">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.2 / <span style="color:var(--text-muted)">BME-2201</span></div>
+        <div class="course-badge">BME-2201 · 2nd Year, 2nd Semester</div>
+        <h2 class="course-title">Structure and Properties of Biomaterials</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Second Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1ItCfTCiz9-f9_eVVF9ue2agCRaa3OIhb?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1pcrr2Fxq5Os4F8lptw0Pmczz1DDRyq_9/preview','BME-2201 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1vJ1Z64CMc6QGC76dvpt-GmIoWoCPlJQ_/preview','BME-2201 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1N5Hz1Wc3BQ8UULOsFUNIDxbljRrVmJGs/preview','BME-2201 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Qw3VBIM2EawUtS45kwa5Ctdi65pWaOH6/preview','BME-2201 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1gtQbJ_HwfCH84pfuYQI36GXZ-evcGE3d/preview','BME-2201 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 6</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1SGONvtl_LOHxlHhCOqF64ki_pxiSHUxk/preview','BME-2201 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Properties and Applications of Metallic Biomaterials and its Biocompatibility</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1GflHpXtPzFa8pib2Y-a04Kq2L1UQqOen/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1anE_vzdsjPyk_OXHv7oziiDwOQKFXTsR/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/16DMCHzuiVwZd4itS6UxtYh4EGWgYZ20X/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1i5y75RHqWH6dBHYzxjorJVjSPHQ1wYxH/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1XU3uzQivNbi4oCTw4wS1xeGdfVMI_DPN/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 6</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Es3aq3h7XASwwXP9ROcbdtF6iPnm1KhM/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 7</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ICQCxPJ2fhe_HKHTvBggQVVaQVN-jKX4/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 8</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1AdiMAn1PzaPG8GLUx1nUiQxCgRp4yddZ/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 9</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Q6BbXOhMZC4Yffn-A4PhIxwbCme50gPR/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 10</span><span class="lec-label">Metallic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Ur664G6NCzCHe8POnYk-RLj0kdbVX5f8/preview','BME-2201 – Metallic Biomaterials')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Properties and Applications of Polymeric Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Polymeric Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1NvO_k9PipiWO01UQGhGmMx3jaA-ZZNyy/preview','BME-2201 – Polymeric Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Polymeric Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/17CO9xyzHOtV7k8FzXhUuCqIXwcjfUytO/preview','BME-2201 – Polymeric Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Polymeric Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1_Wd2bh6tDqz7GoM8EE2rsC6_CHdsrVLW/preview','BME-2201 – Polymeric Biomaterials')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Composite Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Composite Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1gYailUQeneiglHSRegrVkCvaunl3jsvi/preview','BME-2201 – Composite Biomaterials')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Properties and Applications of Ceramic Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Ceramic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1zz37aV-ixPil-BrP9ngZQsy5mTIdGxXj/preview','BME-2201 – Ceramic Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Ceramic Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZX9ibQ2ijZ_tCq7KvG2NbN4sU1Q85JAo/preview','BME-2201 – Ceramic Biomaterials')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Properties and Applications of Degradable Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Degradable Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Xt-lPVjstdVd8uza0ZsgxTf723aFTxIN/preview','BME-2201 – Degradable Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Degradable Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/11ERt_EFmWZKbjTKE3FwlrXZ9xY49iufU/preview','BME-2201 – Degradable Biomaterials')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Biomaterials for Soft Tissue Replacements</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Soft Tissue Replacements</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1W8Y4L_xJkJtkRr1OWFROo0cI3WO5r3lm/preview','BME-2201 – Soft Tissue Replacements')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Soft Tissue Replacements</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1D5nPr42tPBy6BsXc_1tVD9a1bHFyS82W/preview','BME-2201 – Soft Tissue Replacements')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Soft Tissue Replacements</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1q2H4PJqV64c0VTlklB1IGSeWYbtu3cE4/preview','BME-2201 – Soft Tissue Replacements')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 8</span>
+          <span class="chapter-name">Techniques for characterization of Surface properties of Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1 (Part 1)</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1dFu7LPjsoeE4RAxXwRqORPwHyDhKN2vF/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 1 (Part 2)</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1qshkUyQUNXKjGQWS01m_2M1lrWyV-eDP/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uOSPjpJQvAXf8XDYUw44AxhVl9ejZq-3/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sjW10NvVLOFmS1RCsP4s9mCo7u9GRUVa/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1I5dFLJMe0D25u-MMoO35h_zjrY4IMqdH/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1FggDsGu9zCImpdU54-I-PndEpLKydafx/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 6</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1SlG7VmpkYi_q6OmfSoW5LmXAzgjZE4fh/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 7</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1TmvVem5Uo4Ou7a4OVCL095VB6_v0e-wW/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 8</span><span class="lec-label">Surface Properties Characterization</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZNUIdM_Boxzh2n1SVyOoQBSGbzxlboVF/preview','BME-2201 – Surface Properties Characterization')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 9</span>
+          <span class="chapter-name">Biological Testing of Biomaterials</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Biological Testing of Biomaterials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1eCkiFPd7-EyCXxdENOox_G2Wx-zza4HA/preview','BME-2201 – Biological Testing of Biomaterials')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Biological Testing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1jUbo_DAj3weAu04SjzthHk5fRNBvzQ6t/preview','BME-2201 – Biological Testing')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Biological Testing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1aGRdxN_pOxilkJJuSzOz8hf4ru_Nz-zp/preview','BME-2201 – Biological Testing')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Biological Testing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Qazx0Icl2gUDQVptJa7wn7-uz0F8TTNW/preview','BME-2201 – Biological Testing')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CSE-2203 ══ -->
+  <div class="page" id="page-course-2203">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.2 / <span style="color:var(--text-muted)">CSE-2203</span></div>
+        <div class="course-badge">CSE-2203 · 2nd Year, 2nd Semester</div>
+        <h2 class="course-title">Signal and Systems</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Second Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Dr. Md. Khairul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Chairman and Associate Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1cA5FQtBJPjseuALrR4nDAR5eyG_UQb5n/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Signal and Systems – Simon Haykin</a><a href="https://drive.google.com/file/d/18hwEvtL_YaS0t6MfF_2FGqgPkvREnwwE/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Signal and System – Tarun Kumar Rawat</a></div>
+        <a href="https://drive.google.com/drive/folders/18exsiaFDmu85a4SCYk9-VEbMssPnTF8V?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction to Signals and Systems</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction to Signals and Systems</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1UpEv4Lvxlcdrfa_u7bVQT-y2G8QR9vvq/preview','CSE-2203 – Introduction to Signals and Systems')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Full Chapter with Math</span><span class="lec-label">Introduction to Signals and Systems</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1fbZFeMjDJgu1EPyhPYmOyDwTpmZPLiEO/preview','CSE-2203 – Introduction to Signals and Systems')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">System Analysis</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Chapter with Math</span><span class="lec-label">System Analysis</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1AODguE0xh3XqGhrf9l2nnf4rfq-uqIW3/preview','CSE-2203 – System Analysis')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Fourier Analysis of Continuous Time Signals</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Chapter (Part 1)</span><span class="lec-label">Fourier Analysis of Continuous Time Signals</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1eho6aRTosdB8UAPhJgDFegzrUSXqCBdW/preview','CSE-2203 – Fourier Analysis of Continuous Time Signals')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Full Chapter (Part 2)</span><span class="lec-label">Fourier Analysis of Continuous Time Signals</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1-DUpj255F-bl5jTMRoEOYLSbD8hg6R8B/preview','CSE-2203 – Fourier Analysis of Continuous Time Signals')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Laplace Transform</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Chapter (Highlighted)</span><span class="lec-label">Laplace Transform</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1D0_Wakv5LtDwmTkjMeNmRP5TcyKBE3Xu/preview','CSE-2203 – Laplace Transform')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Z-Transformation</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Chapter (Highlighted)</span><span class="lec-label">Z-Transformation</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1VYo9fnWEIB6u7Nhhksd7jKkgmx7uqfIb/preview','CSE-2203 – Z-Transformation')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BIO-2205 ══ -->
+  <div class="page" id="page-course-2205">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.2 / <span style="color:var(--text-muted)">BIO-2205</span></div>
+        <div class="course-badge">BIO-2205 · 2nd Year, 2nd Semester</div>
+        <h2 class="course-title">Cell and Tissue Engineering</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the Second Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Prof. Dr. Rakibul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Professor, Dept. of Biotechnology and Genetic Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1MQ3-dYNx4IOUTytO4u-kA_aUc-joM5n7?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/17lunezsQ87KqRynv3up1rgJ-Og8m05xp/preview','BIO-2205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1BWdYFNjvWUzZHrNViWa7W3gA88ErqDQS/preview','BIO-2205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1xp-x1G8AMy1-3bP_lgNOKBlphZYvb3-e/preview','BIO-2205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uCEBy-ERM-GYBe2hfpz55udVD4rJFcPW/preview','BIO-2205 – Introduction')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/19x1D951wHCqlykbLp2Iq70u-JZVDYgkm/preview','BIO-2205 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Tissue Culture</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Tissue Culture</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1quMtd-6aUAHibmEcrq5Ou_bsPrM_iSUG/preview','BIO-2205 – Tissue Culture')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Tissue Culture</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1mHflVdcw4tSYBunlVwbYKBRR8fwNoKza/preview','BIO-2205 – Tissue Culture')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Tissue Culture</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1t5Zfu-aRL7Wi5qpe228L-9EgEqp4r8LQ/preview','BIO-2205 – Tissue Culture')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Tissue Regeneration</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1dcLlpRPF3oR1IOsv2xZ6i_JgUnI4pw4M/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1EHa4jrZd2MuaZcvwVPhDqYqRnEmOhgds/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/13NBxsBJPtrn_izAfFefLKcMdXqntLolg/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Jv-6jOkzDFpJdAg-6SJBXGX7V0sbdyP6/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 5</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/19y9GiWGCQYk9JUwVs4ha7SoMjnIG7yra/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 6</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/108EIIYOlFT7n6bZw8g_Xf5TFVsMSmIwt/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 7</span><span class="lec-label">Tissue Regeneration</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1cS5E3T-AMzGru_ZcV5_1KYyBZQ03bEgK/preview','BIO-2205 – Tissue Regeneration')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Tissue Engineering</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1lIFoFfO_JU_gmQH7WC4i5uXdqU2mDgk7/preview','BIO-2205 – Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/13UTWgulPXC00nEMrZ5JWwcWPrn1ZDPja/preview','BIO-2205 – Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1rZVNQkK5cjavKCJoWdbK9Fgc7TnJmKDE/preview','BIO-2205 – Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/11RlOw2rHMO867ZNJr6xZTVJRI5pu7m4s/preview','BIO-2205 – Tissue Engineering')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Cardiovascular Tissue Engineering</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Cardiovascular Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1SqNUpFn3YT8yvTDXaSrxifEu0wBrYDdy/preview','BIO-2205 – Cardiovascular Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Cardiovascular Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1eTABT86-MSIq_7LGY4ls9tRm3xMXxp-a/preview','BIO-2205 – Cardiovascular Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Cardiovascular Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1VQW-w4rW1cnf9d2HfSxCn8795uwL15U0/preview','BIO-2205 – Cardiovascular Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 4</span><span class="lec-label">Cardiovascular Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1M22PdZPLPTSmZvnajl1UetSzVzUHr-Fa/preview','BIO-2205 – Cardiovascular Tissue Engineering')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Liver Tissue Engineering</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Liver Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uddbLApA26mkXrsVbjcabf727VkDzyCr/preview','BIO-2205 – Liver Tissue Engineering')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Liver Tissue Engineering</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1x5eKcPWkcE_3PDwLbfd5x2TQ52gSaKhj/preview','BIO-2205 – Liver Tissue Engineering')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Stem Cell</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Stem Cell</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZuqlFmyR0J7maufvIzhr-Z-R8Ia7vkU_/preview','BIO-2205 – Stem Cell')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STAT-2207 ══ -->
+  <div class="page" id="page-course-2207">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.2 / <span style="color:var(--text-muted)">STAT-2207</span></div>
+        <div class="course-badge">STAT-2207 · 2nd Year, 2nd Semester</div>
+        <h2 class="course-title">Biostatistics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the Second Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md. Rabiul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1F1hkbZVEHHQiZt5L3M9fpOv7Z4Fg_hNB?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Statistics</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Statistics</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sHR0DRE0ggDYZ1zSf4uUm71FdOv8fqRh/preview','STAT-2207 – Statistics')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Processing of Data</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Processing of Data</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1iuNFLMKHdrdxHHu_L36k3fOI4zOuV4Z1/preview','STAT-2207 – Processing of Data')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Processing of Data</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uE2U0y9FRObz4mkQzi26Xn4CwSO0LiOi/preview','STAT-2207 – Processing of Data')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Processing of Data</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1wfxD_ZqtCBlf9RbCPhacPoLIOlEb84gq/preview','STAT-2207 – Processing of Data')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Measures of Central Tendency</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Measures of Central Tendency</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/18oEIvme2ML8O8QmBBIaTO4YN7IOINBAx/preview','STAT-2207 – Measures of Central Tendency')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">Measures of Dispersion</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Measures of Dispersion</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1twNpdsORs0tyysNirPawE5oEHhBo8zPD/preview','STAT-2207 – Measures of Dispersion')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Simple Correlation and Regression</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Simple Correlation and Regression</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1sg3Z5ePS95kMOzcQBNCFkfMyGsfL3Li3/preview','STAT-2207 – Simple Correlation and Regression')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Simple Correlation and Regression</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1n3O8PTxiBe2L1myw7DDfdZ9P_TYt7ZZ9/preview','STAT-2207 – Simple Correlation and Regression')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 7</span>
+          <span class="chapter-name">Basic Concept of Probability</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Basic Concept of Probability</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1au_iiWztQP7oswjD5UKZxOsfSQuyqfvn/preview','STAT-2207 – Basic Concept of Probability')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 8</span>
+          <span class="chapter-name">Probability Distribution</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Probability Distribution</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1i8cP889DSsPjO-9DiqixB0JSOMgkPB-R/preview','STAT-2207 – Probability Distribution')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Probability Distribution</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1yObqdZHUJ8vD5XWEAo16MCK6MvPIqffG/preview','STAT-2207 – Probability Distribution')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 9</span>
+          <span class="chapter-name">Hypothesis Testing</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Hypothesis Testing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1C8hyZQDDWMoOEXkQAv4Mz_pI3mbwNFBg/preview','STAT-2207 – Hypothesis Testing')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Hypothesis Testing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1CamyPU6-2aPTJ_zJaBLbZQ2vTcjaea_p/preview','STAT-2207 – Hypothesis Testing')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 10</span>
+          <span class="chapter-name">Chi square Distribution and Analysis of frequency</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Chi square Distribution and Analysis of frequency</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1_oUYiDcYf5_xxtqUtNlUzO5v0Yx4Y_FQ/preview','STAT-2207 – Chi square Distribution and Analysis of frequency')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ICT-2209 ══ -->
+  <div class="page" id="page-course-2209">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 2.2 / <span style="color:var(--text-muted)">ICT-2209</span></div>
+        <div class="course-badge">ICT-2209 · 2nd Year, 2nd Semester</div>
+        <h2 class="course-title">Communication Engineering</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the Second Year, Second Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Prof. Dr. Tapan Kumar Jodder</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">(Guest) Professor, Dept. of ICT, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1d7C1imsw-d_JCf3GNGU4ys9cpQSt6WCf/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Digital Communication Systems</a></div>
+        <a href="https://drive.google.com/drive/folders/1Gw5NqRtWcUnxtZ2RYco5QjnfA_9cPCWc?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction to Communication System</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Introduction to Communication System</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1EXsxGsCrFzuU8v0OeAbZJ1j7S5envDpN/preview','ICT-2209 – Introduction to Communication System')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Amplitude Modulation</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Amplitude Modulation</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1rcuF8ddW89VU0pQaOExSaJAfa9yCMH4P/preview','ICT-2209 – Amplitude Modulation')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">AM Receiver</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">AM Receiver</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1RgzO2-PA8jxv7yyriIOE3Ritlhe7XRDJ/preview','ICT-2209 – AM Receiver')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 4</span>
+          <span class="chapter-name">FM Modulation</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">FM Modulation</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/10JkDRlogsQsj4IPu3YtfFz8ft9jp_h98/preview','ICT-2209 – FM Modulation')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Analog Pulse Modulation Techniques</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Full Lecture</span><span class="lec-label">Analog Pulse Modulation Techniques</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1DQNnlhyBi_RQTEc1eAaD1MQf2QG8THnb/preview','ICT-2209 – Analog Pulse Modulation Techniques')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 6</span>
+          <span class="chapter-name">Digital Pulse Modulation and Transmission Techniques</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Digital Pulse Modulation and Transmission Techniques</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1AxKO3tIazaFN-wokDD_VTbd9EDNwUh14/preview','ICT-2209 – Digital Pulse Modulation and Transmission Techniques')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Digital Pulse Modulation</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1x_y7z97kzUfoh87KDrSl5XQ5dn-I-7AJ/preview','ICT-2209 – Digital Pulse Modulation')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BME-3101 ══ -->
+  <div class="page" id="page-course-3101">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">BME-3101</span></div>
+        <div class="course-badge">BME-3101 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Biomedical Instrumentation and Diagnostics</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Third Year, First Semester of BME-6, IU</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Afiya Mubasharah</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1k5YH2Qynd7q-TozI2VdGq7YpQB8xHsbR/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Introduction to Biomedical Engineering</a><a href="https://drive.google.com/file/d/1JjZHSOIOTzACSTTh1xVT9ABx_hGDi6Tv/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Medical Instrumentation Application and Design</a><a href="https://drive.google.com/file/d/1Js_FoTRyjemqowZhj0DPbcdrRyA3btI9/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Biomedical Instrumentation Technology</a></div>
+        <a href="https://drive.google.com/drive/folders/1V72SHVpC_CGy7JS_AHFHCRBcenKpPubC?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Basic Principle, Technical Specification, Working, and Applications of Laboratory Instruments</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Basic Principle, Technical Specification, Working, and Applications of Laboratory Instruments</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1rsc2ghMRqxgvWd6uD2X1hKlND5xqtkKd/preview','BME-3101 – Basic Principle, Technical Specification, Working, and Applications of Laboratory Instruments')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Laboratory Instruments</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1I249BBsDKkiZV4MIV7-KqcwOBLrxQpcY/preview','BME-3101 – Laboratory Instruments')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Laboratory Instruments</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/17eN7x3noOPR__zQDz5dlUzS-Ke6sl_zD/preview','BME-3101 – Laboratory Instruments')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Basic Principle, Technical Specification, Working, and Applications (2)</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Basic Principle, Technical Specification, Working, and Applications of Laboratory Instruments (2)</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1i1YTG-1pd0XBzjJtqoB_CSH89giOUcDW/preview','BME-3101 – Basic Principle, Technical Specification, Working, and Applications of Laboratory Instruments (2)')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BME-3103 ══ -->
+  <div class="page" id="page-course-3103">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">BME-3103</span></div>
+        <div class="course-badge">BME-3103 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Bio-Signal Processing</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Third Year, First Semester of BME-6, IU</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md. Abu Sayed</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1kEcWj4WpkaTYmpgEgOFHYe0q3dwRnZqE/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Biomedical Signal Analysis</a></div>
+        <a href="https://drive.google.com/drive/folders/1c6pxN-NOeVzMrb8ds-2lgwiyru2R6207?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Bio signals acquisitions and General properties</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Bio signals acquisitions and General properties</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1z14wpcZm3GbPgPc0lEKqfeYNXasvrDLR/preview','BME-3103 – Bio signals acquisitions and General properties')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Filtering for Removal of artifacts</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Filtering for Removal of artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1NTwEnEbgyXqhGX3s274dVCnJgJ1CtXNv/preview','BME-3103 – Filtering for Removal of artifacts')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Filtering for Removal of artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1B7nzfvzwmZ2I3AKVFkCzZJhH46EFQ5K6/preview','BME-3103 – Filtering for Removal of artifacts')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Filtering for Removal of artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1OxgJ-GPJZ-9Kag_b1wVwYnv86XcZ6Cbd/preview','BME-3103 – Filtering for Removal of artifacts')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ICT-3105 ══ -->
+  <div class="page" id="page-course-3105">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">ICT-3105</span></div>
+        <div class="course-badge">ICT-3105 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Networking and Information System in Medicine</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the Third Year, First Semester of BME-6, IU</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Dr. Md. Khairul Islam</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Chairman and Associate Professor, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><a href="https://drive.google.com/file/d/1FoVxhEDdO8Sysws6fAeVMZXTorpFmdxl/view?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin:4px 4px 4px 0;">📘 Data Communications and Networking 5E – Forouzan</a></div>
+        <a href="https://drive.google.com/drive/folders/1sifbDENW9HmTyFUqpvLjCRNVK5lKxayH?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/16LyP_K_GFkAGj6JNemMxw72iSgyxFnWB/preview','ICT-3105 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Network Model</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Network Model</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/15-JwKJjF1E1WubM5trU0VJQVS5F-LdfH/preview','ICT-3105 – Network Model')">📄 View</button></div>
+          <div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Network Model</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1tS7CWXR63OMmrMOOr2u6yvALu3uu0sLw/preview','ICT-3105 – Network Model')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BME-3107 ══ -->
+  <div class="page" id="page-course-3107">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">BME-3107</span></div>
+        <div class="course-badge">BME-3107 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Transducer and Sensors for Medical Applications</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the Third Year, First Semester of BME-6, IU</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Md. Abu Sayed</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1xh41BM2I-u8tIpx3bxyyTP8Pm34Da_7V?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1ZIMlE79ZjRx_qI_4E8CAWN-SycIi1gux/preview','BME-3107 – Introduction')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 2</span>
+          <span class="chapter-name">Displacement, Motion, and Pressure Measurement</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Displacement, Motion, and Pressure Measurement</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1Disepif1jpqZJgT4wgKKCqI1_KQa2_81/preview','BME-3107 – Displacement, Motion, and Pressure Measurement')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 3</span>
+          <span class="chapter-name">Temperature Measurement</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Temperature Measurement</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1uRbMpz6G7lkZPwWer1YhZMnUnamBF4ma/preview','BME-3107 – Temperature Measurement')">📄 View</button></div>
+        </div>
+      </div>
+      <div class="chapter-block">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 5</span>
+          <span class="chapter-name">Fiber Optic Sensors</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Fiber Optic Sensors</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/16YYmdEZUofQUNtXmwkHz5vP4H20I1h-j/preview','BME-3107 – Fiber Optic Sensors')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BME-3109 ══ -->
+  <div class="page" id="page-course-3109">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">BME-3109</span></div>
+        <div class="course-badge">BME-3109 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Physiological Control Systems</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the Third Year, First Semester of BME-6, IU</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
+        <div class="course-teacher-info">
+          <div class="teacher-avatar">👨‍🏫</div>
+          <div>
+            <div style="font-weight:600;color:var(--text)">Sathi Rahman</div>
+            <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;"></div>
+        <a href="https://drive.google.com/drive/folders/1oO5exilSVw2e3Mh6OlydeNmMKCJJAGwK?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div>
+      <div class="chapter-block open">
+        <div class="chapter-header" onclick="toggleChapter(this)">
+          <span class="chapter-num">Chapter 1</span>
+          <span class="chapter-name">Introduction to physiological modelling</span>
+          <span class="chapter-toggle">▼</span>
+        </div>
+        <div class="chapter-lectures">
+          <div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Introduction to physiological modelling</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1F6E-lZb_ey4TKP1IobPqRnR306v__BUm/preview','BME-3109 – Introduction to physiological modelling')">📄 View</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- ════════════════════════════════ QUESTIONS PAGES ════════════════════════════════ -->
@@ -1816,18 +3647,7 @@ function handleRoute() {
   // Update nav active state
   document.querySelectorAll('.nav-btn[data-page]').forEach(b => b.classList.remove('active'));
   
-  // Generic course pages
-  if (hash.startsWith('course-') && hash !== 'course-1101') {
-    const code = hash.replace('course-', '');
-    const course = COURSES[code];
-    if (course) {
-      renderGenericCourse(code, course);
-      document.getElementById('page-course-generic').classList.add('active');
-    } else {
-      document.getElementById('page-home').classList.add('active');
-    }
-    return;
-  }
+  // All course pages are direct HTML pages
 
   const pageEl = document.getElementById('page-' + hash);
   if (pageEl) {
@@ -1956,6 +3776,27 @@ function closeMobileMenu() {
     container.appendChild(p);
   }
 })();
+
+// ── THEME SWITCHER ──
+function toggleTheme() {
+  const root = document.documentElement;
+  const isLight = root.getAttribute('data-theme') === 'light';
+  root.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  document.getElementById('themeSwitchBtn').textContent = isLight ? '🌙' : '☀️';
+  try { localStorage.setItem('bme6_theme', isLight ? 'dark' : 'light'); } catch(e){}
+}
+// Load saved theme
+(function(){
+  try {
+    const saved = localStorage.getItem('bme6_theme');
+    if(saved === 'light'){
+      document.documentElement.setAttribute('data-theme','light');
+      const btn = document.getElementById('themeSwitchBtn');
+      if(btn) btn.textContent = '☀️';
+    }
+  } catch(e){}
+})();
+
 </script>
 </body>
 </html>
