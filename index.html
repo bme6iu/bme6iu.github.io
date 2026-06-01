@@ -68,7 +68,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6th Batch — BME, Islamic University</title>
   <meta name="description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia." />
-    <link rel="icon" type="image/jpg" href="images/logo.jpg" />
+    <link rel="icon" type="image/png" href="images/logo.jpg" />
   <link rel="apple-touch-icon" href="images/logo.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1493,14 +1493,14 @@
 
 <!-- ── NAVIGATION ── -->
 <nav>
-  <span class="nav-logo" onclick="navigate('home')"><img src="images/logo.png" class="nav-logo-img" onerror="this.style.display='none'" alt="BME6">BME<span>6</span>·IU</span>
+  <span class="nav-logo" onclick="navigate('home')"><img src="images/logo.jpg" class="nav-logo-img" onerror="this.style.display='none'" alt="BME6">BME<span>6</span>·IU</span>
 
   <div class="nav-links">
     <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
 
     <div class="nav-dropdown">
       <button class="nav-btn" data-page="courses">Courses ▾</button>
-      <div class="nav-dropdown-menu" style="min-width:340px;">
+      <div class="nav-dropdown-menu" data-nav="courses" style="min-width:340px;">
         <div class="nav-sem-group open">
           <button class="nav-sem-btn" onclick="toggleNavSem(this)">📚 BME 1st Year — 1st Semester <span class="nsb-arrow">▼</span></button>
           <div class="nav-sem-courses">
@@ -1556,8 +1556,8 @@
 
     <div class="nav-dropdown">
       <button class="nav-btn" data-page="questions">Questions ▾</button>
-      <div class="nav-dropdown-menu" style="min-width:240px;">
-        <button class="dropdown-item" onclick="navigate('q-bme11')">BME 1.1 Questions</button>
+      <div class="nav-dropdown-menu" data-nav="questions" style="min-width:240px;">
+        <button class="dropdown-item" onclick="navigate('questions-overview')">BME 1.1 Questions</button>
         <button class="dropdown-item" onclick="navigate('q-bme12')">BME 1.2 Questions</button>
         <button class="dropdown-item" onclick="navigate('q-bme21')">BME 2.1 Questions</button>
         <button class="dropdown-item" onclick="navigate('q-bme22')">BME 2.2 Questions</button>
@@ -1591,7 +1591,7 @@
 
   <!-- Courses Section -->
   <div style="margin-top:8px;">
-    <div style="font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;padding:10px 4px 6px;border-top:1px solid var(--border);">Courses (Theory)</div>
+    <div class="mob-courses-label" style="font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;padding:10px 4px 6px;border-top:1px solid var(--border);">Courses (Theory)</div>
 
     <!-- BME 1.1 -->
     <div class="mob-sem-group">
@@ -1715,7 +1715,7 @@
   <div class="page active" id="page-home">
     <section class="hero">
       <div class="hero-logos">
-        <img src="images/logo.png" class="hero-logo-img" onerror="this.style.display='none'" alt="BME6 Batch Logo">
+        <img src="images/logo.jpg" class="hero-logo-img" onerror="this.style.display='none'" alt="BME6 Batch Logo">
       </div>
       <div class="hero-badge">6th Batch · 2022–23 · Biomedical Engineering</div>
       <h1>
@@ -1738,11 +1738,11 @@
 
       <div class="hero-stats">
         <div class="stat-card">
-          <span class="stat-num">25</span>
+          <span class="stat-num" id="statCourses">25</span>
           <span class="stat-label">Courses</span>
         </div>
         <div class="stat-card">
-          <span class="stat-num">5</span>
+          <span class="stat-num" id="statSemesters">5</span>
           <span class="stat-label">Semesters</span>
         </div>
         <div class="stat-card">
@@ -1773,7 +1773,7 @@
           <div class="card-meta">Chapter-wise lecture PDFs for all semesters</div>
           <div class="card-arrow">→</div>
         </div>
-        <div class="card" onclick="navigate('q-bme11')">
+        <div class="card" onclick="navigate('questions-overview')">
           <div style="font-size:2.2rem;margin-bottom:12px">❓</div>
           <div class="card-title">Exam Questions</div>
           <div class="card-meta">Tutorial & semester final question papers</div>
@@ -1797,7 +1797,7 @@
           <div class="card-meta">Books, materials, questions drive folders</div>
           <div class="card-arrow">→</div>
         </div>
-        <div class="card" onclick="navigate('q-retake')">
+        <div class="card" onclick="navigate('questions-overview')">
           <div style="font-size:2.2rem;margin-bottom:12px">🔄</div>
           <div class="card-title">Retake Questions</div>
           <div class="card-meta">Previous retake examination papers</div>
@@ -4056,6 +4056,16 @@
         <span class="info-banner-icon">📸</span>
         <span>To add photos: Upload landscape images to the <code style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">images/gallery/</code> folder and add entries below following the existing pattern.</span>
       </div>
+      <!-- Slideshow -->
+      <div id="gallerySlideshow" class="gallery-slideshow-wrap"></div>
+      <div id="slideshowControls" class="slideshow-controls" style="display:none;">
+        <button class="slideshow-btn" onclick="slideshowPrev()">&#8249;</button>
+        <button class="slideshow-pause-btn" id="pauseBtn" onclick="togglePause()">&#9208; Pause</button>
+        <span class="slideshow-counter" id="slideCounter">1 / 1</span>
+        <button class="slideshow-btn" onclick="slideshowNext()">&#8250;</button>
+      </div>
+      <div class="slideshow-dots" id="slideshowDots"></div>
+
       <div class="gallery-grid" id="galleryGrid">
         <!-- ══ ADD PHOTOS BELOW ══
              Pattern:
@@ -4471,6 +4481,349 @@ function toggleTheme() {
     }
   } catch(e){}
 })();
+
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║           ★  MASTER DATA — EDIT HERE ONLY  ★                   ║
+// ║  Add semester → SEMESTERS array                                  ║
+// ║  Add course   → courses[] of that semester                       ║
+// ║  Change current semester → CURRENT_SEM_ID                       ║
+// ╚══════════════════════════════════════════════════════════════════╝
+
+const CURRENT_SEM_ID = 'bme31'; // ← change this only
+
+const SEMESTERS = [
+  { id:'bme11', short:'BME 1.1', icon:'📚', label:'BME 1st Year — 1st Semester', qId:'q-bme11', courses:[
+    {num:'1101',prefix:'BME', title:'Introduction to Biomedical Engineering',             teacher:'Ariful Islam',          chapters:6},
+    {num:'1103',prefix:'EEE', title:'Electrical Fundamentals for Biomedical Engineering', teacher:'Dr. Md. Khairul Islam',  chapters:0},
+    {num:'1105',prefix:'CHE', title:'Physical and Inorganic Chemistry',                   teacher:'Dr. Md. Azizul Islam',   chapters:0},
+    {num:'1107',prefix:'MATH',title:'Applied Mathematics',                                teacher:'Ariful Islam',           chapters:0},
+    {num:'1109',prefix:'HUM', title:'Communicative Skills',                               teacher:'Md Rabiul Islam',        chapters:0},
+  ]},
+  { id:'bme12', short:'BME 1.2', icon:'📚', label:'BME 1st Year — 2nd Semester', qId:'q-bme12', courses:[
+    {num:'1201',prefix:'EEE', title:'Electronics',                               teacher:'Ariful Islam',              chapters:7},
+    {num:'1203',prefix:'CHE', title:'Biochemistry',                              teacher:'S M Jahurul Haque',         chapters:5},
+    {num:'1205',prefix:'ICT', title:'Basic Computer and Information Technology', teacher:'Md Rabiul Islam',           chapters:7},
+    {num:'1207',prefix:'MATH',title:'Mathematics for Engineering',               teacher:'Dr. Atish Kumar Joardar',   chapters:0},
+    {num:'1209',prefix:'HUM', title:'Sociology and Economics',                   teacher:'Md. Humaun Kabir',          chapters:7},
+  ]},
+  { id:'bme21', short:'BME 2.1', icon:'🔬', label:'BME 2nd Year — 1st Semester', qId:'q-bme21', courses:[
+    {num:'2101',prefix:'BIO', title:'Human Anatomy and Physiology',                        teacher:'S M Jahurul Haque',          chapters:7},
+    {num:'2103',prefix:'CSE', title:'Digital Electronics',                                 teacher:'Kazi Mowdud Ahmed',          chapters:7},
+    {num:'2105',prefix:'CSE', title:'Programming Concepts and Python',                     teacher:'Md Rabiul Islam',            chapters:3},
+    {num:'2107',prefix:'PHY', title:'Waves and Oscillations, Optics and Thermal Physics',  teacher:'Prof. Md. Khalilur Rahman',  chapters:3},
+    {num:'2109',prefix:'HUM', title:'Managerial and Financial Accounting',                 teacher:'Mithun Bairagi',             chapters:4},
+  ]},
+  { id:'bme22', short:'BME 2.2', icon:'⚡', label:'BME 2nd Year — 2nd Semester', qId:'q-bme22', courses:[
+    {num:'2201',prefix:'BME', title:'Structure and Properties of Biomaterials', teacher:'Ariful Islam',                  chapters:9},
+    {num:'2203',prefix:'CSE', title:'Signal and Systems',                       teacher:'Dr. Md. Khairul Islam',         chapters:5},
+    {num:'2205',prefix:'BIO', title:'Cell and Tissue Engineering',              teacher:'Prof. Dr. Rakibul Islam',       chapters:7},
+    {num:'2207',prefix:'STAT',title:'Biostatistics',                            teacher:'Md. Rabiul Islam',              chapters:9},
+    {num:'2209',prefix:'ICT', title:'Communication Engineering',                teacher:'Prof. Dr. Tapan Kumar Jodder',  chapters:6},
+  ]},
+  { id:'bme31', short:'BME 3.1', icon:'🟢', label:'BME 3rd Year — 1st Semester', qId:'q-bme31', courses:[
+    {num:'3101',prefix:'BME', title:'Biomedical Instrumentation and Diagnostics',        teacher:'Afiya Mubasharah',       chapters:2},
+    {num:'3103',prefix:'BME', title:'Bio-Signal Processing',                             teacher:'Md. Abu Sayed',          chapters:2},
+    {num:'3105',prefix:'ICT', title:'Networking and Information System in Medicine',     teacher:'Dr. Md. Khairul Islam',  chapters:2},
+    {num:'3107',prefix:'BME', title:'Transducer and Sensors for Medical Applications',  teacher:'Md. Abu Sayed',          chapters:4},
+    {num:'3109',prefix:'BME', title:'Physiological Control Systems',                    teacher:'Sathi Rahman',           chapters:1},
+  ]},
+  // ADD NEW SEMESTER HERE:
+  // { id:'bme32', short:'BME 3.2', icon:'🔷', label:'BME 3rd Year — 2nd Semester', qId:'q-bme32', courses:[
+  //   {num:'3201', prefix:'BME', title:'Course Name', teacher:'Teacher', chapters:0},
+  // ]},
+];
+
+const QUESTIONS_DATA = [
+  { semId:'q-bme11', semLabel:'BME 1.1', yearLabel:'1st Year, 1st Semester',
+    tutorial:[
+      {title:'BME-1101, Tutorial-1', sub:'Introduction to Biomedical Engineering', url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+      {title:'BME-1101, Tutorial-2', sub:'Introduction to Biomedical Engineering', url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+      {title:'BME-1101, Tutorial-3', sub:'Introduction to Biomedical Engineering', url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+      {title:'HUM-1109, Tutorial-1', sub:'Communicative Skills',                   url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+      {title:'HUM-1109, Tutorial-2', sub:'Communicative Skills',                   url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+    ],
+    final:[
+      {title:'Previous Years Questions (Before 2022-23)', sub:'1st Year, 1st Semester — all previous batches', url:'https://drive.google.com/file/d/1cW_oi-8dnaaNqaW0HfGBz5HtVnjUfZVB/preview'},
+      {title:'2022-23 Semester Final Questions',          sub:'1st Year, 1st Semester — 6th Batch',           url:'https://drive.google.com/file/d/1rnzqhC-k8xRk6FMEJUeC5W_VDhV9qZwg/preview'},
+    ]
+  },
+  { semId:'q-bme12', semLabel:'BME 1.2', yearLabel:'1st Year, 2nd Semester',
+    tutorial:[
+      {title:'Tutorial Questions 2022-23', sub:'1st Year, 2nd Semester · 6th Batch', url:'https://drive.google.com/file/d/1VWud1CvM7QavMRJ0SFmaUWxvc9pRi5ya/preview'},
+      {title:'Tutorial Questions 2021-22', sub:'1st Year, 2nd Semester · 5th Batch', url:'https://drive.google.com/file/d/1nTIL4GF7hVabs7Of0N_MJlp-pylO8QVR/preview'},
+    ],
+    final:[
+      {title:'Previous Years Questions (Before 2022-23)', sub:'1st Year, 2nd Semester', url:'https://drive.google.com/file/d/1javZ2IiMVvE4CrXocnJ_uOTb-DHPd-19/preview'},
+      {title:'2022-23 Semester Final Questions',          sub:'1st Year, 2nd Semester — 6th Batch', url:'https://drive.google.com/file/d/1vojQT98wJHmbtljGuebiD_2UnoO2VkiJ/preview'},
+    ]
+  },
+  { semId:'q-bme21', semLabel:'BME 2.1', yearLabel:'2nd Year, 1st Semester',
+    tutorial:[
+      {title:'Tutorial Questions 2022-23', sub:'2nd Year, 1st Semester · 6th Batch', url:'https://drive.google.com/file/d/15zWhVvV7WOJWPWY3vQuHmmxz8mdJEUim/preview'},
+      {title:'Tutorial Questions 2021-22', sub:'2nd Year, 1st Semester · 5th Batch', url:'https://drive.google.com/file/d/12t54t1U_cxCs18yPgXw1yb9dqIWJhCkv/preview'},
+    ],
+    final:[
+      {title:'Previous Years Questions (Before 2022-23)', sub:'2nd Year, 1st Semester', url:'https://drive.google.com/file/d/14j5U8ppEYhxkLvve9jD8EuBV3_VtnLL3/preview'},
+      {title:'2022-23 Semester Final Questions',          sub:'2nd Year, 1st Semester — 6th Batch', url:'https://drive.google.com/file/d/1NqMNqHLtYUkmIcjhG3NHulgxnSWyQSzG/preview'},
+    ]
+  },
+  { semId:'q-bme22', semLabel:'BME 2.2', yearLabel:'2nd Year, 2nd Semester',
+    tutorial:[
+      {title:'Tutorial Questions 2022-23', sub:'2nd Year, 2nd Semester · 6th Batch', url:'https://drive.google.com/file/d/12LV92l3_fXhFFwXWyonDYrY1FJthST0k/preview'},
+      {title:'Tutorial Questions 2021-22', sub:'2nd Year, 2nd Semester · 5th Batch', url:'https://drive.google.com/file/d/1MXFYmLo-V09PNpxh5_iRAogsn-yOTfin/preview'},
+    ],
+    final:[
+      {title:'Previous Years Questions (Before 2022-23)', sub:'2nd Year, 2nd Semester', url:'https://drive.google.com/file/d/1DWSKgA5IXWc4K8_-vKQRjmRmRKBK1nK-/preview'},
+      {title:'2022-23 Semester Final Questions',          sub:'2nd Year, 2nd Semester — 6th Batch', url:'https://drive.google.com/file/d/1eAjsd2uIGcflQzaZJCvAAajj3oTC2NEd/preview'},
+    ]
+  },
+  { semId:'q-bme31', semLabel:'BME 3.1', yearLabel:'3rd Year, 1st Semester (Running)',
+    infoBanner:'Currently running semester. 2022-23 tutorial will be added when available.',
+    tutorial:[
+      {title:'Tutorial Questions 2021-22', sub:'3rd Year, 1st Semester · 5th Batch', url:'https://drive.google.com/file/d/1HaF781_sxsChdWR2wjtNNaVMThODDqbT/preview'},
+    ],
+    final:[
+      {title:'Previous Years Questions (Before 2022-23)', sub:'3rd Year, 1st Semester', url:'https://drive.google.com/file/d/1mLXxHvMAbnugQPM1pMwH5W-Yn6WgnRdF/preview'},
+    ]
+  },
+  // ADD NEW SEMESTER QUESTIONS HERE:
+  // { semId:'q-bme32', semLabel:'BME 3.2', yearLabel:'3rd Year, 2nd Semester',
+  //   tutorial:[ {title:'...', sub:'...', url:'DRIVE_PREVIEW_URL'} ],
+  //   final:[    {title:'...', sub:'...', url:'DRIVE_PREVIEW_URL'} ]
+  // },
+];
+
+const RETAKE_QUESTIONS = [
+  {title:'First Year (1st Semester & 2nd Semester)', sub:'Retake Examination Questions', url:'https://drive.google.com/file/d/1hQxbnnRP-1inDlDIACcdCv8b4v1QUSF2/preview'},
+  // ADD MORE RETAKE PAPERS:
+  // {title:'Second Year Retake', sub:'Retake Questions', url:'DRIVE_PREVIEW_URL'},
+];
+
+const GALLERY_DATA = [
+  // {src:'images/gallery/photo1.jpg', caption:'Caption here'},
+];
+
+// ══ AUTO-RENDER ═══════════════════════════════════════════════════
+(function () {
+  var cur = CURRENT_SEM_ID;
+
+  // nav() helper: returns onclick attribute string safely
+  function nav(page) { return "navigate('" + page + "')"; }
+  function navClose(page) { return "navigate('" + page + "');closeMobileMenu()"; }
+
+  // qcard helper
+  function qcard(icon, title, sub, url) {
+    return '<div class="qcard"><div class="qcard-icon">' + icon + '</div>' +
+      '<div class="qcard-info"><div class="qcard-title">' + title + '</div><div class="qcard-sub">' + sub + '</div></div>' +
+      '<button class="view-btn" onclick="openDoc(\'' + url + '\',\'' + title.replace(/'/g,'&#39;') + '\')">📄 View</button></div>';
+  }
+
+  var totalCourses = 0;
+  SEMESTERS.forEach(function(s){ totalCourses += s.courses.length; });
+
+  // 1. Homepage stats
+  var sc = document.getElementById('statCourses');
+  var ss = document.getElementById('statSemesters');
+  if (sc) sc.textContent = totalCourses;
+  if (ss) ss.textContent = SEMESTERS.length;
+
+  // 2. Nav courses dropdown
+  var navDrop = document.querySelector('.nav-dropdown-menu[data-nav="courses"]');
+  if (navDrop) {
+    var nd = '';
+    SEMESTERS.forEach(function(sem) {
+      var isCur = sem.id === cur;
+      var bs = isCur ? ' style="background:rgba(0,255,157,0.08);color:var(--accent2);"' : '';
+      var as = isCur ? ' style="color:var(--accent2);"' : '';
+      var lbl = sem.label + (isCur ? ' (Running)' : '');
+      nd += '<div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)"' + bs + '>';
+      nd += sem.icon + ' ' + lbl + ' <span class="nsb-arrow"' + as + '>&#9660;</span></button>';
+      nd += '<div class="nav-sem-courses">';
+      sem.courses.forEach(function(c){ nd += '<button class="dropdown-item" onclick="' + nav('course-'+c.num) + '">' + c.num + ' - ' + c.title + '</button>'; });
+      nd += '</div></div>';
+    });
+    navDrop.innerHTML = nd;
+  }
+
+  // 3. Nav questions dropdown
+  var navQDrop = document.querySelector('.nav-dropdown-menu[data-nav="questions"]');
+  if (navQDrop) {
+    var nq = '';
+    SEMESTERS.forEach(function(sem){ nq += '<button class="dropdown-item" onclick="' + nav(sem.qId) + '">' + sem.short + ' Questions</button>'; });
+    nq += '<button class="dropdown-item" onclick="' + nav('q-retake') + '">Retake Exams Questions</button>';
+    navQDrop.innerHTML = nq;
+  }
+
+  // 4. Mobile courses menu
+  var mobLabel = document.querySelector('#mobileMenu .mob-courses-label');
+  if (mobLabel) {
+    var wrap = mobLabel.parentElement;
+    wrap.querySelectorAll('.mob-sem-group').forEach(function(g){ g.remove(); });
+    SEMESTERS.forEach(function(sem) {
+      var isCur = sem.id === cur;
+      var div = document.createElement('div');
+      div.className = 'mob-sem-group';
+      var bs = isCur ? ' style="background:rgba(0,255,157,0.08);color:var(--accent2);"' : '';
+      var items = '';
+      sem.courses.forEach(function(c){ items += '<div class="mobile-link" onclick="' + navClose('course-'+c.num) + '">' + c.num + ' - ' + c.title + '</div>'; });
+      div.innerHTML = '<button class="mob-sem-btn" onclick="toggleMobSem(this)"' + bs + '>' +
+        sem.icon + ' ' + sem.short + ' \u2014 ' + sem.label.replace('BME ','') + (isCur?' (Running)':'') + ' <span class="msb-arrow">&#9660;</span></button>' +
+        '<div class="mob-sem-courses">' + items + '</div>';
+      wrap.appendChild(div);
+    });
+  }
+
+  // 5. Mobile questions menu
+  var mobQC = document.querySelector('#mobileMenu .mob-q-courses');
+  if (mobQC) {
+    var mq = '';
+    SEMESTERS.forEach(function(sem){ mq += '<div class="mobile-link" onclick="' + navClose(sem.qId) + '">' + sem.short + ' Questions</div>'; });
+    mq += '<div class="mobile-link" onclick="' + navClose('q-retake') + '">Retake Exams Questions</div>';
+    mobQC.innerHTML = mq;
+  }
+
+  // 6. Courses overview
+  var ovSec = document.querySelector('#page-courses-overview .section');
+  if (ovSec) {
+    var ov = '';
+    SEMESTERS.forEach(function(sem) {
+      var isCur = sem.id === cur;
+      var hc = isCur ? ' running' : '';
+      var lbl = sem.label + (isCur ? ' (Running)' : '');
+      ov += '<div class="sem-acc-block' + (isCur ? ' open' : '') + '">';
+      ov += '<div class="sem-acc-header' + hc + '" onclick="toggleSem(this)"><span>' + sem.icon + '</span><span class="sem-acc-title">' + lbl + '</span><span class="sem-acc-chevron">&#9660;</span></div>';
+      ov += '<div class="sem-acc-body"><div class="card-grid">';
+      sem.courses.forEach(function(c){
+        var meta = [c.teacher, c.chapters ? c.chapters + (c.chapters !== 1 ? ' Chapters' : ' Chapter') : ''].filter(Boolean).join(' \u00b7 ');
+        ov += '<div class="card" onclick="' + nav('course-'+c.num) + '"><div class="card-code">' + c.prefix + '-' + c.num + '</div><div class="card-title">' + c.title + '</div><div class="card-meta">' + meta + '</div><div class="card-arrow">\u2192</div></div>';
+      });
+      ov += '</div></div></div>';
+    });
+    ovSec.innerHTML = ov;
+  }
+
+  // 7. Questions overview page (create if missing)
+  var qOvPage = document.getElementById('page-questions-overview');
+  if (!qOvPage) {
+    qOvPage = document.createElement('div');
+    qOvPage.className = 'page';
+    qOvPage.id = 'page-questions-overview';
+    qOvPage.innerHTML = '<div class="page-top-banner"><div class="page-top-banner-inner"><h1>Exam <span>Questions</span></h1><p>Tutorial &amp; Semester Final Questions \u2014 All Semesters</p></div></div><div class="section" style="padding-top:36px;"></div>';
+    var firstQ = document.getElementById('page-q-bme11');
+    if (firstQ) firstQ.parentNode.insertBefore(qOvPage, firstQ);
+  }
+  var qOvSec = qOvPage.querySelector('.section');
+  if (qOvSec) {
+    var qov = '<div class="card-grid">';
+    SEMESTERS.forEach(function(sem) {
+      var isCur = sem.id === cur;
+      var bs = isCur ? ' style="border-color:rgba(0,255,157,0.3);"' : '';
+      var cs = isCur ? ' style="color:var(--accent2);"' : '';
+      var meta = isCur ? '<div class="card-meta" style="color:var(--accent2);">Running Semester</div>' : '<div class="card-meta">Tutorial &amp; Semester Final Questions</div>';
+      qov += '<div class="card" onclick="' + nav(sem.qId) + '"' + bs + '><div class="card-code"' + cs + '>' + sem.short + (isCur ? ' \ud83d\udfe2' : '') + '</div><div class="card-title">' + sem.label.replace('BME ','') + '</div>' + meta + '<div class="card-arrow">\u2192</div></div>';
+    });
+    qov += '<div class="card" onclick="' + nav('q-retake') + '"><div class="card-code">Retake</div><div class="card-title">Retake Exams</div><div class="card-meta">Previous Retake &amp; Improvement Papers</div><div class="card-arrow">\u2192</div></div>';
+    qov += '</div>';
+    qOvSec.innerHTML = qov;
+  }
+
+  // 8. Question pages (fill content + back button)
+  QUESTIONS_DATA.forEach(function(q) {
+    var page = document.getElementById('page-' + q.semId);
+    if (!page) {
+      page = document.createElement('div');
+      page.className = 'page';
+      page.id = 'page-' + q.semId;
+      page.innerHTML = '<div class="page-top-banner"><div class="page-top-banner-inner"></div></div><div class="section" style="padding-top:36px;"></div>';
+      var rp = document.getElementById('page-q-retake');
+      if (rp) rp.parentNode.insertBefore(page, rp);
+    }
+    var bi = page.querySelector('.page-top-banner-inner');
+    if (bi && !bi.querySelector('.course-crumb')) {
+      bi.innerHTML = '<div class="course-crumb" style="margin-bottom:10px;"><button onclick="' + nav('questions-overview') + '">\u2190 All Questions</button></div>' +
+        '<h1>Questions \u2014 <span>' + q.semLabel + '</span></h1><p>' + q.yearLabel + ' \u2014 Tutorial &amp; Semester Final Questions</p>';
+    }
+    var sec = page.querySelector('.section');
+    if (!sec) return;
+    var h = '';
+    if (q.infoBanner) h += '<div class="info-banner"><span class="info-banner-icon">\ud83d\udfe2</span><span>' + q.infoBanner + '</span></div>';
+    if (q.tutorial && q.tutorial.length) {
+      h += '<div class="q-section-title">\ud83d\udcdd Tutorial Questions</div>';
+      q.tutorial.forEach(function(p){ h += qcard('\ud83d\udcc4', p.title, p.sub, p.url); });
+    }
+    if (q.final && q.final.length) {
+      h += '<div class="q-section-title">\ud83c\udf93 Semester Final Questions</div>';
+      q.final.forEach(function(p){ h += qcard('\ud83d\udcda', p.title, p.sub, p.url); });
+    }
+    sec.innerHTML = h;
+  });
+
+  // Retake back button
+  var rp2 = document.getElementById('page-q-retake');
+  if (rp2) {
+    var bi2 = rp2.querySelector('.page-top-banner-inner');
+    if (bi2 && !bi2.querySelector('.course-crumb')) {
+      bi2.insertAdjacentHTML('afterbegin', '<div class="course-crumb" style="margin-bottom:10px;"><button onclick="' + nav('questions-overview') + '">\u2190 All Questions</button></div>');
+    }
+    var rs = rp2.querySelector('.section');
+    if (rs) {
+      var rh = '<div class="q-section-title">\ud83d\udd04 Retake Questions</div>';
+      RETAKE_QUESTIONS.forEach(function(p){ rh += qcard('\ud83d\udcc4', p.title, p.sub, p.url); });
+      rs.innerHTML = rh;
+    }
+  }
+
+  // 9. Gallery
+  var gg = document.getElementById('galleryGrid');
+  var gs = document.getElementById('gallerySlideshow');
+  var gc = document.getElementById('slideshowControls');
+  var gd = document.getElementById('slideshowDots');
+  if (gg) {
+    if (!GALLERY_DATA.length) {
+      gg.innerHTML = '<div class="gallery-item" style="background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--text-muted);"><div style="font-size:2rem">\ud83d\uddbc\ufe0f</div><div style="font-size:0.8rem;text-align:center;">Upload photos to<br><code style="font-family:\'JetBrains Mono\',monospace;color:var(--accent)">images/gallery/</code></div></div>';
+      if (gs) gs.style.display = 'none';
+    } else {
+      if (gs) {
+        gs.innerHTML = GALLERY_DATA.map(function(item,i){ return '<div class="slideshow-slide'+(i?'':' active')+'" data-index="'+i+'"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="slideshow-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
+        if (gc) gc.style.display = 'flex';
+        if (gd) gd.innerHTML = GALLERY_DATA.map(function(_,i){ return '<button class="slideshow-dot'+(i?'':' active')+'" onclick="goToSlide('+i+')"></button>'; }).join('');
+        updateSlideCounter();
+        startAutoplay();
+      }
+      gg.innerHTML = GALLERY_DATA.map(function(item){ return '<div class="gallery-item" onclick="openGallery(\''+item.src+'\',\''+((item.caption||'').replace(/'/g,'&#39;'))+'\')"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="gallery-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
+    }
+  }
+
+  // 10. PAGE_META for new semesters
+  if (typeof PAGE_META !== 'undefined') {
+    PAGE_META['questions-overview'] = {title:'Exam Questions | BME 6th Batch, IU', desc:'All semester questions.'};
+    SEMESTERS.forEach(function(sem) {
+      if (!PAGE_META[sem.qId]) PAGE_META[sem.qId] = {title:sem.short+' Questions | BME 6th Batch, IU', desc:sem.label+' questions.'};
+      sem.courses.forEach(function(c) {
+        var k = 'course-'+c.num;
+        if (!PAGE_META[k]) PAGE_META[k] = {title:c.title+' | '+c.prefix+'-'+c.num, desc:c.title+', '+sem.label+'.'};
+      });
+    });
+  }
+
+})();
+
+// ── SLIDESHOW ENGINE ──────────────────────────
+// ── SLIDESHOW ENGINE ──────────────────────────
+var _slideIdx = 0, _slidePaused = false, _slideTimer = null;
+var SLIDE_INTERVAL = 1000;
+function getSlides(){ return document.querySelectorAll('.slideshow-slide'); }
+function goToSlide(n){ var s=getSlides(); if(!s.length)return; _slideIdx=((n%s.length)+s.length)%s.length; s.forEach(function(sl,i){ sl.classList.toggle('active',i===_slideIdx); }); document.querySelectorAll('.slideshow-dot').forEach(function(d,i){ d.classList.toggle('active',i===_slideIdx); }); updateSlideCounter(); }
+function slideshowNext(){ goToSlide(_slideIdx+1); }
+function slideshowPrev(){ goToSlide(_slideIdx-1); }
+function updateSlideCounter(){ var el=document.getElementById('slideCounter'); var s=getSlides(); if(el&&s.length) el.textContent=(_slideIdx+1)+' / '+s.length; }
+function startAutoplay(){ clearInterval(_slideTimer); if(!_slidePaused) _slideTimer=setInterval(slideshowNext,SLIDE_INTERVAL); }
+function togglePause(){ _slidePaused=!_slidePaused; var btn=document.getElementById('pauseBtn'); if(_slidePaused){ clearInterval(_slideTimer); if(btn)btn.innerHTML='▶ Play'; } else { startAutoplay(); if(btn)btn.innerHTML='⏸ Pause'; } }
+(function(){ var sw=document.getElementById('gallerySlideshow'); if(sw){ sw.addEventListener('mouseenter',function(){ clearInterval(_slideTimer); }); sw.addEventListener('mouseleave',function(){ if(!_slidePaused)startAutoplay(); }); } })();
+function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src=src; document.getElementById('galleryLightboxCap').textContent=cap||''; document.getElementById('galleryLightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeGallery(){ document.getElementById('galleryLightbox').classList.remove('open'); document.getElementById('galleryLightboxImg').src=''; document.body.style.overflow=''; }
+
 
 </script>
 </body>
