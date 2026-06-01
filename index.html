@@ -4114,36 +4114,35 @@
 
       <div class="section-title" style="font-size:1.1rem;margin-bottom:16px;">Semester-wise <span>Syllabus</span></div>
       <div class="syllabus-grid">
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1Cwt7E09tjXmE9ErD8weUlyxy0dLNIgtb/preview','Syllabus – 1st Year, 1st Semester')">
+        <div class="syl-card" data-semid="bme11" onclick="openDoc('https://drive.google.com/file/d/1Cwt7E09tjXmE9ErD8weUlyxy0dLNIgtb/preview','Syllabus – 1st Year, 1st Semester')">
           <div class="syl-sem">1st Year</div>
           <div class="syl-label">1st Semester</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1D3OuZDORqeiyGVzr4sy9fL3nLe909Jj5/preview','Syllabus – 1st Year, 2nd Semester')">
+        <div class="syl-card" data-semid="bme12" onclick="openDoc('https://drive.google.com/file/d/1D3OuZDORqeiyGVzr4sy9fL3nLe909Jj5/preview','Syllabus – 1st Year, 2nd Semester')">
           <div class="syl-sem">1st Year</div>
           <div class="syl-label">2nd Semester</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1rN0Cq-mY5_GehtMV7ki45MuIfLKheJPW/preview','Syllabus – 2nd Year, 1st Semester')">
+        <div class="syl-card" data-semid="bme21" onclick="openDoc('https://drive.google.com/file/d/1rN0Cq-mY5_GehtMV7ki45MuIfLKheJPW/preview','Syllabus – 2nd Year, 1st Semester')">
           <div class="syl-sem">2nd Year</div>
           <div class="syl-label">1st Semester</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1jXz5SbUHtkSFtQUocZP5smjnDabQ-NPb/preview','Syllabus – 2nd Year, 2nd Semester')">
+        <div class="syl-card" data-semid="bme22" onclick="openDoc('https://drive.google.com/file/d/1jXz5SbUHtkSFtQUocZP5smjnDabQ-NPb/preview','Syllabus – 2nd Year, 2nd Semester')">
           <div class="syl-sem">2nd Year</div>
           <div class="syl-label">2nd Semester</div>
         </div>
-        <div class="syl-card running" onclick="openDoc('https://drive.google.com/file/d/1VA45Cve4u5DqpGE1dHYBT756fCNTuP8s/preview','Syllabus – 3rd Year, 1st Semester')">
+        <div class="syl-card" data-semid="bme31" onclick="openDoc('https://drive.google.com/file/d/1VA45Cve4u5DqpGE1dHYBT756fCNTuP8s/preview','Syllabus – 3rd Year, 1st Semester')">
           <div class="syl-sem">3rd Year</div>
           <div class="syl-label">1st Semester</div>
-          <div class="syl-running-badge">🟢 Running</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1QGGBMGT_KZzU2sPd7cHfOv31Z5JaPF9j/preview','Syllabus – 3rd Year, 2nd Semester')">
+        <div class="syl-card" data-semid="bme32" onclick="openDoc('https://drive.google.com/file/d/1QGGBMGT_KZzU2sPd7cHfOv31Z5JaPF9j/preview','Syllabus – 3rd Year, 2nd Semester')">
           <div class="syl-sem">3rd Year</div>
           <div class="syl-label">2nd Semester</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1sY7_NO-HUuuYPDBxlDxlMA2dlfgTuGhP/preview','Syllabus – 4th Year, 1st Semester')">
+        <div class="syl-card" data-semid="bme41" onclick="openDoc('https://drive.google.com/file/d/1sY7_NO-HUuuYPDBxlDxlMA2dlfgTuGhP/preview','Syllabus – 4th Year, 1st Semester')">
           <div class="syl-sem">4th Year</div>
           <div class="syl-label">1st Semester</div>
         </div>
-        <div class="syl-card" onclick="openDoc('https://drive.google.com/file/d/1wPKXCWyX4Wn08LsD2HG2B9TkKDoUPrFN/preview','Syllabus – 4th Year, 2nd Semester')">
+        <div class="syl-card" data-semid="bme42" onclick="openDoc('https://drive.google.com/file/d/1wPKXCWyX4Wn08LsD2HG2B9TkKDoUPrFN/preview','Syllabus – 4th Year, 2nd Semester')">
           <div class="syl-sem">4th Year</div>
           <div class="syl-label">2nd Semester</div>
         </div>
@@ -4703,6 +4702,75 @@ const GALLERY_DATA = [
     ovSec.innerHTML = ov;
   }
 
+  // 6b. Auto-inject chapters & lectures from SEMESTERS chapterData
+  // If a course has chapterData array, inject them into the existing course page.
+  // If the page doesn't exist at all, create it dynamically.
+  SEMESTERS.forEach(function(sem) {
+    var isCur = sem.id === cur;
+    sem.courses.forEach(function(c) {
+      if (!c.chapterData || !c.chapterData.length) return; // nothing to inject
+      var pageId = 'page-course-' + c.num;
+      var page = document.getElementById(pageId);
+
+      // If page doesn't exist, create it
+      if (!page) {
+        page = document.createElement('div');
+        page.className = 'page';
+        page.id = pageId;
+        var runBadge = isCur ? '<div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>' : '';
+        page.innerHTML =
+          '<div class="course-hero"><div class="course-hero-inner">' +
+          '<div class="course-crumb"><button onclick="' + nav('courses-overview') + '">Courses</button> / ' + sem.short + ' / <span style="color:var(--text-muted)">' + c.prefix + '-' + c.num + '</span></div>' +
+          '<div class="course-badge">' + c.prefix + '-' + c.num + ' · ' + sem.label.replace('BME ','') + '</div>' +
+          '<h2 class="course-title">' + c.title + '</h2>' +
+          (c.teacher ? '<div class="course-teacher-info"><div class="teacher-avatar">👨‍🏫</div><div><div style="font-weight:600;color:var(--text)">' + c.teacher + '</div></div></div>' : '') +
+          runBadge +
+          '</div></div>' +
+          '<div class="section"><div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div><div class="chapters-container"></div></div>';
+        var app = document.getElementById('app');
+        if (app) app.appendChild(page);
+      }
+
+      // Inject chapters into the page (replace existing if already injected)
+      var container = page.querySelector('.chapters-container');
+      if (!container) {
+        // fallback: find .section and add container
+        var sec = page.querySelector('.section');
+        if (!sec) return;
+        container = document.createElement('div');
+        container.className = 'chapters-container';
+        sec.appendChild(container);
+      }
+      var ch = '';
+      c.chapterData.forEach(function(chap, ci) {
+        var isFirst = ci === 0;
+        ch += '<div class="chapter-block' + (isFirst ? ' open' : '') + '">';
+        ch += '<div class="chapter-header" onclick="toggleChapter(this)">';
+        ch += '<span class="chapter-num">Chapter ' + (ci + 1) + '</span>';
+        ch += '<span class="chapter-name">' + chap.name + '</span>';
+        ch += '<span class="chapter-toggle">▼</span>';
+        ch += '</div><div class="chapter-lectures">';
+        (chap.lectures || []).forEach(function(lec, li) {
+          var lecNum = lec.num || ('Lecture ' + (li + 1));
+          var lecLabel = lec.label || chap.name;
+          var lecUrl = lec.url || '';
+          var title = (c.prefix + '-' + c.num) + ' – ' + lecLabel;
+          ch += '<div class="lecture-row">';
+          ch += '<span class="lec-num">' + lecNum + '</span>';
+          ch += '<span class="lec-label">' + lecLabel + '</span>';
+          if (lecUrl) {
+            ch += '<button class="view-btn" onclick="openDoc(\'' + lecUrl + '\',\'' + title.replace(/'/g, '&#39;') + '\')">📄 View</button>';
+          } else {
+            ch += '<span style="font-size:0.75rem;color:var(--text-dim);padding:6px 10px;">Coming soon</span>';
+          }
+          ch += '</div>';
+        });
+        ch += '</div></div>';
+      });
+      container.innerHTML = ch;
+    });
+  });
+
   // 7. Questions overview page (create if missing)
   var qOvPage = document.getElementById('page-questions-overview');
   if (!qOvPage) {
@@ -4794,6 +4862,21 @@ const GALLERY_DATA = [
       gg.innerHTML = GALLERY_DATA.map(function(item){ return '<div class="gallery-item" onclick="openGallery(\''+item.src+'\',\''+((item.caption||'').replace(/'/g,'&#39;'))+'\')"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="gallery-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
     }
   }
+
+  // 9b. Syllabus page — update running badge based on CURRENT_SEM_ID
+  document.querySelectorAll('.syl-card').forEach(function(card) {
+    var sid = card.getAttribute('data-semid');
+    card.classList.remove('running');
+    var badge = card.querySelector('.syl-running-badge');
+    if (badge) badge.remove();
+    if (sid && sid === cur) {
+      card.classList.add('running');
+      var b = document.createElement('div');
+      b.className = 'syl-running-badge';
+      b.textContent = '🟢 Running';
+      card.appendChild(b);
+    }
+  });
 
   // 10. PAGE_META for new semesters
   if (typeof PAGE_META !== 'undefined') {
