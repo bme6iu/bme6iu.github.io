@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url><loc>https://youruser.github.io/bme6iu/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#home</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#courses-overview</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#teachers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#syllabus</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#important-files</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#gallery</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+
+  <!-- BME 1.1 Courses -->
+  <url><loc>https://youruser.github.io/bme6iu/#course-1101</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1103</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1105</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1107</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1109</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <!-- BME 1.2 Courses -->
+  <url><loc>https://youruser.github.io/bme6iu/#course-1201</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1203</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1205</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1207</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-1209</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <!-- BME 2.1 Courses -->
+  <url><loc>https://youruser.github.io/bme6iu/#course-2101</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2103</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2105</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2107</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2109</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <!-- BME 2.2 Courses -->
+  <url><loc>https://youruser.github.io/bme6iu/#course-2201</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2203</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2205</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2207</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-2209</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+
+  <!-- BME 3.1 Courses (Running) -->
+  <url><loc>https://youruser.github.io/bme6iu/#course-3101</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-3103</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-3105</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-3107</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#course-3109</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+
+  <!-- Questions -->
+  <url><loc>https://youruser.github.io/bme6iu/#q-bme11</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#q-bme12</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#q-bme21</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#q-bme22</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#q-bme31</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://youruser.github.io/bme6iu/#q-retake</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+</urlset>

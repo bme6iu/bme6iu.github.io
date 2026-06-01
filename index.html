@@ -97,7 +97,8 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
+    html.smooth-scroll { scroll-behavior: smooth; }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -294,13 +295,15 @@
       position: fixed;
       top: var(--nav-h);
       left: 0; right: 0;
-      background: rgba(5,13,26,0.97);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      bottom: 0;
+      background: rgba(5,13,26,0.99);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       z-index: 999;
-      max-height: calc(100vh - var(--nav-h));
       overflow-y: auto;
-      padding: 16px;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 16px 40px;
     }
     .mobile-menu.open { display: block; }
     .mobile-section-title {
@@ -331,6 +334,11 @@
       z-index: 1;
       min-height: 100vh;
       padding-top: var(--nav-h);
+    }
+    /* Mobile nav height fix */
+    @supports (-webkit-touch-callout: none) {
+      /* iOS Safari */
+      #app { padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); }
     }
     .page { display: none; }
     .page.active {
@@ -1098,12 +1106,8 @@
 
   /* ── THEME SWITCH BUTTON ── */
   #themeSwitchBtn {
-    position: fixed;
-    top: 14px;
-    right: 60px;
-    z-index: 1100;
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: rgba(0,200,255,0.10);
     border: 1px solid var(--border);
@@ -1112,9 +1116,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
+    font-size: 1rem;
     transition: all 0.2s;
-    backdrop-filter: blur(8px);
+    flex-shrink: 0;
+    margin-left: 4px;
   }
   #themeSwitchBtn:hover { background: rgba(0,200,255,0.22); transform: scale(1.1); }
 
@@ -1432,6 +1437,35 @@
   .mob-q-courses { display: none; padding-left: 6px; }
   .mob-q-group.open .mob-q-courses { display: block; }
 
+  
+  
+    /* ══ PAGE TOP BANNER — fixes mobile scroll bug ══
+       Non-course pages need a full-width element at the very top
+       so browser correctly positions scroll at y=0             */
+    .page-top-banner {
+      width: 100%;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 20px 24px;
+    }
+    .page-top-banner-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .page-top-banner h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+    .page-top-banner h1 span { color: var(--accent); }
+    .page-top-banner p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
   </style>
 </head>
 <body>
@@ -1452,9 +1486,6 @@
   <div class="intro-bar"><div class="intro-bar-fill"></div></div>
 </div>
 
-<!-- ── THEME SWITCH BUTTON ── -->
-<button id="themeSwitchBtn" title="Toggle Light/Dark Mode" onclick="toggleTheme()">🌙</button>
-
 
 <!-- Animated background particles -->
 <div class="particles" id="particles"></div>
@@ -1463,19 +1494,15 @@
 <!-- ── NAVIGATION ── -->
 <nav>
   <span class="nav-logo" onclick="navigate('home')"><img src="images/logo.png" class="nav-logo-img" onerror="this.style.display='none'" alt="BME6">BME<span>6</span>·IU</span>
-  
+
   <div class="nav-links">
     <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
-    
+
     <div class="nav-dropdown">
       <button class="nav-btn" data-page="courses">Courses ▾</button>
       <div class="nav-dropdown-menu" style="min-width:340px;">
-
-        <!-- BME 1.1 -->
         <div class="nav-sem-group open">
-          <button class="nav-sem-btn" onclick="toggleNavSem(this)">
-            📚 BME 1st Year — 1st Semester <span class="nsb-arrow">▼</span>
-          </button>
+          <button class="nav-sem-btn" onclick="toggleNavSem(this)">📚 BME 1st Year — 1st Semester <span class="nsb-arrow">▼</span></button>
           <div class="nav-sem-courses">
             <button class="dropdown-item" onclick="navigate('course-1101')">1101 - Introduction to Biomedical Engineering</button>
             <button class="dropdown-item" onclick="navigate('course-1103')">1103 - Electrical Fundamentals for Biomedical Engineering</button>
@@ -1484,12 +1511,8 @@
             <button class="dropdown-item" onclick="navigate('course-1109')">1109 - Communicative Skills</button>
           </div>
         </div>
-
-        <!-- BME 1.2 -->
         <div class="nav-sem-group">
-          <button class="nav-sem-btn" onclick="toggleNavSem(this)">
-            📚 BME 1st Year — 2nd Semester <span class="nsb-arrow">▼</span>
-          </button>
+          <button class="nav-sem-btn" onclick="toggleNavSem(this)">📚 BME 1st Year — 2nd Semester <span class="nsb-arrow">▼</span></button>
           <div class="nav-sem-courses">
             <button class="dropdown-item" onclick="navigate('course-1201')">1201 - Electronics</button>
             <button class="dropdown-item" onclick="navigate('course-1203')">1203 - Biochemistry</button>
@@ -1498,12 +1521,8 @@
             <button class="dropdown-item" onclick="navigate('course-1209')">1209 - Sociology and Economics</button>
           </div>
         </div>
-
-        <!-- BME 2.1 -->
         <div class="nav-sem-group">
-          <button class="nav-sem-btn" onclick="toggleNavSem(this)">
-            🔬 BME 2nd Year — 1st Semester <span class="nsb-arrow">▼</span>
-          </button>
+          <button class="nav-sem-btn" onclick="toggleNavSem(this)">🔬 BME 2nd Year — 1st Semester <span class="nsb-arrow">▼</span></button>
           <div class="nav-sem-courses">
             <button class="dropdown-item" onclick="navigate('course-2101')">2101 - Human Anatomy and Physiology</button>
             <button class="dropdown-item" onclick="navigate('course-2103')">2103 - Digital Electronics</button>
@@ -1512,12 +1531,8 @@
             <button class="dropdown-item" onclick="navigate('course-2109')">2109 - Managerial and Financial Accounting</button>
           </div>
         </div>
-
-        <!-- BME 2.2 -->
         <div class="nav-sem-group">
-          <button class="nav-sem-btn" onclick="toggleNavSem(this)">
-            ⚡ BME 2nd Year — 2nd Semester <span class="nsb-arrow">▼</span>
-          </button>
+          <button class="nav-sem-btn" onclick="toggleNavSem(this)">⚡ BME 2nd Year — 2nd Semester <span class="nsb-arrow">▼</span></button>
           <div class="nav-sem-courses">
             <button class="dropdown-item" onclick="navigate('course-2201')">2201 - Structure and Properties of Biomaterials</button>
             <button class="dropdown-item" onclick="navigate('course-2203')">2203 - Signal and Systems</button>
@@ -1526,12 +1541,8 @@
             <button class="dropdown-item" onclick="navigate('course-2209')">2209 - Communication Engineering</button>
           </div>
         </div>
-
-        <!-- BME 3.1 -->
         <div class="nav-sem-group">
-          <button class="nav-sem-btn" onclick="toggleNavSem(this)" style="background:rgba(0,255,157,0.08);color:var(--accent2);">
-            🟢 BME 3rd Year — 1st Semester (Running) <span class="nsb-arrow" style="color:var(--accent2);">▼</span>
-          </button>
+          <button class="nav-sem-btn" onclick="toggleNavSem(this)" style="background:rgba(0,255,157,0.08);color:var(--accent2);">🟢 BME 3rd Year — 1st Semester (Running) <span class="nsb-arrow" style="color:var(--accent2);">▼</span></button>
           <div class="nav-sem-courses">
             <button class="dropdown-item" onclick="navigate('course-3101')">3101 - Biomedical Instrumentation and Diagnostics</button>
             <button class="dropdown-item" onclick="navigate('course-3103')">3103 - Bio-Signal Processing</button>
@@ -1540,14 +1551,12 @@
             <button class="dropdown-item" onclick="navigate('course-3109')">3109 - Physiological Control Systems</button>
           </div>
         </div>
-
       </div>
-    </div>
     </div>
 
     <div class="nav-dropdown">
       <button class="nav-btn" data-page="questions">Questions ▾</button>
-      <div class="nav-dropdown-menu" style="min-width:260px;">
+      <div class="nav-dropdown-menu" style="min-width:240px;">
         <button class="dropdown-item" onclick="navigate('q-bme11')">BME 1.1 Questions</button>
         <button class="dropdown-item" onclick="navigate('q-bme12')">BME 1.2 Questions</button>
         <button class="dropdown-item" onclick="navigate('q-bme21')">BME 2.1 Questions</button>
@@ -1563,6 +1572,7 @@
     <button class="nav-btn" onclick="navigate('gallery')" data-page="gallery">Gallery</button>
   </div>
 
+  <button id="themeSwitchBtn" title="Toggle Light/Dark Mode" onclick="toggleTheme()">🌙</button>
   <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -1699,7 +1709,7 @@
 </div>
 
 <!-- ── MAIN APP ── -->
-<div id="app">
+<div id="app" style="padding-top:64px;">
 
   <!-- ════════════════════════════════ HOME PAGE ════════════════════════════════ -->
   <div class="page active" id="page-home">
@@ -1808,9 +1818,13 @@
 
   <!-- ════════════════════════════════ COURSES OVERVIEW ════════════════════════════════ -->
     <div class="page" id="page-courses-overview">
-    <div class="section">
-      <div class="section-title">Courses <span>(Theory)</span></div>
-      <div class="section-subtitle">Click a semester to expand its courses</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Courses <span>(Theory)</span></h1>
+        <p>Click a semester to expand — all lecture materials organized by semester</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
 
       <!-- BME 1.1 -->
       <div class="sem-acc-block open">
@@ -1905,7 +1919,7 @@
         <h2 class="course-title">Introduction to<br>Biomedical Engineering</h2>
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the First Year, First Semester of BME-6, IU.</p>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/ariful-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Ariful Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
             <div style="font-size:0.78rem;">Assistant Professor, Dept. of Biomedical Engineering, IU · 
@@ -2084,7 +2098,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the First Year, First Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/ariful-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Ariful Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
@@ -2121,7 +2135,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the First Year, First Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-rabiul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md Rabiul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
@@ -2157,7 +2171,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the First Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/ariful-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Ariful Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
@@ -2265,7 +2279,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the First Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/sm-jahurul-haque.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="S M Jahurul Haque">
           <div>
             <div style="font-weight:600;color:var(--text)">S M Jahurul Haque</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1aews5vvVDX0FzFREK7g7czjJo-S7LZzk/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
@@ -2351,7 +2365,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the First Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-rabiul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md Rabiul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
@@ -2599,7 +2613,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Second Year, First Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/sm-jahurul-haque.png" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="S M Jahurul Haque">
           <div>
             <div style="font-weight:600;color:var(--text)">S M Jahurul Haque</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
@@ -2795,7 +2809,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the Second Year, First Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-rabiul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md Rabiul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Md Rabiul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
@@ -2979,7 +2993,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Second Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/ariful-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Ariful Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Ariful Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU <a href="https://drive.google.com/file/d/1pj7f_svJOujbx8u4kLKw3EGP_59bo1IU/view?usp=drive_link" target="_blank" style="color:var(--accent);text-decoration:none;">About ↗</a></div>
@@ -3125,7 +3139,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Second Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/dr-khairul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Dr. Md. Khairul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Dr. Md. Khairul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Chairman and Associate Professor, Dept. of Biomedical Engineering, IU </div>
@@ -3316,7 +3330,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the Second Year, Second Semester of BME-6, IU</p>
         
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-rabiul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md. Rabiul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Md. Rabiul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Assistant Professor, Dept. of Biomedical Engineering, IU </div>
@@ -3522,7 +3536,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the first course of the Third Year, First Semester of BME-6, IU</p>
         <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/afiya-mubasharah.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Afiya Mubasharah">
           <div>
             <div style="font-weight:600;color:var(--text)">Afiya Mubasharah</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
@@ -3569,7 +3583,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Third Year, First Semester of BME-6, IU</p>
         <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-abu-sayed.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md. Abu Sayed">
           <div>
             <div style="font-weight:600;color:var(--text)">Md. Abu Sayed</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
@@ -3616,7 +3630,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the third course of the Third Year, First Semester of BME-6, IU</p>
         <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/dr-khairul-islam.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Dr. Md. Khairul Islam">
           <div>
             <div style="font-weight:600;color:var(--text)">Dr. Md. Khairul Islam</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Chairman and Associate Professor, Dept. of Biomedical Engineering, IU </div>
@@ -3662,7 +3676,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the fourth course of the Third Year, First Semester of BME-6, IU</p>
         <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/md-abu-sayed.jpg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Md. Abu Sayed">
           <div>
             <div style="font-weight:600;color:var(--text)">Md. Abu Sayed</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
@@ -3727,7 +3741,7 @@
         <p style="color:var(--text-muted);font-size:0.88rem;">This is the fifth course of the Third Year, First Semester of BME-6, IU</p>
         <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>
         <div class="course-teacher-info">
-          <div class="teacher-avatar">👨‍🏫</div>
+          <img src="images/sathi-rahman.jpeg" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display='none'" alt="Sathi Rahman">
           <div>
             <div style="font-weight:600;color:var(--text)">Sathi Rahman</div>
             <div style="font-size:0.78rem;color:var(--text-muted)">Lecturer, Dept. of Biomedical Engineering, IU </div>
@@ -3751,14 +3765,18 @@
       </div>
     </div>
   </div>
-  </div>
+  
 
 
   <!-- ════ QUESTIONS PAGES ════ -->
   <div class="page" id="page-q-bme11">
-    <div class="section">
-      <div class="section-title">Questions — <span>BME 1.1</span></div>
-      <div class="section-subtitle">1st Year, 1st Semester — Tutorial &amp; Semester Final Questions</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Questions — <span>BME 1.1</span></h1>
+        <p>1st Year, 1st Semester — Tutorial &amp; Semester Final Questions</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="q-section-title">📝 Tutorial Questions</div>
       <div class="qcard">
         <div class="qcard-icon">📄</div>
@@ -3799,9 +3817,13 @@
     </div>
   </div>
   <div class="page" id="page-q-bme12">
-    <div class="section">
-      <div class="section-title">Questions — <span>BME 1.2</span></div>
-      <div class="section-subtitle">1st Year, 2nd Semester — Tutorial &amp; Semester Final Questions</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Questions — <span>BME 1.2</span></h1>
+        <p>1st Year, 2nd Semester — Tutorial &amp; Semester Final Questions</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="q-section-title">📝 Tutorial Questions</div>
       <div class="qcard">
         <div class="qcard-icon">📄</div>
@@ -3827,9 +3849,13 @@
     </div>
   </div>
   <div class="page" id="page-q-bme21">
-    <div class="section">
-      <div class="section-title">Questions — <span>BME 2.1</span></div>
-      <div class="section-subtitle">2nd Year, 1st Semester — Tutorial &amp; Semester Final Questions</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Questions — <span>BME 2.1</span></h1>
+        <p>2nd Year, 1st Semester — Tutorial &amp; Semester Final Questions</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="q-section-title">📝 Tutorial Questions</div>
       <div class="qcard">
         <div class="qcard-icon">📄</div>
@@ -3855,9 +3881,13 @@
     </div>
   </div>
   <div class="page" id="page-q-bme22">
-    <div class="section">
-      <div class="section-title">Questions — <span>BME 2.2</span></div>
-      <div class="section-subtitle">2nd Year, 2nd Semester — Tutorial &amp; Semester Final Questions</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Questions — <span>BME 2.2</span></h1>
+        <p>2nd Year, 2nd Semester — Tutorial &amp; Semester Final Questions</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="q-section-title">📝 Tutorial Questions</div>
       <div class="qcard">
         <div class="qcard-icon">📄</div>
@@ -3883,9 +3913,13 @@
     </div>
   </div>
   <div class="page" id="page-q-bme31">
-    <div class="section">
-      <div class="section-title">Questions — <span>BME 3.1</span></div>
-      <div class="section-subtitle">3rd Year, 1st Semester (Running) — Tutorial &amp; Semester Final Questions</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Questions — <span>BME 3.1</span></h1>
+        <p>3rd Year, 1st Semester (Running) — Tutorial &amp; Semester Final Questions</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="info-banner"><span class="info-banner-icon">🟢</span><span>Currently running semester. 2022-23 tutorial will be added when available.</span></div>
       <div class="q-section-title">📝 Tutorial Questions</div>
       <div class="qcard">
@@ -3902,9 +3936,13 @@
     </div>
   </div>
   <div class="page" id="page-q-retake">
-    <div class="section">
-      <div class="section-title">Retake Exams <span>Questions</span></div>
-      <div class="section-subtitle">Previous retake/improvement examination papers</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Retake Exams <span>Questions</span></h1>
+        <p>Previous retake/improvement examination papers</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="q-section-title">🔄 Retake Questions</div>
       <div class="qcard">
         <div class="qcard-icon">📄</div>
@@ -3916,21 +3954,30 @@
 
   <!-- ════ TEACHERS PAGE ════ -->
   <div class="page" id="page-teachers">
-    <div class="section">
-      <div class="section-title">Teacher's <span>Index</span></div>
-      <div class="section-subtitle">Department of Biomedical Engineering, Islamic University, Kushtia</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Teacher's <span>Index</span></h1>
+        <p>Department of Biomedical Engineering, Islamic University, Kushtia</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
 
-      <!-- Featured Group Photo -->
-      <div class="featured-photo-frame">
-        <img src="images/teachers-group.jpg" alt="Faculty Group Photo"
-             onerror="this.parentElement.style.display='none'" />
-        <div class="featured-photo-caption">Faculty of Biomedical Engineering Department, Islamic University</div>
+      <!-- Featured Group Photo 4800×2700px = 16:9 -->
+      <div style="position:relative;width:100%;padding-top:56.25%;border-radius:14px;overflow:hidden;background:var(--surface2);margin-bottom:36px;box-shadow:0 0 0 2px rgba(0,200,255,0.25);">
+        <img src="images/teachers-group.jpg"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
+             onerror="this.style.display='none'"
+             alt="Faculty — Dept. of Biomedical Engineering, Islamic University" />
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 22px;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;color:#fff;font-size:0.95rem;">Department of Biomedical Engineering</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.65);">Islamic University, Kushtia — Faculty</div>
+        </div>
       </div>
 
       <div class="teachers-grid">
 
         <div class="teacher-card">
-          <img src="images/dr-khairul-islam.png" class="teacher-photo"
+          <img src="images/dr-khairul-islam.jpg" class="teacher-photo"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Dr. Md. Khairul Islam" />
           <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
           <div class="teacher-name">Dr. Md. Khairul Islam</div>
@@ -3939,7 +3986,7 @@
         </div>
 
         <div class="teacher-card">
-          <img src="images/md-rabiul-islam.png" class="teacher-photo"
+          <img src="images/md-rabiul-islam.jpg" class="teacher-photo"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Md Rabiul Islam" />
           <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
           <div class="teacher-name">Md Rabiul Islam</div>
@@ -3957,7 +4004,7 @@
         </div>
 
         <div class="teacher-card">
-          <img src="images/ariful-islam.png" class="teacher-photo"
+          <img src="images/ariful-islam.jpg" class="teacher-photo"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Ariful Islam" />
           <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
           <div class="teacher-name">Ariful Islam</div>
@@ -3966,7 +4013,7 @@
         </div>
 
         <div class="teacher-card">
-          <img src="images/md-abu-sayed.png" class="teacher-photo"
+          <img src="images/md-abu-sayed.jpg" class="teacher-photo"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Md. Abu Sayed" />
           <div class="teacher-photo-placeholder" style="display:none">👨‍🏫</div>
           <div class="teacher-name">Md. Abu Sayed</div>
@@ -3975,7 +4022,7 @@
         </div>
 
         <div class="teacher-card">
-          <img src="images/afiya-mubasharah.png" class="teacher-photo"
+          <img src="images/afiya-mubasharah.jpg" class="teacher-photo"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="Afiya Mubasharah" />
           <div class="teacher-photo-placeholder" style="display:none">👩‍🏫</div>
           <div class="teacher-name">Afiya Mubasharah</div>
@@ -3998,9 +4045,13 @@
 
   <!-- ════ GALLERY PAGE ════ -->
   <div class="page" id="page-gallery">
-    <div class="section">
-      <div class="section-title">Photo <span>Gallery</span></div>
-      <div class="section-subtitle">6th Batch, BME — Moments &amp; Memories</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Photo <span>Gallery</span></h1>
+        <p>6th Batch, BME — Moments &amp; Memories</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
       <div class="info-banner" style="margin-bottom:24px;">
         <span class="info-banner-icon">📸</span>
         <span>To add photos: Upload landscape images to the <code style="font-family:'JetBrains Mono',monospace;color:var(--accent2)">images/gallery/</code> folder and add entries below following the existing pattern.</span>
@@ -4034,9 +4085,13 @@
   <!-- ════ SYLLABUS + IMPORTANT FILES ════ -->
 
   <div class="page" id="page-syllabus">
-    <div class="section">
-      <div class="section-title">Course <span>Syllabus</span></div>
-      <div class="section-subtitle">Department of Biomedical Engineering, Islamic University — 6th Batch</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Course <span>Syllabus</span></h1>
+        <p>Department of Biomedical Engineering, Islamic University — 6th Batch</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
 
       <div class="qcard" style="margin-bottom:24px;background:linear-gradient(135deg,rgba(0,200,255,0.07),rgba(124,58,237,0.07));">
         <div class="qcard-icon">📘</div>
@@ -4088,9 +4143,13 @@
 
   <!-- ════════════════════════════════ IMPORTANT FILES PAGE ════════════════════════════════ -->
   <div class="page" id="page-important-files">
-    <div class="section">
-      <div class="section-title">Important <span>Files</span></div>
-      <div class="section-subtitle">Quick access to all major resources</div>
+    <div class="page-top-banner">
+      <div class="page-top-banner-inner">
+        <h1>Important <span>Files</span></h1>
+        <p>Quick access to all major resources</p>
+      </div>
+    </div>
+    <div class="section" style="padding-top:36px;">
 
       <div class="files-grid">
         <a class="file-card" href="https://drive.google.com/drive/folders/116FtiL0L14sHtj9Bu2e0yxgCFfw70O8a?usp=drive_link" target="_blank">
@@ -4144,7 +4203,7 @@
     </a>
     <div class="footer-copy">© 2026 6th Batch, Biomedical Engineering Department, Islamic University, Bangladesh. All rights reserved.</div>
     <div class="footer-designer">Designed and maintained by <a href="http://sites.google.com/view/md-minhazur-rahman-mahim" target="_blank">Md. Minhazur Rahman Mahim</a> · Rebuilt for GitHub Pages</div>
-  </div>
+  
 </footer>
 
 <script>
@@ -4186,90 +4245,30 @@ function navigate(page) {
 }
 
 function handleRoute() {
-  let hash = window.location.hash.slice(1) || 'home';
+  const hash = window.location.hash.slice(1) || 'home';
 
-  // 1. Scroll FIRST before any DOM change
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-
-  // 2. Hide all pages
-  document.querySelectorAll('.page').forEach(p => {
-    p.classList.remove('active');
-    p.classList.remove('page-entering');
-  });
-
-  // 3. Update nav
+  // STEP 1: Hide all pages first
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn[data-page]').forEach(b => b.classList.remove('active'));
 
-  // 4. Show target page
-  const pageEl = document.getElementById('page-' + hash);
-  const target = pageEl || document.getElementById('page-home');
-  target.classList.add('active');
+  // STEP 2: Show target page
+  const target = document.getElementById('page-' + hash) || document.getElementById('page-home');
+  if (target) target.classList.add('active');
 
-  // 5. Scroll again after paint (mobile Safari fix)
-  requestAnimationFrame(() => {
-    window.scrollTo(0, 0);
+  // STEP 3: Force scroll to top — multiple methods for cross-browser
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+  // STEP 4: Repeat after browser paint (mobile Safari needs this)
+  requestAnimationFrame(function() {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    // And once more after layout settles
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 50);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   });
 
   updateMeta(hash);
-}
-
-// Fix nav height dynamically for all mobile browsers
-function fixNavHeight() {
-  const nav = document.querySelector('nav');
-  const app = document.getElementById('app');
-  const mobileMenu = document.getElementById('mobileMenu');
-  if (nav && app) {
-    const h = nav.getBoundingClientRect().height;
-    app.style.paddingTop = h + 'px';
-    if (mobileMenu) mobileMenu.style.top = h + 'px';
-    document.getElementById('themeSwitchBtn') && 
-      (document.getElementById('themeSwitchBtn').style.top = ((h - 38) / 2 + 4) + 'px');
-  }
-}
-window.addEventListener('load', fixNavHeight);
-window.addEventListener('resize', fixNavHeight);
-
-function renderGenericCourse(code, course) {
-  const running = course.sem.includes('Running');
-  document.getElementById('generic-course-content').innerHTML = `
-    <div class="course-hero">
-      <div class="course-hero-inner">
-        <div class="course-crumb">
-          <button onclick="navigate('courses-overview')">Courses</button> / ${course.sem.split(',')[0]} /
-          <span style="color:var(--text-muted)">${course.code}</span>
-        </div>
-        <div class="course-badge">${course.code} · ${course.sem}</div>
-        <h2 class="course-title">${course.title}</h2>
-        ${running ? '<div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);"><span>🟢</span> Currently Running Semester</div>' : ''}
-        ${course.teacher ? `<div class="course-teacher-info"><div class="teacher-avatar">👨‍🏫</div><div><div style="font-weight:600;color:var(--text)">${course.teacher}</div></div></div>` : ''}
-      </div>
-    </div>
-    <div class="section">
-      <div class="info-banner">
-        <span class="info-banner-icon">📚</span>
-        <span>Chapter-wise lecture materials for <strong>${course.title}</strong>. 
-        To add lectures, update the <code style="font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:0.8rem;">COURSES</code> object in <code style="font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:0.8rem;">index.html</code> with the Google Drive file IDs.</span>
-      </div>
-      <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
-        <div style="font-size:3rem;margin-bottom:16px;">📖</div>
-        <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px;">${course.title}</div>
-        <div style="font-size:0.85rem;margin-bottom:24px;">${course.sem} · ${course.code}</div>
-        <div style="font-size:0.82rem;color:var(--text-dim);max-width:400px;margin:0 auto;">
-          Lecture materials for this course will be added here. Add the Drive links to the course data in index.html.
-        </div>
-      </div>
-    </div>
-  `;
+  fixNavHeight();
 }
 
 window.addEventListener('hashchange', handleRoute);
