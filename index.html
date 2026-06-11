@@ -1214,9 +1214,7 @@
 
   /* ── GALLERY ── */
   .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    /* wrapper only — grid is inside .gallery-grid-inner */
   }
   .gallery-item {
     position: relative;
@@ -1341,6 +1339,34 @@
   .slideshow-dot.active {
     background: var(--accent);
     transform: scale(1.3);
+  }
+
+  .gallery-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: rgba(0,200,255,0.07);
+    border: 1px solid rgba(0,200,255,0.25);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .gallery-toggle-btn:hover {
+    background: rgba(0,200,255,0.15);
+    border-color: rgba(0,200,255,0.5);
+    transform: translateY(-1px);
+  }
+  .gallery-grid-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
   }
 
   .gallery-lightbox {
@@ -3353,6 +3379,14 @@ function openGallery(src, cap) {
   document.getElementById('galleryLightboxCap').textContent = cap || '';
   document.getElementById('galleryLightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+function toggleGalleryGrid(btn){
+  var grid=document.querySelector('.gallery-grid-inner');
+  if(!grid)return;
+  var open=grid.style.display!=='none';
+  grid.style.display=open?'none':'grid';
+  var count=document.querySelectorAll('.gallery-grid-inner .gallery-item').length;
+  btn.textContent=open?'📷 Show All Photos ('+count+')':'🔼 Hide Photos';
 }
 function closeGallery() {
   document.getElementById('galleryLightbox').classList.remove('open');
@@ -5969,7 +6003,9 @@ const GALLERY_DATA = [{"src":"images/gallery/gp1.jpg","caption":"After 1st Year"
         updateSlideCounter();
         startAutoplay();
       }
-      gg.innerHTML = GALLERY_DATA.map(function(item){ return '<div class="gallery-item" onclick="openGallery(\''+item.src+'\',\''+((item.caption||'').replace(/'/g,'&#39;'))+'\')"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="gallery-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
+      var showBtn='<div style="text-align:center;margin:18px 0 8px"><button class="gallery-toggle-btn" onclick="toggleGalleryGrid(this)">📷 Show All Photos ('+GALLERY_DATA.length+')</button></div>';
+      var gridHTML=GALLERY_DATA.map(function(item){ return '<div class="gallery-item" onclick="openGallery(\''+item.src+'\',\''+((item.caption||'').replace(/'/g,'&#39;'))+'\')"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="gallery-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
+      gg.innerHTML=showBtn+'<div class="gallery-grid-inner" style="display:none">'+gridHTML+'</div>';
     }
   }
 
@@ -6005,7 +6041,7 @@ const GALLERY_DATA = [{"src":"images/gallery/gp1.jpg","caption":"After 1st Year"
 // ── SLIDESHOW ENGINE ──────────────────────────
 // ── SLIDESHOW ENGINE ──────────────────────────
 var _slideIdx = 0, _slidePaused = false, _slideTimer = null;
-var SLIDE_INTERVAL = 10000;
+var SLIDE_INTERVAL = 2000;
 function getSlides(){ return document.querySelectorAll('.slideshow-slide'); }
 function goToSlide(n){ var s=getSlides(); if(!s.length)return; _slideIdx=((n%s.length)+s.length)%s.length; s.forEach(function(sl,i){ sl.classList.toggle('active',i===_slideIdx); }); document.querySelectorAll('.slideshow-dot').forEach(function(d,i){ d.classList.toggle('active',i===_slideIdx); }); updateSlideCounter(); }
 function slideshowNext(){ goToSlide(_slideIdx+1); }
@@ -6015,6 +6051,14 @@ function startAutoplay(){ clearInterval(_slideTimer); if(!_slidePaused) _slideTi
 function togglePause(){ _slidePaused=!_slidePaused; var btn=document.getElementById('pauseBtn'); if(_slidePaused){ clearInterval(_slideTimer); if(btn)btn.innerHTML='▶ Play'; } else { startAutoplay(); if(btn)btn.innerHTML='⏸ Pause'; } }
 (function(){ var sw=document.getElementById('gallerySlideshow'); if(sw){ sw.addEventListener('mouseenter',function(){ clearInterval(_slideTimer); }); sw.addEventListener('mouseleave',function(){ if(!_slidePaused)startAutoplay(); }); } })();
 function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src=src; document.getElementById('galleryLightboxCap').textContent=cap||''; document.getElementById('galleryLightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+function toggleGalleryGrid(btn){
+  var grid=document.querySelector('.gallery-grid-inner');
+  if(!grid)return;
+  var open=grid.style.display!=='none';
+  grid.style.display=open?'none':'grid';
+  var count=document.querySelectorAll('.gallery-grid-inner .gallery-item').length;
+  btn.textContent=open?'📷 Show All Photos ('+count+')':'🔼 Hide Photos';
+}
 function closeGallery(){ document.getElementById('galleryLightbox').classList.remove('open'); document.getElementById('galleryLightboxImg').src=''; document.body.style.overflow=''; }
 
 
