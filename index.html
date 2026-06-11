@@ -1258,10 +1258,41 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    will-change: transform, opacity;
   }
   .slideshow-slide.active {
     display: block;
+    animation: ss-fade-in 0.6s ease both;
   }
+  /* per-animation overrides on entering slide */
+  .slideshow-slide.active[data-anim="slide-left"]  { animation: ss-slide-left-in  0.6s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.active[data-anim="slide-right"] { animation: ss-slide-right-in 0.6s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.active[data-anim="zoom-in"]     { animation: ss-zoom-in-in     0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.active[data-anim="zoom-out"]    { animation: ss-zoom-out-in    0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.active[data-anim="flip-x"]      { animation: ss-flip-x-in      0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.active[data-anim="fade"]        { animation: ss-fade-in        0.65s ease both; }
+  /* exiting slide */
+  .slideshow-slide.ss-exit { display: block; }
+  .slideshow-slide.ss-exit[data-anim="slide-left"]  { animation: ss-slide-left-out  0.6s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.ss-exit[data-anim="slide-right"] { animation: ss-slide-right-out 0.6s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.ss-exit[data-anim="zoom-in"]     { animation: ss-zoom-in-out     0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.ss-exit[data-anim="zoom-out"]    { animation: ss-zoom-out-out    0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.ss-exit[data-anim="flip-x"]      { animation: ss-flip-x-out      0.65s cubic-bezier(.4,0,.2,1) both; }
+  .slideshow-slide.ss-exit[data-anim="fade"]        { animation: ss-fade-out        0.65s ease both; }
+
+  @keyframes ss-fade-in        { from{opacity:0}              to{opacity:1} }
+  @keyframes ss-fade-out       { from{opacity:1}              to{opacity:0} }
+  @keyframes ss-slide-left-in  { from{transform:translateX(60px);opacity:0}  to{transform:translateX(0);opacity:1} }
+  @keyframes ss-slide-left-out { from{transform:translateX(0);opacity:1}     to{transform:translateX(-60px);opacity:0} }
+  @keyframes ss-slide-right-in { from{transform:translateX(-60px);opacity:0} to{transform:translateX(0);opacity:1} }
+  @keyframes ss-slide-right-out{ from{transform:translateX(0);opacity:1}     to{transform:translateX(60px);opacity:0} }
+  @keyframes ss-zoom-in-in     { from{transform:scale(.92);opacity:0}        to{transform:scale(1);opacity:1} }
+  @keyframes ss-zoom-in-out    { from{transform:scale(1);opacity:1}          to{transform:scale(1.06);opacity:0} }
+  @keyframes ss-zoom-out-in    { from{transform:scale(1.06);opacity:0}       to{transform:scale(1);opacity:1} }
+  @keyframes ss-zoom-out-out   { from{transform:scale(1);opacity:1}          to{transform:scale(.92);opacity:0} }
+  @keyframes ss-flip-x-in      { from{transform:perspective(600px) rotateY(12deg);opacity:0} to{transform:perspective(600px) rotateY(0);opacity:1} }
+  @keyframes ss-flip-x-out     { from{transform:perspective(600px) rotateY(0);opacity:1}     to{transform:perspective(600px) rotateY(-12deg);opacity:0} }
+
   .slideshow-slide img {
     width: 100%;
     height: 100%;
@@ -5712,6 +5743,60 @@ const RETAKE_QUESTIONS = [{"title":"First Year (1st Semester & 2nd Semester)","s
 
 const GALLERY_DATA = [{"src":"images/gallery/gp1.jpg","caption":"After 1st Year"},{"src":"images/gallery/gp2.jpg","caption":"After 1st Year"},{"src":"images/gallery/gp3.jpg","caption":"BME 6 Boys"}];
 
+// ── SLIDESHOW ENGINE ──────────────────────────
+var _slideIdx = 0, _slidePaused = false, _slideTimer = null;
+var SLIDE_INTERVAL = 1500;
+
+var _ANIMS = ['fade','slide-left','slide-right','zoom-in','zoom-out','flip-x'];
+var _animIdx = 0;
+
+function getSlides(){ return document.querySelectorAll('.slideshow-slide'); }
+
+function goToSlide(n){
+  var s = getSlides();
+  if (!s.length) return;
+  var prev = _slideIdx;
+  _slideIdx = ((n % s.length) + s.length) % s.length;
+  if (prev === _slideIdx) return;
+
+  var anim = _ANIMS[_animIdx % _ANIMS.length];
+  _animIdx++;
+
+  // remove active from all
+  s.forEach(function(sl){ sl.classList.remove('active','ss-exit'); sl.removeAttribute('data-anim'); });
+
+  var leaving = s[prev];
+  var entering = s[_slideIdx];
+
+  leaving.setAttribute('data-anim', anim);
+  leaving.classList.add('ss-exit');
+  entering.setAttribute('data-anim', anim);
+  entering.classList.add('active');
+
+  setTimeout(function(){ leaving.classList.remove('ss-exit'); leaving.removeAttribute('data-anim'); }, 650);
+
+  document.querySelectorAll('.slideshow-dot').forEach(function(d,i){ d.classList.toggle('active', i===_slideIdx); });
+  updateSlideCounter();
+}
+
+function slideshowNext(){ goToSlide(_slideIdx+1); }
+function slideshowPrev(){ goToSlide(_slideIdx-1); }
+function updateSlideCounter(){ var el=document.getElementById('slideCounter'); var s=getSlides(); if(el&&s.length) el.textContent=(_slideIdx+1)+' / '+s.length; }
+function startAutoplay(){ clearInterval(_slideTimer); if(!_slidePaused) _slideTimer=setInterval(slideshowNext,SLIDE_INTERVAL); }
+function togglePause(){
+  _slidePaused=!_slidePaused;
+  var btn=document.getElementById('pauseBtn');
+  if(_slidePaused){ clearInterval(_slideTimer); if(btn)btn.innerHTML='&#9654; Play'; }
+  else { startAutoplay(); if(btn)btn.innerHTML='&#9208; Pause'; }
+}
+(function(){
+  var sw=document.getElementById('gallerySlideshow');
+  if(sw){
+    sw.addEventListener('click',function(e){ if(!e.target.closest('button')) togglePause(); });
+  }
+})();
+function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src=src; document.getElementById('galleryLightboxCap').textContent=cap||''; document.getElementById('galleryLightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+
 // ══ AUTO-RENDER ═══════════════════════════════════════════════════
 (function () {
   var cur = CURRENT_SEM_ID;
@@ -6038,19 +6123,7 @@ const GALLERY_DATA = [{"src":"images/gallery/gp1.jpg","caption":"After 1st Year"
 
 })();
 
-// ── SLIDESHOW ENGINE ──────────────────────────
-// ── SLIDESHOW ENGINE ──────────────────────────
-var _slideIdx = 0, _slidePaused = false, _slideTimer = null;
-var SLIDE_INTERVAL = 2000;
-function getSlides(){ return document.querySelectorAll('.slideshow-slide'); }
-function goToSlide(n){ var s=getSlides(); if(!s.length)return; _slideIdx=((n%s.length)+s.length)%s.length; s.forEach(function(sl,i){ sl.classList.toggle('active',i===_slideIdx); }); document.querySelectorAll('.slideshow-dot').forEach(function(d,i){ d.classList.toggle('active',i===_slideIdx); }); updateSlideCounter(); }
-function slideshowNext(){ goToSlide(_slideIdx+1); }
-function slideshowPrev(){ goToSlide(_slideIdx-1); }
-function updateSlideCounter(){ var el=document.getElementById('slideCounter'); var s=getSlides(); if(el&&s.length) el.textContent=(_slideIdx+1)+' / '+s.length; }
-function startAutoplay(){ clearInterval(_slideTimer); if(!_slidePaused) _slideTimer=setInterval(slideshowNext,SLIDE_INTERVAL); }
-function togglePause(){ _slidePaused=!_slidePaused; var btn=document.getElementById('pauseBtn'); if(_slidePaused){ clearInterval(_slideTimer); if(btn)btn.innerHTML='▶ Play'; } else { startAutoplay(); if(btn)btn.innerHTML='⏸ Pause'; } }
-(function(){ var sw=document.getElementById('gallerySlideshow'); if(sw){ sw.addEventListener('mouseenter',function(){ clearInterval(_slideTimer); }); sw.addEventListener('mouseleave',function(){ if(!_slidePaused)startAutoplay(); }); } })();
-function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src=src; document.getElementById('galleryLightboxCap').textContent=cap||''; document.getElementById('galleryLightbox').classList.add('open'); document.body.style.overflow='hidden'; }
+
 function toggleGalleryGrid(btn){
   var grid=document.querySelector('.gallery-grid-inner');
   if(!grid)return;
