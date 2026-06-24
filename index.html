@@ -5513,7 +5513,7 @@ const SEMESTERS = [
         "prefix": "BME",
         "title": "Transducer and Sensors for Medical Applications",
         "teacher": "Md. Abu Sayed",
-        "chapters": 4,
+        "chapters": 5,
         "desc": "This is the fourth course of the Third Year, First Semester of BME-6, IU",
         "teacherPhoto": "images/md-abu-sayed.jpg",
         "driveFolder": "https://drive.google.com/drive/folders/1xh41BM2I-u8tIpx3bxyyTP8Pm34Da_7V?usp=drive_link",
@@ -5546,6 +5546,16 @@ const SEMESTERS = [
                 "num": "Lecture 1",
                 "label": "Temperature Measurement",
                 "url": "https://drive.google.com/file/d/1uRbMpz6G7lkZPwWer1YhZMnUnamBF4ma/preview"
+              }
+            ]
+          },
+          {
+            "name": "Chemical Sensors",
+            "lectures": [
+              {
+                "num": "Lecture 1",
+                "label": "Chemical Sensors",
+                "url": "https://drive.google.com/file/d/1L6gXur0EKc5Kg4XS7dn8Ew-s8z0Jq-NQ/preview"
               }
             ]
           },
@@ -6125,6 +6135,7 @@ var PAGE_NOTES = {};
 
 (function(){if(window._bmeRt)return;window._bmeRt=true;if(typeof ANNOUNCEMENT!=="undefined"&&ANNOUNCEMENT&&ANNOUNCEMENT.trim()){var bar=document.createElement("div");bar.id="ann-banner";bar.style.cssText="position:fixed;top:var(--nav-h,64px);left:0;right:0;background:linear-gradient(90deg,rgba(0,200,255,.18),rgba(0,255,157,.12));border-bottom:1px solid rgba(0,200,255,.25);padding:7px 16px;font-size:.78rem;color:#00c8ff;z-index:998;overflow:hidden;";var inner=document.createElement("div");inner.style.cssText="display:inline-block;white-space:nowrap;animation:annScroll 25s linear infinite;padding-left:100%;";inner.textContent="📢  "+ANNOUNCEMENT+"   ";if(!document.getElementById("ann-style")){var st=document.createElement("style");st.id="ann-style";st.textContent="@keyframes annScroll{0%{transform:translateX(0)}100%{transform:translateX(-200%)}}";document.head.appendChild(st);}bar.appendChild(inner);document.body.appendChild(bar);var app=document.getElementById("app");if(app)app.style.paddingTop=(parseInt(getComputedStyle(app).paddingTop)||64)+34+"px";}if(typeof PAGE_NOTES==="object"&&PAGE_NOTES){function _sn(){var old=document.getElementById("_pnote");if(old)old.remove();var hash=(window.location.hash||"#home").slice(1)||"home";var note=PAGE_NOTES[hash];if(!note||!note.trim())return;var div=document.createElement("div");div.id="_pnote";div.style.cssText="margin:12px auto;max-width:1100px;padding:10px 16px;background:rgba(255,209,102,.09);border:1px solid rgba(255,209,102,.25);border-radius:8px;font-size:.8rem;color:#ffd166;line-height:1.6;";div.innerHTML="📝 <strong>Note:</strong> "+note.replace(/\n/g,"<br>");var tgt=document.getElementById("page-"+hash);if(tgt)tgt.insertAdjacentElement("afterbegin",div);}window.addEventListener("hashchange",_sn);window.addEventListener("load",_sn);_sn();}})();
 </script>
+
 
 
 </body></html>
