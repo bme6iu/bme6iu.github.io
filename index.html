@@ -1787,7 +1787,29 @@ nav.fx-scrolled{box-shadow:0 6px 24px rgba(10,31,60,.12)!important}
 
   /* stop mobile browsers' automatic force-dark from double-darkening; the site manages its own theme */
 html{color-scheme:light}html[data-theme="dark"]{color-scheme:dark}
-nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--nav-bg,var(--surface))!important}
+/* ═══════ LIGHT-THEME HERO & BANNERS (follow the theme toggle) ═══════ */
+[data-theme="light"] .hero{background:radial-gradient(1100px 520px at 85% 8%,rgba(14,124,134,.11),transparent 62%),radial-gradient(700px 400px at 5% 100%,rgba(179,32,47,.06),transparent 60%),linear-gradient(180deg,#FFFFFF 0%,#F3EFE8 100%)!important;border-bottom:1px solid var(--border)!important}
+[data-theme="light"] .hero h1 .line1{color:var(--ink)!important}
+[data-theme="light"] .hero h1 .line2{color:var(--accent2)!important}
+[data-theme="light"] .hero-badge{color:var(--accent2)!important}
+[data-theme="light"] .hero-sub{color:var(--text-muted)!important}
+[data-theme="light"] .hero-stats{border-top-color:var(--border)}
+[data-theme="light"] .hero .stat-num{color:var(--ink)!important}
+[data-theme="light"] .hero .stat-label{color:var(--text-muted)!important}
+[data-theme="light"] .hero .btn-secondary,[data-theme="light"] .hero .btn-ghost{color:var(--ink)!important;border-color:rgba(10,31,60,.3)!important}
+[data-theme="light"] .hero .btn-secondary:hover,[data-theme="light"] .hero .btn-ghost:hover{background:rgba(10,31,60,.06)!important;border-color:var(--ink)!important;color:var(--ink)!important}
+[data-theme="light"] .page-top-banner,[data-theme="light"] .course-hero{background:linear-gradient(180deg,#FFFFFF,#F3EFE8)!important;border-bottom:1px solid var(--border)!important}
+[data-theme="light"] .page-top-banner h1,[data-theme="light"] .course-title{color:var(--ink)!important}
+[data-theme="light"] .page-top-banner h1 span{color:var(--accent2)!important}
+[data-theme="light"] .page-top-banner p,[data-theme="light"] .course-hero p,[data-theme="light"] .course-crumb,[data-theme="light"] .course-crumb button,[data-theme="light"] .course-crumb a{color:var(--text-muted)!important}
+[data-theme="light"] .course-crumb button:hover,[data-theme="light"] .course-crumb a:hover{color:var(--accent)!important}
+[data-theme="light"] .course-badge{background:var(--surface2)!important;border-color:var(--border)!important;color:var(--accent2)!important}
+[data-theme="light"] .course-teacher-info{background:#fff!important;border-color:var(--border)!important}
+[data-theme="light"] .course-teacher-info *{color:var(--ink)!important}
+[data-theme="light"] .course-hero .btn-ghost{color:var(--ink)!important;border-color:var(--border)!important}
+[data-theme="light"] .course-hero .btn-ghost:hover{border-color:var(--accent)!important;color:var(--accent)!important}
+.hero,.page-top-banner,.course-hero{transition:background-color .35s ease,color .35s ease}
+
   </style>
 <meta id="og-title" property="og:title" content="6th Batch — BME, Islamic University"><meta id="og-desc" property="og:description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia."><meta id="og-image" property="og:image" content="og-preview.png"><meta id="tw-image" property="twitter:image" content="og-preview.png"><meta id="tw-title" property="twitter:title" content="6th Batch — BME, Islamic University"><meta id="tw-desc" property="twitter:description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia.">
   <!-- ═══════════════════════════════════════════ -->
@@ -7619,19 +7641,19 @@ var PAGE_NOTES = {};
   function beat(x){var m=x%260;if(m<30)return 0;if(m<50)return Math.sin((m-30)/20*Math.PI)*-6;if(m<80)return 0;if(m<90)return (m-80)*1.2;if(m<100)return -(100-m)*0+(-(m-90)*9+12);if(m<112)return (m-100)*7.5-78;if(m<130)return (130-m)*.3;if(m<170)return Math.sin((m-130)/40*Math.PI)*-14;return 0}
   function draw(now){
    if(!vis){requestAnimationFrame(draw);return}
-   var t=(now-t0)/1000;cx.clearRect(0,0,W,H);
+   var t=(now-t0)/1000;cx.clearRect(0,0,W,H);var L=document.documentElement.getAttribute('data-theme')==='light',P=L?{cs:'rgba(14,124,134,.26)',cf:'rgba(179,32,47,.14)',s0:'rgba(14,124,134,.8)',s1:'rgba(179,32,47,.7)',r:'rgba(10,31,60,',d0:'rgba(14,124,134,.95)',d1:'rgba(179,32,47,.9)',t:'14,124,134',c:'179,32,47',sh:'rgba(14,124,134,.25)'}:{cs:'rgba(143,227,218,.16)',cf:'rgba(229,72,77,.14)',s0:'rgba(143,227,218,.55)',s1:'rgba(229,72,77,.5)',r:'rgba(255,255,255,',d0:'rgba(143,227,218,.9)',d1:'rgba(229,72,77,.85)',t:'43,179,166',c:'229,72,77',sh:'rgba(43,179,166,.6)'};
    cells.forEach(function(c){var y=(c.y-t*c.s*40+H*2)%(H+40)-20,x=c.x+Math.sin(t*c.s+c.p)*14;
-    cx.beginPath();cx.arc(x,y,c.r,0,6.283);cx.strokeStyle='rgba(143,227,218,.16)';cx.lineWidth=1.2;cx.stroke();
-    cx.beginPath();cx.arc(x+c.r*.25,y-c.r*.15,c.r*.34,0,6.283);cx.fillStyle='rgba(229,72,77,.14)';cx.fill()});
+    cx.beginPath();cx.arc(x,y,c.r,0,6.283);cx.strokeStyle=P.cs;cx.lineWidth=1.2;cx.stroke();
+    cx.beginPath();cx.arc(x+c.r*.25,y-c.r*.15,c.r*.34,0,6.283);cx.fillStyle=P.cf;cx.fill()});
    cx.globalAlpha=W>820?1:.28;var hx=W>820?W*.8:W*.86,hh=Math.min(H*.78,520),top=(H-hh)/2,n=34;
    for(var s=0;s<2;s++){cx.beginPath();for(var i=0;i<=n;i++){var u=i/n,y=top+u*hh,ph=u*9+t*1.1+s*Math.PI,x=hx+Math.sin(ph)*58;
-     i?cx.lineTo(x,y):cx.moveTo(x,y)}cx.strokeStyle=s?'rgba(229,72,77,.5)':'rgba(143,227,218,.55)';cx.lineWidth=2;cx.stroke()}
+     i?cx.lineTo(x,y):cx.moveTo(x,y)}cx.strokeStyle=s?P.s1:P.s0;cx.lineWidth=2;cx.stroke()}
    for(var i=0;i<=n;i+=1){var u=i/n,y=top+u*hh,ph=u*9+t*1.1,a=Math.sin(ph)*58,b=Math.sin(ph+Math.PI)*58,dp=Math.cos(ph);
-    cx.strokeStyle='rgba(255,255,255,'+(.08+Math.abs(dp)*.12)+')';cx.lineWidth=1;cx.beginPath();cx.moveTo(hx+a,y);cx.lineTo(hx+b,y);cx.stroke();
-    cx.fillStyle=dp>0?'rgba(143,227,218,.9)':'rgba(229,72,77,.85)';cx.beginPath();cx.arc(hx+a,y,2.6+dp*1.2,0,6.283);cx.fill()}
-   cx.globalAlpha=1;var by=H-62,off=t*120,g=cx.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba(43,179,166,0)');g.addColorStop(.35,'rgba(43,179,166,.9)');g.addColorStop(.85,'rgba(229,72,77,1)');g.addColorStop(1,'rgba(229,72,77,0)');
+    cx.strokeStyle=P.r+(.08+Math.abs(dp)*.12+(L?.08:0))+')';cx.lineWidth=1;cx.beginPath();cx.moveTo(hx+a,y);cx.lineTo(hx+b,y);cx.stroke();
+    cx.fillStyle=dp>0?P.d0:P.d1;cx.beginPath();cx.arc(hx+a,y,2.6+dp*1.2,0,6.283);cx.fill()}
+   cx.globalAlpha=1;var by=H-62,off=t*120,g=cx.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba('+P.t+',0)');g.addColorStop(.35,'rgba('+P.t+',.9)');g.addColorStop(.85,'rgba('+P.c+',1)');g.addColorStop(1,'rgba('+P.c+',0)');
    cx.beginPath();for(var x=0;x<=W;x+=3){var yy=by+beat(x+off);x?cx.lineTo(x,yy):cx.moveTo(x,yy)}
-   cx.strokeStyle=g;cx.lineWidth=2;cx.shadowColor='rgba(43,179,166,.6)';cx.shadowBlur=8;cx.stroke();cx.shadowBlur=0;
+   cx.strokeStyle=g;cx.lineWidth=2;cx.shadowColor=P.sh;cx.shadowBlur=8;cx.stroke();cx.shadowBlur=0;
    requestAnimationFrame(draw)}
   size();addEventListener('resize',size);requestAnimationFrame(draw);
   if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting&&!document.hidden}).observe(hero);
