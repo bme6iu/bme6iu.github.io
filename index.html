@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0A1F3C">
+  <meta name="color-scheme" content="light dark">
+  <meta name="darkreader-lock">
   <title>6th Batch — BME, Islamic University</title>
   <meta name="description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia.">
     <link rel="icon" type="image/png" href="images/logo.jpg">
@@ -1716,7 +1718,7 @@ footer .fb-btn{background:rgba(255,255,255,.08)!important;border:1px solid rgba(
 
   /* ═══════ V2 · EDITORIAL UNIVERSITY LAYER (biomedical) ═══════ */
 :root{--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--navy:#0A1F3C;--navy2:#0E2A4F;--cardiac:#E5484D;--teal:#2BB3A6;
- --bg:#07121F;--surface:#0D1B2E;--surface2:#122440;--accent:#FF7D86;--accent2:#4FD1C5;--ink:#EAF0F8;--btn-bg:#E5484D;--footer-bg:#050E1A}
+ --bg:#07121F;--surface:#0D1B2E;--surface2:#122440;--accent:#FF7D86;--accent2:#4FD1C5;--ink:#EAF0F8;--btn-bg:#E5484D;--footer-bg:#050E1A;--nav-bg:rgba(7,18,31,.96)}
 [data-theme="light"]{--bg:#FBF9F5;--surface:#FFFFFF;--surface2:#F3EFE8;--border:#E7E2D9;--accent:#B3202F;--accent2:#0E7C86;--ink:#0A1F3C;--text:#1B2A3F;--text-muted:#5B6B80;--btn-bg:#B3202F;--footer-bg:#07162B;--nav-bg:rgba(251,249,245,.94)}
 h1,h2,.section-title,.page-top-banner h1,.course-title,.stat-num,.card-title,.q-section-title,.intro-logo,.footer-logo,.teacher-name{font-family:var(--serif)!important;font-optical-sizing:auto}
 .nav-logo{font-family:var(--serif)!important;font-weight:700}
@@ -1783,6 +1785,9 @@ nav.fx-scrolled{box-shadow:0 6px 24px rgba(10,31,60,.12)!important}
 @media(max-width:768px){.hero{padding:64px 20px 48px;min-height:0}.hero-stats{margin-top:36px}.stat-card{padding-right:22px!important;flex:0 0 50%}#page-home .card{padding:24px 20px 52px}}
 @media(prefers-reduced-motion:reduce){.fx-reveal{opacity:1;transform:none}.hero-badge::before{animation:none}}
 
+  /* stop mobile browsers' automatic force-dark from double-darkening; the site manages its own theme */
+html{color-scheme:light}html[data-theme="dark"]{color-scheme:dark}
+nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--nav-bg,var(--surface))!important}
   </style>
 <meta id="og-title" property="og:title" content="6th Batch — BME, Islamic University"><meta id="og-desc" property="og:description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia."><meta id="og-image" property="og:image" content="og-preview.png"><meta id="tw-image" property="twitter:image" content="og-preview.png"><meta id="tw-title" property="twitter:title" content="6th Batch — BME, Islamic University"><meta id="tw-desc" property="twitter:description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia.">
   <!-- ═══════════════════════════════════════════ -->
