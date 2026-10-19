@@ -1471,28 +1471,79 @@ async function ghApi(p,o){var c=ghCfg();o=o||{};var r=await fetch('https://api.g
   return o.raw?r.text():r.json()}
 function b64(s){var u=new TextEncoder().encode(s),o='',i=0;for(;i<u.length;i+=32768)o+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(o)}
 function bmeLoad(text,name){PD=new DOMParser().parseFromString(text,'text/html');extract();document.getElementById('fst').textContent=name;document.getElementById('noFile').style.display='none';document.getElementById('dlbar').classList.add('show');document.getElementById('ldg').style.display='none';show('home')}
+async function ghTest(){var c=ghSave();document.getElementById('ghLog').innerHTML='';ghLog('যাচাই হচ্ছে…');try{var r=await ghApi('');ghLog('✅ সংযোগ ঠিক আছে: '+r.full_name+(r.permissions&&!r.permissions.push?' (⚠️ লেখার অনুমতি নেই!)':''))}catch(e){ghLog('❌ '+e.message,1)}}
+/* ═══════ PHASE 2 · MULTI-PAGE SITE GENERATOR ═══════ */
+function bmeRoute(id){var m;if(id==='home')return'';if(id==='courses-overview')return'courses/';if(id==='questions-overview')return'questions/';if(id==='q-retake')return'retake/';if(id==='important-files')return'files/';
+  if(m=id.match(/^course-(\d+)$/))return'courses/bme-'+m[1]+'/';if(m=id.match(/^q-(.+)$/))return'questions/'+m[1]+'/';return id+'/'}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+async function gitSha(s){var b=new TextEncoder().encode(s),h=new TextEncoder().encode('blob '+b.length+'\0'),u=new Uint8Array(h.length+b.length);u.set(h);u.set(b,h.length);var d=await crypto.subtle.digest('SHA-1',u);return Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+async function genSite(log){
+  log=log||function(){};syncAll();var html=genHTML(),c=ghCfg(),baseUrl=ghBase(c),bp=new URL(baseUrl).pathname;
+  var mm=html.match(/<script>var ANNOUNCEMENT[\s\S]*?<\/script>/),fm=html.match(/<script id="bme-fx">([\s\S]*?)<\/script>/);
+  if(!mm)throw new Error('সাইটের মূল script পাওয়া যায়নি — source ফাইল ঠিক আছে কি?');
+  var main=mm[0].slice(8,-9),fx=fm?fm[1]:'',miss=[];
+  function patch(a,b,n){if(main.indexOf(a)<0){miss.push(n);return}main=main.replace(a,b)}
+  patch('function navigate(page) {','function navigate(page) {\n  if (window.BME_MPA && BME_ROUTES[page]) { location.href = BME_ROUTES[page]; return; }','navigate');
+  patch('function handleRoute() {','function handleRoute() {\n  if (window.BME_MPA) return;','handleRoute');
+  patch('function _sn(){','function _sn(){if(window.BME_MPA)return;','page-notes');
+  var ci=main.indexOf('var cur = CURRENT_SEM_ID;'),st=ci<0?-1:main.lastIndexOf('(function',ci);
+  if(st<0)miss.push('auto-render');else{var ob=main.indexOf('{',st);main=main.slice(0,ob+1)+'if(window.BME_MPA){try{updateSlideCounter();startAutoplay();}catch(e){}return;}'+main.slice(ob+1)}
+  if(miss.length)throw new Error('সাইটের কোডে এই অংশ পাওয়া যায়নি: '+miss.join(', ')+' — generator আপডেট দরকার');
+  var css=(html.match(/<style>[\s\S]*?<\/style>/g)||[]).map(function(s){return s.slice(7,-8)}).join('\n')+'\n.no-intro #introOverlay{display:none!important}';
+  var ver=(await gitSha(css+main+fx)).slice(0,8);
+  log('পেইজ রেন্ডার হচ্ছে…');
+  var fr=document.createElement('iframe');fr.style.cssText='position:fixed;left:-9999px;top:0;width:1280px;height:900px;border:0';document.body.appendChild(fr);
+  await new Promise(function(r){fr.onload=r;fr.srcdoc=html});await sleep(1200);
+  var w=fr.contentWindow,d=fr.contentDocument,ids=Array.prototype.map.call(d.querySelectorAll('.page'),function(p){return p.id.replace(/^page-/,'')}),routes={},files={};
+  ids.forEach(function(i){routes[i]=bp+bmeRoute(i)});
+  var introJs='<script>try{var _p=location.pathname.replace(/index\\.html$/,"");if(sessionStorage.getItem("bme_i")||_p!=="'+bp+'")document.documentElement.classList.add("no-intro");else sessionStorage.setItem("bme_i",1)}catch(e){}<\/script>';
+  var themeJs='<script>try{if(localStorage.getItem("bme6_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}<\/script>';
+  for(var k=0;k<ids.length;k++){var id=ids[k];w.location.hash=id;await sleep(140);
+    var cl=d.documentElement.cloneNode(true);
+    cl.querySelectorAll('.page').forEach(function(p){if(p.id!=='page-'+id)p.remove()});var pg=cl.querySelector('#page-'+id);if(pg)pg.classList.add('active');
+    cl.querySelectorAll('script:not([type="application/ld+json"]),style:not([id]),.fx-canvas,#fxProg,.fx-burst,.particle').forEach(function(e){e.remove()});
+    cl.querySelectorAll('.fx-reveal,[data-fxr],[data-fx]').forEach(function(e){e.classList.remove('fx-reveal','in');e.removeAttribute('data-fxr');e.removeAttribute('data-fx');if(e.style)e.style.removeProperty('--d')});
+    cl.querySelectorAll('.slideshow-slide').forEach(function(s,i){s.classList.remove('leaving');s.classList.toggle('active',i===0)});cl.querySelectorAll('.slideshow-dot').forEach(function(s,i){s.classList.toggle('active',i===0)});
+    cl.querySelectorAll('a[href^="#"]').forEach(function(a){var q=a.getAttribute('href').slice(1);if(routes[q])a.setAttribute('href',routes[q])});
+    cl.setAttribute('data-theme','light');var hd=cl.querySelector('head'),full=baseUrl.replace(/\/$/,'')+routes[id].replace(bp,'/'),cn=cl.querySelector('#canonical-link');
+    if(cn)cn.setAttribute('href',full);var ou=cl.querySelector('#og-url');if(ou)ou.setAttribute('content',full);
+    hd.insertAdjacentHTML('afterbegin','<base href="'+bp+'">'+themeJs+introJs);
+    hd.insertAdjacentHTML('beforeend','<link rel="stylesheet" href="assets/site.css?v='+ver+'"><script src="assets/site.js?v='+ver+'" defer><\/script>');
+    files[routes[id].slice(bp.length)+'index.html']='<!DOCTYPE html>\n'+cl.outerHTML}
+  fr.remove();
+  files['assets/site.css']=css;
+  files['assets/site.js']='window.BME_MPA=true;window.BME_ROUTES='+JSON.stringify(routes)+';\n(function(){var h=location.hash.slice(1);if(h&&BME_ROUTES[h])location.replace(BME_ROUTES[h])})();\n'+main+'\n'+fx;
+  var sm=smBuild(baseUrl,ids);files['sitemap.xml']=sm.sitemap;files['robots.txt']=sm.robots;files['_source/site.html']=html;
+  return{files:files,count:ids.length}}
+function smBuild(base,ids){var today=new Date().toISOString().split('T')[0];
+  var us=ids.map(function(i){var p=bmeRoute(i),pri=i==='home'?'1.0':/^course-/.test(i)?'0.9':'0.8',fq=/^course-|^q-|overview/.test(i)?'weekly':'monthly';return'  <url>\n    <loc>'+base+p+'</loc>\n    <lastmod>'+today+'</lastmod>\n    <changefreq>'+fq+'</changefreq>\n    <priority>'+pri+'</priority>\n  </url>'}).join('\n');
+  return{sitemap:'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+us+'\n</urlset>',robots:'User-agent: *\nAllow: /\nDisallow: /_source/\nSitemap: '+base+'sitemap.xml\n'}}
 async function ghLoad(silent){var c=ghCfg();if(!c.token||!c.owner||!c.repo){if(!silent){ghOpen();toast('আগে GitHub সেটিংস ও token দিন',1)}return}
   document.getElementById('ldg').style.display='inline';
-  try{var ref=await ghApi('/git/ref/heads/'+(c.branch||'main'));var txt=await ghApi('/contents/index.html?ref='+ref.object.sha,{raw:true});bmeLoad(txt,'index.html · GitHub');_head=ref.object.sha;toast('✅ GitHub থেকে সাইট লোড হয়েছে')}
+  try{var br=c.branch||'main',ref=await ghApi('/git/ref/heads/'+br),txt;
+    try{txt=await ghApi('/contents/_source/site.html?ref='+ref.object.sha,{raw:true})}catch(e){if(e.status!==404)throw e;txt=await ghApi('/contents/index.html?ref='+ref.object.sha,{raw:true})}
+    if(txt.indexOf('<script>var ANNOUNCEMENT')<0)throw new Error('এই ফাইলে সাইটের ডেটা নেই (generated পেইজ?) — _source/site.html লাগবে');
+    bmeLoad(txt,'সাইট · GitHub');_head=ref.object.sha;toast('✅ GitHub থেকে সাইট লোড হয়েছে')}
   catch(e){document.getElementById('ldg').style.display='none';if(!silent)toast('❌ '+e.message,1);else console.warn(e)}}
-function smBuild(base){var today=new Date().toISOString().split('T')[0],en=[{p:'',pri:'1.0',freq:'weekly'},{p:'home',pri:'1.0',freq:'weekly'},{p:'teachers',pri:'0.9',freq:'monthly'},{p:'syllabus',pri:'0.9',freq:'monthly'},{p:'important-files',pri:'0.8',freq:'monthly'},{p:'gallery',pri:'0.6',freq:'monthly'},{p:'courses-overview',pri:'0.9',freq:'weekly'},{p:'questions-overview',pri:'0.9',freq:'weekly'},{p:'q-retake',pri:'0.8',freq:'monthly'}];
-  E.courses.sems.forEach(function(s){en.push({p:s.qId||'q-'+s.id,pri:'0.85',freq:'weekly'});(s.courses||[]).forEach(function(c){en.push({p:'course-'+c.num,pri:'0.9',freq:'weekly'})})});
-  var us=en.map(function(e){return'  <url>\n    <loc>'+base+(e.p?'#'+e.p:'')+'</loc>\n    <lastmod>'+today+'</lastmod>\n    <changefreq>'+e.freq+'</changefreq>\n    <priority>'+e.pri+'</priority>\n  </url>'}).join('\n');
-  return{sitemap:'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+us+'\n</urlset>',robots:'User-agent: *\nAllow: /\nSitemap: '+base+'sitemap.xml\n\nUser-agent: Googlebot\nAllow: /\nCrawl-delay: 1\n'}}
-async function ghTest(){var c=ghSave();document.getElementById('ghLog').innerHTML='';ghLog('যাচাই হচ্ছে…');try{var r=await ghApi('');ghLog('✅ সংযোগ ঠিক আছে: '+r.full_name+(r.permissions&&!r.permissions.push?' (⚠️ লেখার অনুমতি নেই!)':''))}catch(e){ghLog('❌ '+e.message,1)}}
-async function ghPublish(){if(!PD){ghLog('❌ আগে সাইট লোড করুন (GitHub থেকে লোড বা index.html আপলোড)',1);return}
+async function ghPublish(){if(!PD){ghLog('❌ আগে সাইট লোড করুন',1);return}
   var c=ghSave(),btn=document.getElementById('ghPub');document.getElementById('ghLog').innerHTML='';btn.disabled=true;
-  try{if(!c.token)throw new Error('GitHub token দিন');syncAll();var files=[['index.html',genHTML()]],sm=smBuild(ghBase(c));files.push(['sitemap.xml',sm.sitemap],['robots.txt',sm.robots]);
-    var br=c.branch||'main';ghLog('GitHub-এর সর্বশেষ অবস্থা দেখা হচ্ছে…');var ref=await ghApi('/git/ref/heads/'+br),head=ref.object.sha;
+  try{if(!c.token)throw new Error('GitHub token দিন');var br=c.branch||'main',g=await genSite(ghLog),files=g.files;ghLog('✓ '+g.count+' টি পেইজ তৈরি হয়েছে');
+    ghLog('GitHub-এর সর্বশেষ অবস্থা দেখা হচ্ছে…');var ref=await ghApi('/git/ref/heads/'+br),head=ref.object.sha;
     if(_head&&head!==_head&&!confirm('লোড করার পর repo-তে নতুন পরিবর্তন হয়েছে (অন্য ডিভাইস বা অন্য কেউ)। তবুও Publish করলে সেগুলো মুছে যেতে পারে। চালিয়ে যাবেন?'))throw new Error('Publish বাতিল করা হয়েছে');
-    var cm=await ghApi('/git/commits/'+head),tree=[];
-    for(var i=0;i<files.length;i++){ghLog('আপলোড হচ্ছে: '+files[i][0]);var b=await ghApi('/git/blobs',{method:'POST',body:{content:b64(files[i][1]),encoding:'base64'}});tree.push({path:files[i][0],mode:'100644',type:'blob',sha:b.sha})}
+    var cm=await ghApi('/git/commits/'+head),ex={},tr=await ghApi('/git/trees/'+cm.tree.sha+'?recursive=1');
+    if(!tr.truncated)tr.tree.forEach(function(e){if(e.type==='blob')ex[e.path]=e.sha});
+    var tree=[],todo=[],paths=Object.keys(files);
+    for(var i=0;i<paths.length;i++){if(ex[paths[i]]!==await gitSha(files[paths[i]]))todo.push(paths[i])}
+    Object.keys(ex).forEach(function(p){if(/^(courses|questions|retake|syllabus|teachers|files|gallery)\/(.*\/)?index\.html$/.test(p)&&!(p in files))tree.push({path:p,mode:'100644',type:'blob',sha:null})});
+    ghLog('পরিবর্তিত ফাইল: '+todo.length+' / '+paths.length+(tree.length?' · মুছবে: '+tree.length:''));
+    for(var j=0;j<todo.length;j+=5)await Promise.all(todo.slice(j,j+5).map(async function(p){var b=await ghApi('/git/blobs',{method:'POST',body:{content:b64(files[p]),encoding:'base64'}});tree.push({path:p,mode:'100644',type:'blob',sha:b.sha})}));
+    if(!tree.length){_head=head;ghLog('✅ কোনো পরিবর্তন নেই — সাইট আগে থেকেই আপ-টু-ডেট।');return}
     var nt=await ghApi('/git/trees',{method:'POST',body:{base_tree:cm.tree.sha,tree:tree}});
-    if(nt.sha===cm.tree.sha){_head=head;ghLog('✅ কোনো পরিবর্তন নেই — সাইট আগে থেকেই আপ-টু-ডেট।');return}
     var nc=await ghApi('/git/commits',{method:'POST',body:{message:'Update site via BME6 Editor ('+new Date().toISOString().slice(0,16).replace('T',' ')+' UTC)',tree:nt.sha,parents:[head]}});
     await ghApi('/git/refs/heads/'+br,{method:'PATCH',body:{sha:nc.sha}});_head=nc.sha;
     ghLog('✅ Publish সম্পন্ন! GitHub Pages ১–২ মিনিটে আপডেট করবে।');ghLog('🌐 '+ghBase(c));toast('✅ Publish হয়েছে!');
   }catch(e){ghLog('❌ '+e.message,1)}finally{btn.disabled=false}}
+
 function pwaInstall(){if(_bip){_bip.prompt();_bip=null;pwaBtns(false)}else toast('Android Chrome: ⋮ মেনু → "Install app"। iPhone: Share → "Add to Home Screen"')}
 function pwaBtns(on){['pwaBtn','pwaBtn2'].forEach(function(i){var e=document.getElementById(i);if(e)e.style.display=on?'':'none'})}
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();_bip=e;pwaBtns(true)});
