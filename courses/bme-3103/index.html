@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><base href="/"><script>try{if(localStorage.getItem("bme6_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script><script>try{var _p=location.pathname.replace(/index\.html$/,"");if(sessionStorage.getItem("bme_i")||_p!=="/")document.documentElement.classList.add("no-intro");else sessionStorage.setItem("bme_i",1)}catch(e){}</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0A1F3C">
+  <meta name="color-scheme" content="light dark">
+  <meta name="darkreader-lock">
+  <title>Bio-Signal Processing | BME-3103</title>
+  <meta name="description" content="Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia.">
+    <link rel="icon" type="image/png" href="images/logo.jpg">
+  <link rel="apple-touch-icon" href="images/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,500&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  
+<meta id="og-title" property="og:title" content="Bio-Signal Processing | BME-3103"><meta id="og-desc" property="og:description" content="Lecture materials for Bio-Signal Processing (BME-3103), 3rd Year 1st Semester."><meta id="og-image" property="og:image" content="og-preview.png"><meta id="tw-image" property="twitter:image" content="og-preview.png"><meta id="tw-title" property="twitter:title" content="Bio-Signal Processing | BME-3103"><meta id="tw-desc" property="twitter:description" content="Lecture materials for Bio-Signal Processing (BME-3103), 3rd Year 1st Semester.">
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SEO: Canonical, Open Graph, Twitter        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <link rel="canonical" href="https://bme6iu.github.io/">
+  <meta property="og:url" content="https://bme6iu.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="bn_BD">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="BME6·IU Academic Portal">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@bme6iuk">
+
+  <!-- SEO: Keywords & Robots -->
+  <meta name="keywords" content="BME6 IU, BME 6th Batch, Biomedical Engineering IU, Islamic University Kushtia BME, বায়োমেডিকেল ইঞ্জিনিয়ারিং ইসলামী বিশ্ববিদ্যালয়, BME lecture notes, BME exam questions, BME syllabus, 6th Batch Biomedical Engineering, IU BME Department, Faculty of Engineering and Technology IU, BME IU course materials, Ibn Sina Science Building IU, Introduction to Biomedical Engineering, BME-1101, Electrical Fundamentals for Biomedical Engineering, EEE-1103, Physical and Inorganic Chemistry, CHE-1105, Applied Mathematics, MATH-1107, Communicative Skills, HUM-1109, Electronics, EEE-1201, Biochemistry, CHE-1203, Basic Computer and Information Technology, ICT-1205, Mathematics for Engineering, MATH-1207, Sociology and Economics, HUM-1209, Human Anatomy and Physiology, BIO-2101">
+  <meta name="author" content="BME 6th Batch, Islamic University, Kushtia">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <meta name="geo.region" content="BD-KHU">
+  <meta name="geo.placename" content="Kushtia, Bangladesh">
+
+  <!-- SEO: Structured Data — WebSite -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "6th Batch — BME, Islamic University",
+  "alternateName": "BME6·IU Academic Portal",
+  "url": "https://bme6iu.github.io",
+  "description": "Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia. Lecture notes, exam questions, syllabus, teacher profiles.",
+  "inLanguage": [
+    "en",
+    "bn"
+  ],
+  "publisher": {
+    "@type": "CollegeOrUniversity",
+    "name": "Islamic University, Kushtia",
+    "url": "https://iu.ac.bd"
+  }
+}
+  </script>
+
+  <!-- SEO: Structured Data — Educational Organization + All 25 Courses + Teachers -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Department of Biomedical Engineering, Islamic University",
+  "alternateName": "BME Dept, IU",
+  "url": "https://bme6iu.github.io",
+  "description": "Official academic portal of the 6th Batch (2022-23), Department of Biomedical Engineering, Islamic University, Kushtia. Lecture notes, exam questions, syllabus, teacher profiles.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Ibn Sina Science Building (2nd Floor)",
+    "addressLocality": "Kushtia",
+    "postalCode": "7003",
+    "addressCountry": "BD"
+  },
+  "memberOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Islamic University, Kushtia",
+    "url": "https://iu.ac.bd",
+    "sameAs": "https://iu.ac.bd"
+  },
+  "employee": [
+    {
+      "@type": "Person",
+      "name": "Dr. Md. Khairul Islam",
+      "jobTitle": "Chairman, Associate Professor"
+    },
+    {
+      "@type": "Person",
+      "name": "Md Rabiul Islam",
+      "jobTitle": "Assistant Professor"
+    },
+    {
+      "@type": "Person",
+      "name": "S M Jahurul Haque",
+      "jobTitle": "Assistant Professor"
+    },
+    {
+      "@type": "Person",
+      "name": "Ariful Islam",
+      "jobTitle": "Assistant Professor"
+    },
+    {
+      "@type": "Person",
+      "name": "Md. Abu Sayed",
+      "jobTitle": "Lecturer"
+    },
+    {
+      "@type": "Person",
+      "name": "Afiya Mubasharah",
+      "jobTitle": "Lecturer"
+    },
+    {
+      "@type": "Person",
+      "name": "Sathi Rahman",
+      "jobTitle": "Lecturer"
+    }
+  ],
+  "hasCourse": [
+    {
+      "@type": "Course",
+      "name": "BME-1101: Introduction to Biomedical Engineering",
+      "courseCode": "BME-1101",
+      "url": "https://bme6iu.github.io/#course-1101",
+      "description": "This is the first course of the First Year, First Semester of BME-6, IU.",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "EEE-1103: Electrical Fundamentals for Biomedical Engineering",
+      "courseCode": "EEE-1103",
+      "url": "https://bme6iu.github.io/#course-1103",
+      "description": "This is the third course of the First Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "CHE-1105: Physical and Inorganic Chemistry",
+      "courseCode": "CHE-1105",
+      "url": "https://bme6iu.github.io/#course-1105",
+      "description": "This is the fifth course of the First Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "MATH-1107: Applied Mathematics",
+      "courseCode": "MATH-1107",
+      "url": "https://bme6iu.github.io/#course-1107",
+      "description": "This is the fourth course of the First Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "HUM-1109: Communicative Skills",
+      "courseCode": "HUM-1109",
+      "url": "https://bme6iu.github.io/#course-1109",
+      "description": "This is the second course of the First Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "EEE-1201: Electronics",
+      "courseCode": "EEE-1201",
+      "url": "https://bme6iu.github.io/#course-1201",
+      "description": "This is the first course of the First Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "CHE-1203: Biochemistry",
+      "courseCode": "CHE-1203",
+      "url": "https://bme6iu.github.io/#course-1203",
+      "description": "This is the second course of the First Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "ICT-1205: Basic Computer and Information Technology",
+      "courseCode": "ICT-1205",
+      "url": "https://bme6iu.github.io/#course-1205",
+      "description": "This is the third course of the First Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "MATH-1207: Mathematics for Engineering",
+      "courseCode": "MATH-1207",
+      "url": "https://bme6iu.github.io/#course-1207",
+      "description": "This is the fourth course of the First Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "HUM-1209: Sociology and Economics",
+      "courseCode": "HUM-1209",
+      "url": "https://bme6iu.github.io/#course-1209",
+      "description": "This is the fifth course of the First Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BIO-2101: Human Anatomy and Physiology",
+      "courseCode": "BIO-2101",
+      "url": "https://bme6iu.github.io/#course-2101",
+      "description": "This is the first course of the Second Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "CSE-2103: Digital Electronics",
+      "courseCode": "CSE-2103",
+      "url": "https://bme6iu.github.io/#course-2103",
+      "description": "This is the second course of the Second Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "CSE-2105: Programming Concepts and Python",
+      "courseCode": "CSE-2105",
+      "url": "https://bme6iu.github.io/#course-2105",
+      "description": "This is the third course of the Second Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "PHY-2107: Waves and Oscillations, Optics and Thermal Physics",
+      "courseCode": "PHY-2107",
+      "url": "https://bme6iu.github.io/#course-2107",
+      "description": "This is the fourth course of the Second Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "HUM-2109: Managerial and Financial Accounting",
+      "courseCode": "HUM-2109",
+      "url": "https://bme6iu.github.io/#course-2109",
+      "description": "This is the fifth course of the Second Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BME-2201: Structure and Properties of Biomaterials",
+      "courseCode": "BME-2201",
+      "url": "https://bme6iu.github.io/#course-2201",
+      "description": "This is the first course of the Second Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "CSE-2203: Signal and Systems",
+      "courseCode": "CSE-2203",
+      "url": "https://bme6iu.github.io/#course-2203",
+      "description": "This is the second course of the Second Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BIO-2205: Cell and Tissue Engineering",
+      "courseCode": "BIO-2205",
+      "url": "https://bme6iu.github.io/#course-2205",
+      "description": "This is the third course of the Second Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "STAT-2207: Biostatistics",
+      "courseCode": "STAT-2207",
+      "url": "https://bme6iu.github.io/#course-2207",
+      "description": "This is the fourth course of the Second Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "ICT-2209: Communication Engineering",
+      "courseCode": "ICT-2209",
+      "url": "https://bme6iu.github.io/#course-2209",
+      "description": "This is the fifth course of the Second Year, Second Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BME-3101: Biomedical Instrumentation and Diagnostics",
+      "courseCode": "BME-3101",
+      "url": "https://bme6iu.github.io/#course-3101",
+      "description": "This is the first course of the Third Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BME-3103: Bio-Signal Processing",
+      "courseCode": "BME-3103",
+      "url": "https://bme6iu.github.io/#course-3103",
+      "description": "This is the second course of the Third Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "ICT-3105: Networking and Information System in Medicine",
+      "courseCode": "ICT-3105",
+      "url": "https://bme6iu.github.io/#course-3105",
+      "description": "This is the third course of the Third Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BME-3107: Transducer and Sensors for Medical Applications",
+      "courseCode": "BME-3107",
+      "url": "https://bme6iu.github.io/#course-3107",
+      "description": "This is the fourth course of the Third Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    },
+    {
+      "@type": "Course",
+      "name": "BME-3109: Physiological Control Systems",
+      "courseCode": "BME-3109",
+      "url": "https://bme6iu.github.io/#course-3109",
+      "description": "This is the fifth course of the Third Year, First Semester of BME-6, IU",
+      "provider": {
+        "@type": "CollegeOrUniversity",
+        "name": "Islamic University, Kushtia"
+      },
+      "inLanguage": "bn"
+    }
+  ]
+}
+  </script>
+
+  <!-- SEO: Structured Data — BreadcrumbList -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bme6iu.github.io"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Teacher's Index",
+      "item": "https://bme6iu.github.io/#teachers"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Course Syllabus",
+      "item": "https://bme6iu.github.io/#syllabus"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "Courses",
+      "item": "https://bme6iu.github.io/#courses-overview"
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "name": "Exam Questions",
+      "item": "https://bme6iu.github.io/#questions-overview"
+    }
+  ]
+}
+  </script>
+  <!-- ═══════════════════════════════════════════ -->
+<link rel="canonical" id="canonical-link" href="https://bme6iu.github.io/courses/bme-3103/"><link rel="stylesheet" href="assets/site.css?v=7db3c133"><script src="assets/site.js?v=7db3c133" defer=""></script></head>
+<body data-new-gr-c-s-check-loaded="14.1338.0" data-gr-ext-installed="">
+
+<!-- ── INTRO ANIMATION OVERLAY ── -->
+<div id="introOverlay" role="presentation" aria-hidden="true">
+  <div class="intro-logo">BME<span>6</span>·IU</div>
+  <svg class="intro-ecg" width="280" height="40" viewBox="0 0 280 40" fill="none">
+    <path class="intro-ecg-path" d="M0,20 L45,20 L52,20 L58,4 L64,36 L70,20 L100,20 L107,20 L113,4 L119,36 L125,20 L155,20 L162,2 L168,38 L174,20 L204,20 L211,7 L217,33 L223,20 L280,20" stroke="#00c8ff" stroke-width="1.5" fill="none"></path>
+  </svg>
+  <div class="intro-byline">
+    This website is designed and maintained by<br>
+    <strong>Md. Minhazur Rahman Mahim</strong><br>
+    <span style="font-size:0.8rem;color:rgba(255,255,255,0.35);">6th Batch · Dept. of Biomedical Engineering · Islamic University</span>
+  </div>
+  <div class="intro-bar"><div class="intro-bar-fill"></div></div>
+</div>
+
+
+<!-- Animated background particles -->
+<div class="particles" id="particles"></div>
+<div class="dna-bg"><div class="dna-strand"></div><div class="dna-strand"></div></div>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <span class="nav-logo" onclick="navigate('home')"><img src="images/logo.jpg" class="nav-logo-img" onerror="this.style.display='none'" alt="BME6" style="display: none;">BME<span>6</span>·IU</span>
+
+  <div class="nav-links">
+    <button class="nav-btn" onclick="navigate('home')" data-page="home">Home</button>
+
+    <div class="nav-dropdown">
+      <button class="nav-btn" data-page="courses" onclick="toggleNavDrop(this)">Courses ▾</button>
+      <div class="nav-dropdown-menu" data-nav="courses" style="min-width:340px;"><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)">📚 BME 1st Year — 1st Semester <span class="nsb-arrow">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-1101')">1101 - Introduction to Biomedical Engineering</button><button class="dropdown-item" onclick="navigate('course-1103')">1103 - Electrical Fundamentals for Biomedical Engineering</button><button class="dropdown-item" onclick="navigate('course-1105')">1105 - Physical and Inorganic Chemistry</button><button class="dropdown-item" onclick="navigate('course-1107')">1107 - Applied Mathematics</button><button class="dropdown-item" onclick="navigate('course-1109')">1109 - Communicative Skills</button></div></div><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)">📚 BME 1st Year — 2nd Semester <span class="nsb-arrow">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-1201')">1201 - Electronics</button><button class="dropdown-item" onclick="navigate('course-1203')">1203 - Biochemistry</button><button class="dropdown-item" onclick="navigate('course-1205')">1205 - Basic Computer and Information Technology</button><button class="dropdown-item" onclick="navigate('course-1207')">1207 - Mathematics for Engineering</button><button class="dropdown-item" onclick="navigate('course-1209')">1209 - Sociology and Economics</button></div></div><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)">🔬 BME 2nd Year — 1st Semester <span class="nsb-arrow">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-2101')">2101 - Human Anatomy and Physiology</button><button class="dropdown-item" onclick="navigate('course-2103')">2103 - Digital Electronics</button><button class="dropdown-item" onclick="navigate('course-2105')">2105 - Programming Concepts and Python</button><button class="dropdown-item" onclick="navigate('course-2107')">2107 - Waves and Oscillations, Optics and Thermal Physics</button><button class="dropdown-item" onclick="navigate('course-2109')">2109 - Managerial and Financial Accounting</button></div></div><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)">⚡ BME 2nd Year — 2nd Semester <span class="nsb-arrow">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-2201')">2201 - Structure and Properties of Biomaterials</button><button class="dropdown-item" onclick="navigate('course-2203')">2203 - Signal and Systems</button><button class="dropdown-item" onclick="navigate('course-2205')">2205 - Cell and Tissue Engineering</button><button class="dropdown-item" onclick="navigate('course-2207')">2207 - Biostatistics</button><button class="dropdown-item" onclick="navigate('course-2209')">2209 - Communication Engineering</button></div></div><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)">🖥️ BME 3rd Year — 1st Semester <span class="nsb-arrow">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-3101')">3101 - Biomedical Instrumentation and Diagnostics</button><button class="dropdown-item" onclick="navigate('course-3103')">3103 - Bio-Signal Processing</button><button class="dropdown-item" onclick="navigate('course-3105')">3105 - Networking and Information System in Medicine</button><button class="dropdown-item" onclick="navigate('course-3107')">3107 - Transducer and Sensors for Medical Applications</button><button class="dropdown-item" onclick="navigate('course-3109')">3109 - Physiological Control Systems</button></div></div><div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)" style="background:rgba(0,255,157,0.08);color:var(--accent2);">🔬 BME 3rd Year — 2nd Semester (Running) <span class="nsb-arrow" style="color:var(--accent2);">▼</span></button><div class="nav-sem-courses"><button class="dropdown-item" onclick="navigate('course-3201')">3201 - Medical Imaging</button><button class="dropdown-item" onclick="navigate('course-3203')">3203 - Embedded System</button><button class="dropdown-item" onclick="navigate('course-3205')">3205 - Rehabilitation Engineering</button><button class="dropdown-item" onclick="navigate('course-3207')">3207 - Brain and Cognitive Systems</button><button class="dropdown-item" onclick="navigate('course-3209')">3209 - Telemedicine Systems</button></div></div></div>
+    </div>
+
+    <div class="nav-dropdown">
+      <button class="nav-btn" data-page="questions" onclick="toggleNavDrop(this)">Questions ▾</button>
+      <div class="nav-dropdown-menu" data-nav="questions" style="min-width:240px;"><button class="dropdown-item" onclick="navigate('q-bme11')">BME 1.1 Questions</button><button class="dropdown-item" onclick="navigate('q-bme12')">BME 1.2 Questions</button><button class="dropdown-item" onclick="navigate('q-bme21')">BME 2.1 Questions</button><button class="dropdown-item" onclick="navigate('q-bme22')">BME 2.2 Questions</button><button class="dropdown-item" onclick="navigate('q-bme31')">BME 3.1 Questions</button><button class="dropdown-item" onclick="navigate('q-bme32')">BME 3.2 Questions</button><button class="dropdown-item" onclick="navigate('q-retake')">Retake Exams Questions</button></div>
+    </div>
+
+    <button class="nav-btn" onclick="navigate('teachers')" data-page="teachers">Teachers</button>
+    <button class="nav-btn" onclick="navigate('syllabus')" data-page="syllabus">Syllabus</button>
+    <button class="nav-btn" onclick="navigate('important-files')" data-page="important-files">Files</button>
+    <button class="nav-btn" onclick="navigate('gallery')" data-page="gallery">Gallery</button>
+  </div>
+
+  <button id="themeSwitchBtn" title="Toggle Light/Dark Mode" aria-label="Toggle light and dark mode" onclick="toggleTheme()">☀️</button>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-link" onclick="navigate('home');closeMobileMenu()">🏠 Home</div>
+  <div class="mobile-link" onclick="navigate('teachers');closeMobileMenu()">👨‍🏫 Teacher's Index</div>
+  <div class="mobile-link" onclick="navigate('syllabus');closeMobileMenu()">📋 Course Syllabus</div>
+  <div class="mobile-link" onclick="navigate('important-files');closeMobileMenu()">📁 Important Files</div>
+  <div class="mobile-link" onclick="navigate('gallery');closeMobileMenu()">🖼️ Photo Gallery</div>
+
+  <!-- Courses Section -->
+  <div style="margin-top:8px;">
+    <div class="mob-courses-label" style="font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;padding:10px 4px 6px;border-top:1px solid var(--border);">Courses (Theory)</div>
+
+    <!-- BME 1.1 -->
+    
+
+    <!-- BME 1.2 -->
+    
+
+    <!-- BME 2.1 -->
+    
+
+    <!-- BME 2.2 -->
+    
+
+    <!-- BME 3.1 -->
+    
+  <div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)">📚 BME 1.1 — 1st Year — 1st Semester <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-1101');closeMobileMenu()">1101 - Introduction to Biomedical Engineering</div><div class="mobile-link" onclick="navigate('course-1103');closeMobileMenu()">1103 - Electrical Fundamentals for Biomedical Engineering</div><div class="mobile-link" onclick="navigate('course-1105');closeMobileMenu()">1105 - Physical and Inorganic Chemistry</div><div class="mobile-link" onclick="navigate('course-1107');closeMobileMenu()">1107 - Applied Mathematics</div><div class="mobile-link" onclick="navigate('course-1109');closeMobileMenu()">1109 - Communicative Skills</div></div></div><div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)">📚 BME 1.2 — 1st Year — 2nd Semester <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-1201');closeMobileMenu()">1201 - Electronics</div><div class="mobile-link" onclick="navigate('course-1203');closeMobileMenu()">1203 - Biochemistry</div><div class="mobile-link" onclick="navigate('course-1205');closeMobileMenu()">1205 - Basic Computer and Information Technology</div><div class="mobile-link" onclick="navigate('course-1207');closeMobileMenu()">1207 - Mathematics for Engineering</div><div class="mobile-link" onclick="navigate('course-1209');closeMobileMenu()">1209 - Sociology and Economics</div></div></div><div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)">🔬 BME 2.1 — 2nd Year — 1st Semester <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-2101');closeMobileMenu()">2101 - Human Anatomy and Physiology</div><div class="mobile-link" onclick="navigate('course-2103');closeMobileMenu()">2103 - Digital Electronics</div><div class="mobile-link" onclick="navigate('course-2105');closeMobileMenu()">2105 - Programming Concepts and Python</div><div class="mobile-link" onclick="navigate('course-2107');closeMobileMenu()">2107 - Waves and Oscillations, Optics and Thermal Physics</div><div class="mobile-link" onclick="navigate('course-2109');closeMobileMenu()">2109 - Managerial and Financial Accounting</div></div></div><div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)">⚡ BME 2.2 — 2nd Year — 2nd Semester <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-2201');closeMobileMenu()">2201 - Structure and Properties of Biomaterials</div><div class="mobile-link" onclick="navigate('course-2203');closeMobileMenu()">2203 - Signal and Systems</div><div class="mobile-link" onclick="navigate('course-2205');closeMobileMenu()">2205 - Cell and Tissue Engineering</div><div class="mobile-link" onclick="navigate('course-2207');closeMobileMenu()">2207 - Biostatistics</div><div class="mobile-link" onclick="navigate('course-2209');closeMobileMenu()">2209 - Communication Engineering</div></div></div><div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)">🖥️ BME 3.1 — 3rd Year — 1st Semester <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-3101');closeMobileMenu()">3101 - Biomedical Instrumentation and Diagnostics</div><div class="mobile-link" onclick="navigate('course-3103');closeMobileMenu()">3103 - Bio-Signal Processing</div><div class="mobile-link" onclick="navigate('course-3105');closeMobileMenu()">3105 - Networking and Information System in Medicine</div><div class="mobile-link" onclick="navigate('course-3107');closeMobileMenu()">3107 - Transducer and Sensors for Medical Applications</div><div class="mobile-link" onclick="navigate('course-3109');closeMobileMenu()">3109 - Physiological Control Systems</div></div></div><div class="mob-sem-group"><button class="mob-sem-btn" onclick="toggleMobSem(this)" style="background:rgba(0,255,157,0.08);color:var(--accent2);">🔬 BME 3.2 — 3rd Year — 2nd Semester (Running) <span class="msb-arrow">▼</span></button><div class="mob-sem-courses"><div class="mobile-link" onclick="navigate('course-3201');closeMobileMenu()">3201 - Medical Imaging</div><div class="mobile-link" onclick="navigate('course-3203');closeMobileMenu()">3203 - Embedded System</div><div class="mobile-link" onclick="navigate('course-3205');closeMobileMenu()">3205 - Rehabilitation Engineering</div><div class="mobile-link" onclick="navigate('course-3207');closeMobileMenu()">3207 - Brain and Cognitive Systems</div><div class="mobile-link" onclick="navigate('course-3209');closeMobileMenu()">3209 - Telemedicine Systems</div></div></div></div>
+
+  <!-- Questions Section -->
+  <div style="margin-top:4px;">
+    <div style="font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:0.1em;padding:10px 4px 6px;border-top:1px solid var(--border);">Questions</div>
+
+    <div class="mob-q-group">
+      <button class="mob-q-btn" onclick="toggleMobQ(this)">
+        ❓ Semester Questions <span class="mqb-arrow">▼</span>
+      </button>
+      <div class="mob-q-courses"><div class="mobile-link" onclick="navigate('q-bme11');closeMobileMenu()">BME 1.1 Questions</div><div class="mobile-link" onclick="navigate('q-bme12');closeMobileMenu()">BME 1.2 Questions</div><div class="mobile-link" onclick="navigate('q-bme21');closeMobileMenu()">BME 2.1 Questions</div><div class="mobile-link" onclick="navigate('q-bme22');closeMobileMenu()">BME 2.2 Questions</div><div class="mobile-link" onclick="navigate('q-bme31');closeMobileMenu()">BME 3.1 Questions</div><div class="mobile-link" onclick="navigate('q-bme32');closeMobileMenu()">BME 3.2 Questions</div><div class="mobile-link" onclick="navigate('q-retake');closeMobileMenu()">Retake Exams Questions</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── DOCUMENT VIEWER MODAL ── -->
+<div class="modal-overlay" id="docModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span style="font-size:1.2rem">📄</span>
+      <span class="modal-title" id="modalTitle">Document</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-frame-wrap">
+      <div class="modal-loading" id="modalLoading" style="display: none;">
+        <div class="spinner"></div>
+        <span>Loading document…</span>
+      </div>
+      <iframe class="modal-iframe" id="modalIframe" onload="window.hideModalLoading?hideModalLoading():0" allowfullscreen="" style="display: block;"></iframe>
+    </div>
+    <div class="modal-bottom-bar">
+      <span style="font-size:0.78rem;color:var(--text-muted)">Viewing inside BME Portal</span>
+      <a id="modalOpenLink" href="#" target="_blank" class="btn btn-ghost" style="margin-left:auto">↗ Open in Drive</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app" style="padding-top:64px;">
+
+  <!-- ════════════════════════════════ HOME PAGE ════════════════════════════════ -->
+  
+
+  <!-- ════════════════════════════════ COURSES OVERVIEW ════════════════════════════════ -->
+    
+
+
+
+  <!-- ══ EEE-1103 ══ -->
+  
+
+  <!-- ══ CHE-1105 ══ -->
+  
+
+  <!-- ══ MATH-1107 ══ -->
+  
+
+  <!-- ══ HUM-1109 ══ -->
+  
+
+  <!-- ══ EEE-1201 ══ -->
+  
+
+  <!-- ══ CHE-1203 ══ -->
+  
+
+  <!-- ══ ICT-1205 ══ -->
+  
+
+  <!-- ══ MATH-1207 ══ -->
+  
+
+  <!-- ══ HUM-1209 ══ -->
+  
+
+  <!-- ══ BIO-2101 ══ -->
+  
+
+  <!-- ══ CSE-2103 ══ -->
+  
+
+  <!-- ══ CSE-2105 ══ -->
+  
+
+  <!-- ══ PHY-2107 ══ -->
+  
+
+  <!-- ══ HUM-2109 ══ -->
+  
+
+  <!-- ══ BME-2201 ══ -->
+  
+
+  <!-- ══ CSE-2203 ══ -->
+  
+
+  <!-- ══ BIO-2205 ══ -->
+  
+
+  <!-- ══ STAT-2207 ══ -->
+  
+
+  <!-- ══ ICT-2209 ══ -->
+  
+
+  <!-- ══ BME-3101 ══ -->
+  
+
+  <!-- ══ BME-3103 ══ -->
+  <div class="page active" id="page-course-3103">
+    <div class="course-hero">
+      <div class="course-hero-inner">
+        <div class="course-crumb"><button onclick="navigate('courses-overview')">Courses</button> / BME 3.1 / <span style="color:var(--text-muted)">BME-3103</span></div>
+        <div class="course-badge">BME-3103 · 3rd Year, 1st Semester</div>
+        <h2 class="course-title">Bio-Signal Processing</h2>
+        <p style="color:var(--text-muted);font-size:0.88rem;">This is the second course of the Third Year, First Semester of BME-6, IU</p>
+        
+        <div class="course-teacher-info"><img src="images/md-abu-sayed.jpg" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); flex-shrink: 0; display: none;" onerror="this.style.display='none'" alt="Md. Abu Sayed"><div><div style="font-weight:600;color:var(--text)">Md. Abu Sayed</div><div style="font-size:0.78rem;color:var(--text-muted);">Lecturer, Dept. of Biomedical Engineering, Islamic University, Kushtia</div></div></div><div class="course-books-container" style="margin-top: 16px;"><button class="btn btn-ghost" style="margin-right: 8px; margin-bottom: 6px;">📘 Course Book – Biomedical Signal Analysis</button></div>
+        <a href="https://drive.google.com/drive/folders/1c6pxN-NOeVzMrb8ds-2lgwiyru2R6207?usp=drive_link" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;margin-top:12px;">📁 Download Full Folder</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title" style="margin-bottom: 24px;">Chapter-wise <span>Lectures</span></div>
+      
+      
+    <div class="chapters-container"><div class="chapter-block open" style=""><div class="chapter-header" onclick="toggleChapter(this)"><span class="chapter-num">Chapter 1</span><span class="chapter-name">Bio signals acquisitions and General properties</span><span class="chapter-toggle">▼</span></div><div class="chapter-lectures"><div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Origin and Dynamics of Bio-signals</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1z14wpcZm3GbPgPc0lEKqfeYNXasvrDLR/preview','BME-3103 – Origin and Dynamics of Bio-signals')">📄 View</button></div></div></div><div class="chapter-block" style=""><div class="chapter-header" onclick="toggleChapter(this)"><span class="chapter-num">Chapter 2</span><span class="chapter-name">Filtering for Removal of artifacts</span><span class="chapter-toggle">▼</span></div><div class="chapter-lectures"><div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Filtering for Removal of Artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1NTwEnEbgyXqhGX3s274dVCnJgJ1CtXNv/preview','BME-3103 – Filtering for Removal of Artifacts')">📄 View</button></div><div class="lecture-row"><span class="lec-num">Lecture 2</span><span class="lec-label">Filtering for Removal of Artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1B7nzfvzwmZ2I3AKVFkCzZJhH46EFQ5K6/preview','BME-3103 – Filtering for Removal of Artifacts')">📄 View</button></div><div class="lecture-row"><span class="lec-num">Lecture 3</span><span class="lec-label">Filtering for Removal of Artifacts</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1OxgJ-GPJZ-9Kag_b1wVwYnv86XcZ6Cbd/preview','BME-3103 – Filtering for Removal of Artifacts')">📄 View</button></div></div></div><div class="chapter-block" style=""><div class="chapter-header" onclick="toggleChapter(this)"><span class="chapter-num">Chapter 3</span><span class="chapter-name">Cardiological Signal Processing</span><span class="chapter-toggle">▼</span></div><div class="chapter-lectures"><div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Event Detection, Waveform Analysis, Frequency-domain Analysis and Adaptive Noise Cancelling of ECG</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1cArihtsGju6FjmYE5TKTc_RXg5IZSeGX/preview','BME-3103 – Event Detection, Waveform Analysis, Frequency-domain Analysis and Adaptive Noise Cancelling of ECG')">📄 View</button></div></div></div><div class="chapter-block" style=""><div class="chapter-header" onclick="toggleChapter(this)"><span class="chapter-num">Chapter 4</span><span class="chapter-name">Neurological Signal Processing</span><span class="chapter-toggle">▼</span></div><div class="chapter-lectures"><div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Neurological Signal Processing</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1fr6wBOVBQ2FoRRl_3PPDXCxflaQwJvp0/preview','BME-3103 – Neurological Signal Processing')">📄 View</button></div></div></div><div class="chapter-block" style=""><div class="chapter-header" onclick="toggleChapter(this)"><span class="chapter-num">Chapter 5</span><span class="chapter-name">Detection of Evoked Potentials</span><span class="chapter-toggle">▼</span></div><div class="chapter-lectures"><div class="lecture-row"><span class="lec-num">Lecture 1</span><span class="lec-label">Detection of Evoked Potentials</span><button class="view-btn" onclick="openDoc('https://drive.google.com/file/d/1P2ODe147KrRJy4AKLOvMK0E23zeOAboV/preview','BME-3103 – Detection of Evoked Potentials')">📄 View</button></div></div></div></div></div>
+  </div>
+
+  <!-- ══ ICT-3105 ══ -->
+  
+
+  <!-- ══ BME-3107 ══ -->
+  
+
+  <!-- ══ BME-3109 ══ -->
+  
+  
+
+
+  <!-- ════ QUESTIONS PAGES ════ -->
+  
+  
+  
+  
+  
+  
+
+  <!-- ════ TEACHERS PAGE ════ -->
+  
+
+  <!-- ════ GALLERY PAGE ════ -->
+  
+
+  <!-- Gallery Lightbox -->
+  <div class="gallery-lightbox" id="galleryLightbox" onclick="closeGallery()">
+    <button class="gallery-lightbox-close" onclick="closeGallery()">✕</button>
+    <img id="galleryLightboxImg" src="" alt="">
+    <div class="gallery-lightbox-cap" id="galleryLightboxCap"></div>
+  </div>
+
+  <!-- ════ SYLLABUS + IMPORTANT FILES ════ -->
+
+  
+
+  <!-- ════════════════════════════════ IMPORTANT FILES PAGE ════════════════════════════════ -->
+  
+
+</div><!-- #app -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">BME<span style="color:var(--accent2)">6</span>·IU</div>
+    <div class="footer-address">Department of Biomedical Engineering · Faculty of Engineering and Technology<br>
+      Ibn Sina Science Building (2nd Floor) · Islamic University, Kushtia-7003</div>
+    <div class="footer-links">
+      <a href="http://iu.ac.bd" target="_blank" class="footer-link">IU Website</a>
+      <a href="https://iu.ac.bd/index.php/site/dept/BE" target="_blank" class="footer-link">IU BME Dept. Site</a>
+      <a href="https://www.facebook.com/bme6iuk" target="_blank" class="footer-link">Facebook</a>
+      <button class="footer-link" onclick="navigate('syllabus')" style="border:none;cursor:pointer;background:none;">Syllabus</button>
+      <button class="footer-link" onclick="navigate('important-files')" style="border:none;cursor:pointer;background:none;">Files</button>
+    </div>
+    <a href="https://www.facebook.com/bme6iuk" target="_blank" class="fb-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#4b96ff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+      @bme6iuk
+    </a>
+    <div class="footer-copy">© 2026 6th Batch, Biomedical Engineering Department, Islamic University, Bangladesh. All rights reserved.</div>
+    <div class="footer-designer">Designed and maintained by <a href="https://minhazurrahmanmahim.github.io/" target="_blank" style="color:#34d399;">Md. Minhazur Rahman Mahim</a> · Rebuilt for GitHub Pages</div>
+  
+</div></footer>
+
+
+
+
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></html>

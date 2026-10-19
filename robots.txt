@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /_source/
 Sitemap: https://bme6iu.github.io/sitemap.xml
-
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
