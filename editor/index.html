@@ -377,7 +377,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="fg"><label class="fl">Interval (ms) &#x2014; 1000 = 1s</label><input class="fi2" id="slideInt" type="number" min="500" inputmode="numeric"></div></div>
   <div class="ec"><div class="ect">Gallery Photos</div>
     <div class="ig"><div class="igt">&#x1F4C1; <code style="color:var(--ac2)">images/gallery/</code> ফোল্ডারে রাখুন</div></div>
-    <div id="galItems"></div><button class="btn bg2 bsm" onclick="addGal()">+ ছবি যোগ</button></div>
+    <div id="galItems"></div><button class="btn bg2 bsm" onclick="addGal()">+ ছবি যোগ</button> <button class="btn bp bsm" onclick="galUpload()">📷 ছবি আপলোড (ফোন/কম্পিউটার)</button></div>
 </div>
 
 <!-- COURSES -->
@@ -506,6 +506,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <button class="btn bg2" onclick="ghLoad()" style="flex:1;justify-content:center">&#x2B07; GitHub থেকে লোড</button>
     </div>
     <div style="display:flex;gap:8px;margin-top:8px"><button class="btn bs2 bsm" onclick="ghTest()">&#x2705; সংযোগ যাচাই</button><button class="btn bs2 bsm" id="pwaBtn2" style="display:none" onclick="pwaInstall()">&#x1F4F2; App Install</button></div>
+    <div id="ghPend" style="margin-top:10px;font-size:.76rem;color:var(--ac2);font-weight:600"></div>
     <div id="ghLog" style="margin-top:12px;font-size:.74rem;line-height:1.8;color:var(--tx);max-height:160px;overflow:auto;background:rgba(4,10,20,.6);border-radius:8px;padding:0 10px"></div>
   </div>
 </div>
@@ -900,7 +901,7 @@ function rTeachers(){
     +'<div class="crs-acc-body"><div class="fr"><div class="fg"><label class="fl">নাম</label><input class="fi2" value="'+esc(t.name)+'" oninput="E.teachers.list['+i+'].name=this.value;populateChairSel()"></div>'
     +'<div class="fg"><label class="fl">পদবী'+(isChair?' <span style="color:var(--ac2)">(Chairman prefix auto)</span>':'')+'</label><input class="fi2" value="'+esc(t.role)+'" oninput="E.teachers.list['+i+'].role=this.value;rTeachers()"></div></div>'
     +'<div class="fg"><label class="fl">Department Info</label><textarea class="fta" rows="2" oninput="E.teachers.list['+i+'].dept=this.value">'+esc(t.dept)+'</textarea></div>'
-    +'<div class="fg"><label class="fl">Photo Path (images/name.jpg)</label><input class="fi2" value="'+esc(t.photo)+'" oninput="E.teachers.list['+i+'].photo=this.value"></div>'
+    +'<div class="fg"><label class="fl">Photo Path (images/name.jpg)</label><input class="fi2" value="'+esc(t.photo)+'" oninput="E.teachers.list['+i+'].photo=this.value"><button class="btn bg2 bsm" style="margin-top:6px" onclick="imgPick(\'images/\',800,false,function(p){E.teachers.list['+i+'].photo=p;rTeachers()})">📷 ছবি আপলোড করুন</button></div>'
     +'<button class="btn bd2 bsm" style="margin-top:6px" onclick="E.teachers.list.splice('+i+',1);rTeachers()">🗑 মুছুন</button></div>';
     list.appendChild(d2);
   });
@@ -1461,7 +1462,7 @@ function ghv(id){var e=document.getElementById(id);return e?e.value.trim():''}
 function ghCfg(){try{return JSON.parse(localStorage.getItem('bme_gh')||'{}')}catch(e){return{}}}
 function ghFill(){var c=ghCfg();document.getElementById('ghOwner').value=c.owner||'bme6iu';document.getElementById('ghRepo').value=c.repo||'bme6iu.github.io';document.getElementById('ghBranch').value=c.branch||'main';document.getElementById('ghToken').value=c.token||'';document.getElementById('ghBase').value=c.base||''}
 function ghSave(){var c={owner:ghv('ghOwner'),repo:ghv('ghRepo'),branch:ghv('ghBranch')||'main',token:ghv('ghToken'),base:ghv('ghBase')};try{localStorage.setItem('bme_gh',JSON.stringify(c))}catch(e){}return c}
-function ghOpen(){ghFill();document.getElementById('ghLog').innerHTML='';document.getElementById('ghModal').style.display='flex'}
+function ghOpen(){ghFill();pendUi();document.getElementById('ghLog').innerHTML='';document.getElementById('ghModal').style.display='flex'}
 function ghClose(){document.getElementById('ghModal').style.display='none'}
 function ghLog(m,err){var l=document.getElementById('ghLog'),d=document.createElement('div');d.textContent=m;if(err)d.style.color='var(--rd)';l.appendChild(d);l.scrollTop=l.scrollHeight}
 function ghBase(c){if(c.base)return c.base.replace(/\/?$/,'/');return /\.github\.io$/i.test(c.repo)?'https://'+c.repo+'/':'https://'+c.owner+'.github.io/'+c.repo+'/'}
@@ -1475,8 +1476,91 @@ async function ghTest(){var c=ghSave();document.getElementById('ghLog').innerHTM
 /* ═══════ PHASE 2 · MULTI-PAGE SITE GENERATOR ═══════ */
 function bmeRoute(id){var m;if(id==='home')return'';if(id==='courses-overview')return'courses/';if(id==='questions-overview')return'questions/';if(id==='q-retake')return'retake/';if(id==='important-files')return'files/';
   if(m=id.match(/^course-(\d+)$/))return'courses/bme-'+m[1]+'/';if(m=id.match(/^q-(.+)$/))return'questions/'+m[1]+'/';return id+'/'}
+function bmeDesc(id,S,Q,RT,nT){var U='Dept. of Biomedical Engineering, Islamic University, Kushtia',m,o='',i,j;
+  function cut(s){return s.length>160?s.slice(0,157).replace(/\s+\S*$/,'')+'…':s}
+  if(m=id.match(/^course-(\d+)$/)){for(i=0;i<S.length;i++)for(j=0;j<(S[i].courses||[]).length;j++){var c=S[i].courses[j];if(c.num===m[1]){var n=(c.chapterData||[]).length;
+    o=(c.prefix||'BME')+'-'+c.num+' '+c.title+' — '+(S[i].label||'').replace(/^BME /,'')+' ('+S[i].short+'), '+U+'. '+(c.teacher?'Course teacher: '+c.teacher+'. ':'')+(n?n+' chapters of lecture notes':'Lecture notes')+' and reference books for the BME 6th Batch.'}}}
+  else if(m=id.match(/^q-(.+)$/)&&id!=='q-retake'){for(i=0;i<S.length;i++){if((S[i].qId||'q-'+S[i].id)===id){var qd=Q.filter(function(q){return q.semId===id})[0],t=qd?(qd.tutorial||[]).length:0,f=qd?(qd.final||[]).length:0;
+    o=S[i].short+' exam question papers — '+(t||f?t+' tutorial and '+f+' semester final papers':'tutorial and semester final papers')+' for '+(S[i].label||'').replace(/^BME /,'')+', BME 6th Batch, '+U+'.'}}}
+  else if(id==='courses-overview'){var cc=0;S.forEach(function(s){cc+=(s.courses||[]).length});o='All '+cc+' theory courses of the BME 6th Batch (2022–23) across '+S.length+' semesters — chapter-wise lecture notes and books. '+U+'.'}
+  else if(id==='questions-overview')o='Tutorial and semester final exam question papers for all '+S.length+' semesters of the BME 6th Batch, '+U+'.';
+  else if(id==='q-retake')o='Previous retake examination question papers'+(RT?' ('+RT+' papers)':'')+' for the BME 6th Batch, '+U+'.';
+  else if(id==='syllabus')o='Full course syllabus and semester-wise syllabus PDFs for all '+S.length+' semesters of the BME 6th Batch (2022–23), '+U+'.';
+  else if(id==='teachers')o='Faculty index of the '+U+(nT?' — profiles of '+nT+' teachers':'')+'.';
+  else if(id==='important-files')o='Important files for the BME 6th Batch — books, study materials and question-bank Drive folders. '+U+'.';
+  else if(id==='gallery')o='Photo gallery of the BME 6th Batch — batch memories, events and moments at Islamic University, Kushtia.';
+  return o?cut(o):''}
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 async function gitSha(s){var b=new TextEncoder().encode(s),h=new TextEncoder().encode('blob '+b.length+'\0'),u=new Uint8Array(h.length+b.length);u.set(h);u.set(b,h.length);var d=await crypto.subtle.digest('SHA-1',u);return Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+/* ═══════ FIVE FEATURES · helpers ═══════ */
+var PEND={},PENDURL={},UPD=null;
+function fmtD(d){var p=d.split('-');return(+p[2])+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]+' '+p[0]}
+function isNewD(d){return !!d&&(Date.now()-Date.parse(d))<14*864e5}
+function b64b(u){var o='',i=0;for(;i<u.length;i+=32768)o+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(o)}
+async function gitShaB(u){var h=new TextEncoder().encode('blob '+u.length+'\0'),x=new Uint8Array(h.length+u.length);x.set(h);x.set(u,h.length);var d=await crypto.subtle.digest('SHA-1',x);return Array.prototype.map.call(new Uint8Array(d),function(v){return('0'+v.toString(16)).slice(-2)}).join('')}
+async function fsha(v){return typeof v==='string'?gitSha(v):gitShaB(v.b)}
+function fb64(v){return typeof v==='string'?b64(v):b64b(v.b)}
+/* image upload: resize + WebP in the browser, queued into the next publish commit */
+function imgSlug(n){return n.replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'image'}
+function imgProcess(file,maxD){return new Promise(function(res,rej){var u=URL.createObjectURL(file),im=new Image();
+  im.onload=function(){var s=Math.min(1,maxD/Math.max(im.width,im.height)),w=Math.round(im.width*s),h=Math.round(im.height*s),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);URL.revokeObjectURL(u);
+    function fin(b,ext){b.arrayBuffer().then(function(ab){res({bytes:new Uint8Array(ab),ext:ext,blob:b})})}
+    c.toBlob(function(b){if(b&&b.type==='image/webp')fin(b,'webp');else c.toBlob(function(b2){fin(b2,'jpg')},'image/jpeg',.85)},'image/webp',.82)};
+  im.onerror=function(){rej(new Error('ছবি পড়া যায়নি'))};im.src=u})}
+function imgPick(folder,maxD,multi,cb){var i=document.createElement('input');i.type='file';i.accept='image/*';i.multiple=!!multi;
+  i.onchange=async function(){for(var k=0;k<i.files.length;k++){try{var f=i.files[k],r=await imgProcess(f,maxD),p=folder+imgSlug(f.name)+'.'+r.ext;PEND[p]={b:r.bytes};PENDURL[p]=URL.createObjectURL(r.blob);toast('✅ '+p+' ('+Math.round(r.bytes.length/1024)+' KB)');cb(p)}catch(e){toast('❌ '+e.message,1)}}pendUi()};i.click()}
+function pendUi(){var n=Object.keys(PEND).length,e=document.getElementById('ghPend');if(e)e.textContent=n?'🖼 '+n+' টি নতুন ছবি পরের Publish-এ আপলোড হবে':''}
+function galUpload(){imgPick('images/gallery/',1600,true,function(p){E.gallery.items.push({src:p,caption:''});rGallery()})}
+/* share-preview card (1200x630) drawn per page */
+function bmeSub(id,S){var m,i,j;if(m=id.match(/^course-(\d+)$/)){for(i=0;i<S.length;i++)for(j=0;j<(S[i].courses||[]).length;j++)if(S[i].courses[j].num===m[1])return(S[i].label||'').replace(/^BME /,'')+(S[i].courses[j].teacher?'  ·  '+S[i].courses[j].teacher:'')}
+  if(m=id.match(/^q-(.+)$/)&&id!=='q-retake'){for(i=0;i<S.length;i++)if((S[i].qId||'q-'+S[i].id)===id)return(S[i].label||'').replace(/^BME /,'')}
+  return{home:'Lectures · Questions · Syllabus · Resources','courses-overview':'All theory courses & lecture materials','questions-overview':'Tutorial & semester final question papers','q-retake':'Previous retake examination papers',syllabus:'Semester-wise syllabus','teachers':'Faculty profiles',gallery:'Batch memories','important-files':'Books, materials & drive folders'}[id]||'Dept. of Biomedical Engineering'}
+async function ogPng(title,sub){var c=document.createElement('canvas');c.width=1200;c.height=630;var x=c.getContext('2d'),g=x.createLinearGradient(0,0,1200,630);g.addColorStop(0,'#0A1F3C');g.addColorStop(1,'#12335F');x.fillStyle=g;x.fillRect(0,0,1200,630);
+  x.strokeStyle='rgba(43,179,166,.6)';x.lineWidth=3;x.beginPath();for(var i=0;i<=1200;i+=4){var m=i%300,dy=m<40?0:m<70?-Math.sin((m-40)/30*Math.PI)*8:m<110?0:m<125?-(m-110)*4:m<140?-60+(m-125)*8:m<165?60-(m-140)*2.4:m<200?-Math.sin((m-165)/35*Math.PI)*16:0;i?x.lineTo(i,566+dy):x.moveTo(i,566+dy)}x.stroke();
+  x.fillStyle='#E5484D';x.fillRect(80,88,64,6);x.fillStyle='#8FE3DA';x.font='600 25px Arial,sans-serif';x.fillText('BME 6TH BATCH  ·  ISLAMIC UNIVERSITY',80,146);
+  x.fillStyle='#fff';x.font='700 64px Georgia,serif';var ws=title.split(/\s+/),ln=[],cur='';ws.forEach(function(w2){var t=cur?cur+' '+w2:w2;if(x.measureText(t).width>1040&&cur){ln.push(cur);cur=w2}else cur=t});ln.push(cur);ln=ln.slice(0,3);
+  var y=240;ln.forEach(function(l){x.fillText(l,80,y);y+=76});x.fillStyle='#B9C7DA';x.font='400 30px Arial,sans-serif';x.fillText(sub.slice(0,80),80,y+14);
+  x.fillStyle='#fff';x.font='700 38px Georgia,serif';x.textAlign='right';x.fillText('BME6·IU',1130,606);
+  var blob=await new Promise(function(r){c.toBlob(r,'image/jpeg',.86)});return{b:new Uint8Array(await blob.arrayBuffer())}}
+function smeta(cl,attr,key,val){var el=cl.querySelector('meta['+attr+'="'+key+'"]');if(!el){el=cl.ownerDocument.createElement('meta');el.setAttribute(attr,key);cl.querySelector('head').appendChild(el)}el.setAttribute('content',val)}
+var SEARCH_JS=`(function(){if(!window.BME_MPA)return;var data=null,ov,inp,lst,sel=0,res=[];
+function load(){if(data)return Promise.resolve();return fetch('assets/search.json?v='+(window.BME_V||'')).then(function(r){return r.json()}).then(function(j){data=j}).catch(function(){data=[]})}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function run(){var q=inp.value.trim().toLowerCase();if(!q){lst.innerHTML='<div class="fxs-empty">কোর্স, লেকচার, শিক্ষক বা প্রশ্ন লিখুন…</div>';res=[];return}
+ var tk=q.split(/\\s+/);res=data.filter(function(it){return tk.every(function(t){return it.s.indexOf(t)>-1})}).map(function(it){var tl=it.t.toLowerCase(),sc=0;if(tl.indexOf(q)>-1)sc+=10;tk.forEach(function(t){if(tl.indexOf(t)>-1)sc+=3});if(/^Course/.test(it.k))sc+=1;return{it:it,sc:sc}}).sort(function(a,b){return b.sc-a.sc}).slice(0,12).map(function(r){return r.it});sel=0;draw()}
+function draw(){if(!res.length&&inp.value.trim()){lst.innerHTML='<div class="fxs-empty">কিছু পাওয়া যায়নি</div>';return}lst.innerHTML=res.map(function(r,i){return'<a href="'+esc(r.u)+'" class="'+(i===sel?'on':'')+'"><b>'+esc(r.t)+'</b><small>'+esc(r.k)+'</small></a>'}).join('')}
+function open(){if(!ov)build();ov.classList.add('open');load().then(function(){run()});setTimeout(function(){inp.focus()},30)}
+function close(){if(ov)ov.classList.remove('open')}
+function build(){ov=document.createElement('div');ov.id='fxSearch';ov.innerHTML='<div class="fxs-box" role="dialog" aria-label="Search"><div class="fxs-top"><span>🔍</span><input type="search" placeholder="Search courses, lectures, teachers, questions…" autocomplete="off"><button type="button" aria-label="Close">✕</button></div><div class="fxs-list"></div><div class="fxs-hint">↑↓ চলুন · Enter খুলুন · Esc বন্ধ</div></div>';document.body.appendChild(ov);
+ inp=ov.querySelector('input');lst=ov.querySelector('.fxs-list');ov.addEventListener('click',function(e){if(e.target===ov||e.target.tagName==='BUTTON')close()});inp.addEventListener('input',run);
+ inp.addEventListener('keydown',function(e){if(e.key==='ArrowDown'){sel=Math.min(sel+1,res.length-1);draw();e.preventDefault()}else if(e.key==='ArrowUp'){sel=Math.max(sel-1,0);draw();e.preventDefault()}else if(e.key==='Enter'&&res[sel]){location.href=res[sel].u}})}
+var tb=document.getElementById('themeSwitchBtn');if(tb){var b=document.createElement('button');b.id='fxSearchBtn';b.type='button';b.title='Search (/)';b.setAttribute('aria-label','Search');b.textContent='🔍';b.addEventListener('click',open);tb.parentNode.insertBefore(b,tb)}
+document.addEventListener('keydown',function(e){var t=(e.target.tagName||'');if(e.key==='Escape')close();else if((e.key==='/'&&!/INPUT|TEXTAREA/.test(t))||((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k')){e.preventDefault();open()}});
+})();`;
+var EXTRA_CSS=`
+#fxSearchBtn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;margin-left:6px}
+#fxSearchBtn:hover{border-color:var(--accent)}
+#fxSearch{position:fixed;inset:0;z-index:100002;background:rgba(7,18,31,.6);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding:9vh 14px 14px}
+#fxSearch.open{display:flex}
+.fxs-box{width:100%;max-width:620px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.35);overflow:hidden}
+.fxs-top{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.fxs-top input{flex:1;background:none;border:0;outline:0;color:var(--text);font:500 1rem var(--font);min-width:0}
+.fxs-top button{background:none;border:0;color:var(--text-muted);font-size:1rem;cursor:pointer;padding:4px 8px}
+.fxs-list{max-height:52vh;overflow:auto;padding:6px}
+.fxs-list a{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:10px 12px;border-radius:8px;color:var(--text);text-decoration:none}
+.fxs-list a.on,.fxs-list a:hover{background:var(--surface2)}
+.fxs-list b{font-weight:600;font-size:.93rem}.fxs-list small{color:var(--text-muted);white-space:nowrap;font-size:.74rem}
+.fxs-empty{padding:22px;text-align:center;color:var(--text-muted);font-size:.88rem}
+.fxs-hint{padding:8px 14px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text-dim)}
+.card,.qcard{position:relative}
+.fx-new{position:absolute;top:12px;right:12px;background:var(--cardiac,#E5484D);color:#fff;font:700 .62rem var(--font);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;z-index:2}
+.fx-updates .fx-upd-list{display:flex;flex-direction:column;border-top:1px solid var(--border)}
+.fx-upd{display:grid;grid-template-columns:96px 1fr auto;gap:14px;align-items:baseline;padding:14px 4px;border-bottom:1px solid var(--border);color:var(--text);text-decoration:none;transition:background .2s}
+.fx-upd:hover{background:var(--surface2)}
+.fx-upd-d{font:600 .78rem var(--font);color:var(--accent);letter-spacing:.04em}.fx-upd-t{font-weight:600}.fx-upd-k{font-size:.74rem;color:var(--text-muted)}
+.fx-upd-note{margin-top:12px;font-size:.8rem;color:var(--accent2);font-weight:600}
+@media(max-width:640px){.fx-upd{grid-template-columns:1fr auto}.fx-upd-d{grid-column:1/-1}}`;
+
 async function genSite(log){
   log=log||function(){};syncAll();var html=genHTML().split('btn.onclick=function(){openDoc(b.url,b.title);};').join("btn.setAttribute('onclick','openDoc('+JSON.stringify(b.url)+','+JSON.stringify(b.title)+')');"),c=ghCfg(),baseUrl=ghBase(c),bp=new URL(baseUrl).pathname;
   var mm=html.match(/<script>var ANNOUNCEMENT[\s\S]*?<\/script>/),fm=html.match(/<script id="bme-fx">([\s\S]*?)<\/script>/);
@@ -1489,13 +1573,29 @@ async function genSite(log){
   var ci=main.indexOf('var cur = CURRENT_SEM_ID;'),st=ci<0?-1:main.lastIndexOf('(function',ci);
   if(st<0)miss.push('auto-render');else{var ob=main.indexOf('{',st);main=main.slice(0,ob+1)+'if(window.BME_MPA){try{updateSlideCounter();startAutoplay();}catch(e){}return;}'+main.slice(ob+1)}
   if(miss.length)throw new Error('সাইটের কোডে এই অংশ পাওয়া যায়নি: '+miss.join(', ')+' — generator আপডেট দরকার');
-  var css=(html.match(/<style>[\s\S]*?<\/style>/g)||[]).map(function(s){return s.slice(7,-8)}).join('\n')+'\n.no-intro #introOverlay{display:none!important}';
+  [['SEMESTERS','[]','[',']'],['QUESTIONS_DATA','[]','[',']'],['RETAKE_QUESTIONS','[]','[',']'],['GALLERY_DATA','[]','[',']'],['PAGE_META','{}','{','}']].forEach(function(a){main=replaceVar(main,a[0],a[1],a[2],a[3])});
+  var css=(html.match(/<style>[\s\S]*?<\/style>/g)||[]).map(function(s){return s.slice(7,-8)}).join('\n')+'\n.no-intro #introOverlay{display:none!important}'+EXTRA_CSS;
   var ver=(await gitSha(css+main+fx)).slice(0,8);
   log('পেইজ রেন্ডার হচ্ছে…');
   var fr=document.createElement('iframe');fr.style.cssText='position:fixed;left:-9999px;top:0;width:1280px;height:900px;border:0';document.body.appendChild(fr);
   await new Promise(function(r){fr.onload=r;fr.srcdoc=html});await sleep(1200);
   var w=fr.contentWindow,d=fr.contentDocument,ids=Array.prototype.map.call(d.querySelectorAll('.page'),function(p){return p.id.replace(/^page-/,'')}),routes={},files={};
   ids.forEach(function(i){routes[i]=bp+bmeRoute(i)});
+  var S=[],Q=[],RT=0;try{S=w.eval('SEMESTERS');Q=w.eval('QUESTIONS_DATA');RT=(w.eval('RETAKE_QUESTIONS')||[]).length}catch(er){}
+  var GAL=[],RTD=[];try{GAL=w.eval('GALLERY_DATA');RTD=w.eval('RETAKE_QUESTIONS')}catch(er){}
+  var today=new Date().toISOString().slice(0,10),prev=(UPD&&UPD.items)?UPD:null,items={},recent=((prev&&prev.recent)||[]).slice();
+  async function track(id,title,kind,obj){var h=(await gitSha(JSON.stringify(obj))).slice(0,12),o=prev&&prev.items&&prev.items[id],dd=o?o.d:null;
+    if(prev&&(!o||o.h!==h)){dd=today;recent=recent.filter(function(r){return r.id!==id});recent.unshift({id:id,t:title,k:kind,d:today})}items[id]={h:h,d:dd||null}}
+  for(var si=0;si<S.length;si++){var sm0=S[si];for(var ci=0;ci<(sm0.courses||[]).length;ci++){var cc0=sm0.courses[ci];await track('course-'+cc0.num,(cc0.prefix||'BME')+'-'+cc0.num+' '+cc0.title,'Course',[cc0.title,cc0.teacher,cc0.desc,cc0.books,cc0.chapterData])}}
+  for(var qi=0;qi<Q.length;qi++)await track(Q[qi].semId,(Q[qi].semLabel||Q[qi].semId)+' Questions','Questions',Q[qi]);
+  await track('q-retake','Retake Questions','Retake',RTD);await track('gallery','Photo Gallery','Gallery',GAL);
+  recent=recent.filter(function(r){return Date.now()-Date.parse(r.d)<45*864e5}).slice(0,12);
+  var idx=[];function sadd(t,u,k,s){if(u)idx.push({t:t,u:u,k:k,s:(t+' '+k+' '+(s||'')).toLowerCase()})}
+  S.forEach(function(sem){(sem.courses||[]).forEach(function(c){var tx=[c.teacher,c.desc,sem.label,sem.short].join(' ');(c.chapterData||[]).forEach(function(ch){tx+=' '+(ch.name||'');(ch.lectures||[]).forEach(function(l){tx+=' '+(l.label||'')})});(c.books||[]).forEach(function(b){tx+=' '+(b.title||'')});sadd((c.prefix||'BME')+'-'+c.num+' '+c.title,routes['course-'+c.num],'Course · '+sem.short,tx)});
+    var qid=sem.qId||'q-'+sem.id;sadd(sem.short+' Questions',routes[qid],'Questions',sem.label+' tutorial final exam question')});
+  Q.forEach(function(q){[].concat(q.tutorial||[],q.final||[]).forEach(function(pp){sadd((pp.title||'')+' — '+(q.semLabel||''),routes[q.semId],'Question paper',pp.sub)})});
+  Array.prototype.forEach.call(d.querySelectorAll('#page-teachers .teacher-card'),function(tc){var n1=tc.querySelector('.teacher-name'),r1=tc.querySelector('.teacher-role');if(n1)sadd(n1.textContent.trim(),routes.teachers,'Teacher',r1?r1.textContent:'')});
+  [['courses-overview','All Courses','lecture materials theory'],['questions-overview','Exam Questions','tutorial final'],['q-retake','Retake Questions','retake exam'],['syllabus','Course Syllabus','semester pdf'],['teachers','Teacher\'s Index','faculty'],['important-files','Important Files','books drive materials'],['gallery','Photo Gallery','photos memories']].forEach(function(a){sadd(a[1],routes[a[0]],'Page',a[2])});
   var introJs='<script>try{var _p=location.pathname.replace(/index\\.html$/,"");if(sessionStorage.getItem("bme_i")||_p!=="'+bp+'")document.documentElement.classList.add("no-intro");else sessionStorage.setItem("bme_i",1)}catch(e){}<\/script>';
   var themeJs='<script>try{if(localStorage.getItem("bme6_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}<\/script>';
   for(var k=0;k<ids.length;k++){var id=ids[k];w.location.hash=id;await sleep(140);
@@ -1505,15 +1605,33 @@ async function genSite(log){
     cl.querySelectorAll('.fx-reveal,[data-fxr],[data-fx]').forEach(function(e){e.classList.remove('fx-reveal','in');e.removeAttribute('data-fxr');e.removeAttribute('data-fx');if(e.style)e.style.removeProperty('--d')});
     cl.querySelectorAll('img[onerror]').forEach(function(m){m.style.removeProperty('display');if(!m.getAttribute('style'))m.removeAttribute('style');var s=m.nextElementSibling;if(s&&s.classList.contains('teacher-photo-placeholder'))s.style.display='none'});
     cl.querySelectorAll('.slideshow-slide').forEach(function(s,i){s.classList.remove('leaving');s.classList.toggle('active',i===0)});cl.querySelectorAll('.slideshow-dot').forEach(function(s,i){s.classList.toggle('active',i===0)});
+    var dsc=bmeDesc(id,S,Q,RT,cl.querySelectorAll('.teacher-card').length);
+    if(dsc)cl.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]').forEach(function(mt){mt.setAttribute('content',dsc)});
+    var ttl=((cl.querySelector('title')||{}).textContent||'BME 6th Batch').replace(/\s*\|.*$/,''),slug=routes[id].slice(bp.length).replace(/\/$/,'').replace(/\//g,'-')||'home',ogp='og/'+slug+'.jpg';
+    if(!(ogp in files))files[ogp]=await ogPng(ttl,bmeSub(id,S));
+    var ogu=baseUrl+ogp,desc2=(cl.querySelector('meta[name="description"]')||{getAttribute:function(){return ''}}).getAttribute('content');
+    smeta(cl,'property','og:title',ttl);smeta(cl,'property','og:description',desc2);smeta(cl,'property','og:image',ogu);smeta(cl,'property','og:image:width','1200');smeta(cl,'property','og:image:height','630');smeta(cl,'property','og:type',id==='home'?'website':'article');
+    smeta(cl,'name','twitter:card','summary_large_image');smeta(cl,'name','twitter:title',ttl);smeta(cl,'name','twitter:description',desc2);smeta(cl,'name','twitter:image',ogu);
+    cl.querySelectorAll('img').forEach(function(im){im.setAttribute('decoding','async');if(!im.closest('nav')&&!im.classList.contains('hero-logo-img')&&!im.closest('.slideshow-slide'))im.setAttribute('loading','lazy')});
+    cl.querySelectorAll('.card[onclick*="navigate("],.qcard[onclick*="navigate("]').forEach(function(el){var m3=el.getAttribute('onclick').match(/navigate\('([^']+)'\)/);if(m3&&items[m3[1]]&&isNewD(items[m3[1]].d)){var bd=cl.ownerDocument.createElement('span');bd.className='fx-new';bd.textContent='New';el.appendChild(bd)}});
+    if(items[id]&&items[id].d){var hn=cl.querySelector('.course-hero-inner,.page-top-banner-inner');if(hn){var nt=cl.ownerDocument.createElement('div');nt.className='fx-upd-note';nt.textContent='Last updated: '+fmtD(items[id].d);hn.appendChild(nt)}}
+    if(id==='home'&&recent.length){var hs=cl.querySelector('#page-home .section');if(hs){var us2=cl.ownerDocument.createElement('div');us2.className='section fx-updates';us2.innerHTML='<h2 class="section-title">Recent <span>Updates</span></h2><div class="fx-upd-list">'+recent.slice(0,6).map(function(r){return'<a class="fx-upd" href="'+(routes[r.id]||'#')+'"><span class="fx-upd-d">'+fmtD(r.d)+'</span><span class="fx-upd-t">'+esc(r.t)+'</span><span class="fx-upd-k">'+esc(r.k)+'</span></a>'}).join('')+'</div>';hs.parentNode.insertBefore(us2,hs.nextSibling)}}
+    var cd=cl.ownerDocument;
+    cl.querySelectorAll('[onclick*="navigate("]').forEach(function(el){var mm2=(el.getAttribute('onclick')||'').match(/navigate\('([^']+)'\)/);if(!mm2||!routes[mm2[1]]||el.querySelector('a[href]'))return;
+      if(el.tagName==='A'){el.setAttribute('href',routes[mm2[1]]);return}
+      var a=cd.createElement('a');a.setAttribute('href',routes[mm2[1]]);a.setAttribute('tabindex','-1');a.setAttribute('style','display:contents;color:inherit;text-decoration:none');
+      while(el.firstChild)a.appendChild(el.firstChild);el.appendChild(a)});
     cl.querySelectorAll('a[href^="#"]').forEach(function(a){var q=a.getAttribute('href').slice(1);if(routes[q])a.setAttribute('href',routes[q])});
     cl.setAttribute('data-theme','light');var hd=cl.querySelector('head'),full=baseUrl.replace(/\/$/,'')+routes[id].replace(bp,'/'),cn=cl.querySelector('#canonical-link');
     if(cn)cn.setAttribute('href',full);var ou=cl.querySelector('#og-url');if(ou)ou.setAttribute('content',full);
     hd.insertAdjacentHTML('afterbegin','<base href="'+bp+'">'+themeJs+introJs);
     hd.insertAdjacentHTML('beforeend','<link rel="stylesheet" href="assets/site.css?v='+ver+'"><script src="assets/site.js?v='+ver+'" defer><\/script>');
+    cl.querySelectorAll('img[onerror]').forEach(function(m){m.style.removeProperty('display');if(!m.getAttribute('style'))m.removeAttribute('style');var s=m.nextElementSibling;if(s&&s.classList.contains('teacher-photo-placeholder'))s.style.display='none'});
     files[routes[id].slice(bp.length)+'index.html']='<!DOCTYPE html>\n'+cl.outerHTML}
   fr.remove();
   files['assets/site.css']=css;
-  files['assets/site.js']='window.BME_MPA=true;window.BME_ROUTES='+JSON.stringify(routes)+';\n(function(){var h=location.hash.slice(1);if(h&&BME_ROUTES[h])location.replace(BME_ROUTES[h])})();\n'+main+'\n'+fx;
+  files['assets/site.js']='window.BME_V="'+ver+'";window.BME_MPA=true;window.BME_ROUTES='+JSON.stringify(routes)+';\n(function(){var h=location.hash.slice(1);if(h&&BME_ROUTES[h])location.replace(BME_ROUTES[h])})();\n'+main+'\n'+fx+'\n'+SEARCH_JS;
+  files['assets/search.json']=JSON.stringify(idx);files['_source/updates.json']=JSON.stringify({items:items,recent:recent});
   var sm=smBuild(baseUrl,ids);files['sitemap.xml']=sm.sitemap;files['robots.txt']=sm.robots;files['_source/site.html']=html;
   return{files:files,count:ids.length}}
 function smBuild(base,ids){var today=new Date().toISOString().split('T')[0];
@@ -1524,24 +1642,24 @@ async function ghLoad(silent){var c=ghCfg();if(!c.token||!c.owner||!c.repo){if(!
   try{var br=c.branch||'main',ref=await ghApi('/git/ref/heads/'+br),txt;
     try{txt=await ghApi('/contents/_source/site.html?ref='+ref.object.sha,{raw:true})}catch(e){if(e.status!==404)throw e;txt=await ghApi('/contents/index.html?ref='+ref.object.sha,{raw:true})}
     if(txt.indexOf('<script>var ANNOUNCEMENT')<0)throw new Error('এই ফাইলে সাইটের ডেটা নেই (generated পেইজ?) — _source/site.html লাগবে');
-    bmeLoad(txt,'সাইট · GitHub');_head=ref.object.sha;toast('✅ GitHub থেকে সাইট লোড হয়েছে')}
+    bmeLoad(txt,'সাইট · GitHub');_head=ref.object.sha;try{UPD=JSON.parse(await ghApi('/contents/_source/updates.json?ref='+ref.object.sha,{raw:true}))}catch(er){UPD=null}toast('✅ GitHub থেকে সাইট লোড হয়েছে')}
   catch(e){document.getElementById('ldg').style.display='none';if(!silent)toast('❌ '+e.message,1);else console.warn(e)}}
 async function ghPublish(){if(!PD){ghLog('❌ আগে সাইট লোড করুন',1);return}
   var c=ghSave(),btn=document.getElementById('ghPub');document.getElementById('ghLog').innerHTML='';btn.disabled=true;
-  try{if(!c.token)throw new Error('GitHub token দিন');var br=c.branch||'main',g=await genSite(ghLog),files=g.files;ghLog('✓ '+g.count+' টি পেইজ তৈরি হয়েছে');
+  try{if(!c.token)throw new Error('GitHub token দিন');var br=c.branch||'main',g=await genSite(ghLog),files=g.files;Object.keys(PEND).forEach(function(k){files[k]=PEND[k]});ghLog('✓ '+g.count+' টি পেইজ তৈরি হয়েছে');
     ghLog('GitHub-এর সর্বশেষ অবস্থা দেখা হচ্ছে…');var ref=await ghApi('/git/ref/heads/'+br),head=ref.object.sha;
     if(_head&&head!==_head&&!confirm('লোড করার পর repo-তে নতুন পরিবর্তন হয়েছে (অন্য ডিভাইস বা অন্য কেউ)। তবুও Publish করলে সেগুলো মুছে যেতে পারে। চালিয়ে যাবেন?'))throw new Error('Publish বাতিল করা হয়েছে');
     var cm=await ghApi('/git/commits/'+head),ex={},tr=await ghApi('/git/trees/'+cm.tree.sha+'?recursive=1');
     if(!tr.truncated)tr.tree.forEach(function(e){if(e.type==='blob')ex[e.path]=e.sha});
     var tree=[],todo=[],paths=Object.keys(files);
-    for(var i=0;i<paths.length;i++){if(ex[paths[i]]!==await gitSha(files[paths[i]]))todo.push(paths[i])}
+    for(var i=0;i<paths.length;i++){if(ex[paths[i]]!==await fsha(files[paths[i]]))todo.push(paths[i])}
     Object.keys(ex).forEach(function(p){if(/^(courses|questions|retake|syllabus|teachers|files|gallery)\/(.*\/)?index\.html$/.test(p)&&!(p in files))tree.push({path:p,mode:'100644',type:'blob',sha:null})});
     ghLog('পরিবর্তিত ফাইল: '+todo.length+' / '+paths.length+(tree.length?' · মুছবে: '+tree.length:''));
-    for(var j=0;j<todo.length;j+=5)await Promise.all(todo.slice(j,j+5).map(async function(p){var b=await ghApi('/git/blobs',{method:'POST',body:{content:b64(files[p]),encoding:'base64'}});tree.push({path:p,mode:'100644',type:'blob',sha:b.sha})}));
+    for(var j=0;j<todo.length;j+=5)await Promise.all(todo.slice(j,j+5).map(async function(p){var b=await ghApi('/git/blobs',{method:'POST',body:{content:fb64(files[p]),encoding:'base64'}});tree.push({path:p,mode:'100644',type:'blob',sha:b.sha})}));
     if(!tree.length){_head=head;ghLog('✅ কোনো পরিবর্তন নেই — সাইট আগে থেকেই আপ-টু-ডেট।');return}
     var nt=await ghApi('/git/trees',{method:'POST',body:{base_tree:cm.tree.sha,tree:tree}});
     var nc=await ghApi('/git/commits',{method:'POST',body:{message:'Update site via BME6 Editor ('+new Date().toISOString().slice(0,16).replace('T',' ')+' UTC)',tree:nt.sha,parents:[head]}});
-    await ghApi('/git/refs/heads/'+br,{method:'PATCH',body:{sha:nc.sha}});_head=nc.sha;
+    await ghApi('/git/refs/heads/'+br,{method:'PATCH',body:{sha:nc.sha}});_head=nc.sha;PEND={};pendUi();try{UPD=JSON.parse(files['_source/updates.json'])}catch(er){}
     ghLog('✅ Publish সম্পন্ন! GitHub Pages ১–২ মিনিটে আপডেট করবে।');ghLog('🌐 '+ghBase(c));toast('✅ Publish হয়েছে!');
   }catch(e){ghLog('❌ '+e.message,1)}finally{btn.disabled=false}}
 
