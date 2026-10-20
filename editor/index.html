@@ -1478,7 +1478,7 @@ function bmeRoute(id){var m;if(id==='home')return'';if(id==='courses-overview')r
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 async function gitSha(s){var b=new TextEncoder().encode(s),h=new TextEncoder().encode('blob '+b.length+'\0'),u=new Uint8Array(h.length+b.length);u.set(h);u.set(b,h.length);var d=await crypto.subtle.digest('SHA-1',u);return Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
 async function genSite(log){
-  log=log||function(){};syncAll();var html=genHTML(),c=ghCfg(),baseUrl=ghBase(c),bp=new URL(baseUrl).pathname;
+  log=log||function(){};syncAll();var html=genHTML().split('btn.onclick=function(){openDoc(b.url,b.title);};').join("btn.setAttribute('onclick','openDoc('+JSON.stringify(b.url)+','+JSON.stringify(b.title)+')');"),c=ghCfg(),baseUrl=ghBase(c),bp=new URL(baseUrl).pathname;
   var mm=html.match(/<script>var ANNOUNCEMENT[\s\S]*?<\/script>/),fm=html.match(/<script id="bme-fx">([\s\S]*?)<\/script>/);
   if(!mm)throw new Error('সাইটের মূল script পাওয়া যায়নি — source ফাইল ঠিক আছে কি?');
   var main=mm[0].slice(8,-9),fx=fm?fm[1]:'',miss=[];
@@ -1503,6 +1503,7 @@ async function genSite(log){
     cl.querySelectorAll('.page').forEach(function(p){if(p.id!=='page-'+id)p.remove()});var pg=cl.querySelector('#page-'+id);if(pg)pg.classList.add('active');
     cl.querySelectorAll('script:not([type="application/ld+json"]),style:not([id]),.fx-canvas,#fxProg,.fx-burst,.particle').forEach(function(e){e.remove()});
     cl.querySelectorAll('.fx-reveal,[data-fxr],[data-fx]').forEach(function(e){e.classList.remove('fx-reveal','in');e.removeAttribute('data-fxr');e.removeAttribute('data-fx');if(e.style)e.style.removeProperty('--d')});
+    cl.querySelectorAll('img[onerror]').forEach(function(m){m.style.removeProperty('display');if(!m.getAttribute('style'))m.removeAttribute('style');var s=m.nextElementSibling;if(s&&s.classList.contains('teacher-photo-placeholder'))s.style.display='none'});
     cl.querySelectorAll('.slideshow-slide').forEach(function(s,i){s.classList.remove('leaving');s.classList.toggle('active',i===0)});cl.querySelectorAll('.slideshow-dot').forEach(function(s,i){s.classList.toggle('active',i===0)});
     cl.querySelectorAll('a[href^="#"]').forEach(function(a){var q=a.getAttribute('href').slice(1);if(routes[q])a.setAttribute('href',routes[q])});
     cl.setAttribute('data-theme','light');var hd=cl.querySelector('head'),full=baseUrl.replace(/\/$/,'')+routes[id].replace(bp,'/'),cn=cl.querySelector('#canonical-link');
