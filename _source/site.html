@@ -7262,7 +7262,7 @@ function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src
       btn.style.marginRight='8px';
       btn.style.marginBottom='6px';
       btn.textContent=(b.label||('📘 '+b.title));
-      btn.onclick=function(){openDoc(b.url,b.title);};
+      btn.setAttribute('onclick','openDoc('+JSON.stringify(b.url)+','+JSON.stringify(b.title)+')');
       div.appendChild(btn);
     });
     if(div.children.length>0){
