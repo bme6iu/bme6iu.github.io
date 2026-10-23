@@ -1,4 +1,5 @@
-window.BME_V="88070a15";window.BME_MPA=true;window.BME_ROUTES={"home":"/","courses-overview":"/courses/","course-1101":"/courses/bme-1101/","course-1103":"/courses/bme-1103/","course-1105":"/courses/bme-1105/","course-1107":"/courses/bme-1107/","course-1109":"/courses/bme-1109/","course-1201":"/courses/bme-1201/","course-1203":"/courses/bme-1203/","course-1205":"/courses/bme-1205/","course-1207":"/courses/bme-1207/","course-1209":"/courses/bme-1209/","course-2101":"/courses/bme-2101/","course-2103":"/courses/bme-2103/","course-2105":"/courses/bme-2105/","course-2107":"/courses/bme-2107/","course-2109":"/courses/bme-2109/","course-2201":"/courses/bme-2201/","course-2203":"/courses/bme-2203/","course-2205":"/courses/bme-2205/","course-2207":"/courses/bme-2207/","course-2209":"/courses/bme-2209/","course-3101":"/courses/bme-3101/","course-3103":"/courses/bme-3103/","course-3105":"/courses/bme-3105/","course-3107":"/courses/bme-3107/","course-3109":"/courses/bme-3109/","questions-overview":"/questions/","q-bme11":"/questions/bme11/","q-bme12":"/questions/bme12/","q-bme21":"/questions/bme21/","q-bme22":"/questions/bme22/","q-bme31":"/questions/bme31/","q-bme32":"/questions/bme32/","q-retake":"/retake/","teachers":"/teachers/","gallery":"/gallery/","syllabus":"/syllabus/","important-files":"/files/","course-3201":"/courses/bme-3201/","course-3203":"/courses/bme-3203/","course-3205":"/courses/bme-3205/","course-3207":"/courses/bme-3207/","course-3209":"/courses/bme-3209/"};
+window.bmeSetFrame=function(u){var f=document.getElementById('modalIframe');try{f.contentWindow.location.replace(u?new URL(u,document.baseURI).href:'about:blank')}catch(e){f.src=u||''}};window.addEventListener('popstate',function(){var m=document.getElementById('docModal');if(m&&m.classList.contains('open')&&typeof closeModalNow==='function')closeModalNow()});window.bmeReaderUrl=function(u,t,prev){u=String(u||'');var drive=/drive\.google\.com\/file\/d\//.test(u),pdf=/^(?!https?:|\/\/)[^?#]*\.pdf(?:[?#].*)?$/i.test(u);if(!drive&&!pdf)return prev;return 'read/?u='+encodeURIComponent(pdf?new URL(u,document.baseURI).href:u)+'&t='+encodeURIComponent(t||'')};
+window.BME_V="33b3a3ab";window.BME_MPA=true;window.BME_ROUTES={"home":"/","courses-overview":"/courses/","course-1101":"/courses/bme-1101/","course-1103":"/courses/bme-1103/","course-1105":"/courses/bme-1105/","course-1107":"/courses/bme-1107/","course-1109":"/courses/bme-1109/","course-1201":"/courses/bme-1201/","course-1203":"/courses/bme-1203/","course-1205":"/courses/bme-1205/","course-1207":"/courses/bme-1207/","course-1209":"/courses/bme-1209/","course-2101":"/courses/bme-2101/","course-2103":"/courses/bme-2103/","course-2105":"/courses/bme-2105/","course-2107":"/courses/bme-2107/","course-2109":"/courses/bme-2109/","course-2201":"/courses/bme-2201/","course-2203":"/courses/bme-2203/","course-2205":"/courses/bme-2205/","course-2207":"/courses/bme-2207/","course-2209":"/courses/bme-2209/","course-3101":"/courses/bme-3101/","course-3103":"/courses/bme-3103/","course-3105":"/courses/bme-3105/","course-3107":"/courses/bme-3107/","course-3109":"/courses/bme-3109/","questions-overview":"/questions/","q-bme11":"/questions/bme11/","q-bme12":"/questions/bme12/","q-bme21":"/questions/bme21/","q-bme22":"/questions/bme22/","q-bme31":"/questions/bme31/","q-bme32":"/questions/bme32/","q-retake":"/retake/","teachers":"/teachers/","gallery":"/gallery/","syllabus":"/syllabus/","important-files":"/files/","course-3201":"/courses/bme-3201/","course-3203":"/courses/bme-3203/","course-3205":"/courses/bme-3205/","course-3207":"/courses/bme-3207/","course-3209":"/courses/bme-3209/"};
 (function(){var h=location.hash.slice(1);if(h&&BME_ROUTES[h])location.replace(BME_ROUTES[h])})();
 var ANNOUNCEMENT = ``;
 
@@ -77,7 +78,7 @@ window.addEventListener('load', handleRoute);
 // ══════════════════════════════════════════════
 function openDoc(url, title) {
   document.getElementById('modalTitle').textContent = title || 'Document';
-  document.getElementById('modalIframe').src = '';
+  bmeSetFrame('');
   document.getElementById('modalLoading').style.display = 'flex';
   document.getElementById('modalIframe').style.display = 'none';
   
@@ -89,10 +90,11 @@ function openDoc(url, title) {
   }
   // For already preview links, use as-is
   
-  document.getElementById('modalOpenLink').href = url.replace('/preview','').replace('/view','') + '/view?usp=drive_link';
-  document.getElementById('modalIframe').src = previewUrl;
+  document.getElementById('modalOpenLink').href = url.indexOf('drive.google.com') > -1 ? url.replace('/preview','').replace('/view','') + '/view?usp=drive_link' : url; document.getElementById('modalOpenLink').textContent = url.indexOf('drive.google.com') > -1 ? '↗ Open in Drive' : '↗ Open PDF';
+  bmeSetFrame(window.bmeReaderUrl ? bmeReaderUrl(url, title, previewUrl) : previewUrl);
   document.getElementById('docModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  if (window.BME_MPA && !(history.state && history.state.bmeDoc)) { try { history.pushState({bmeDoc:1}, ''); } catch(e) {} }
 }
 
 function hideModalLoading() {
@@ -101,8 +103,12 @@ function hideModalLoading() {
 }
 
 function closeModal() {
+  if (window.BME_MPA && history.state && history.state.bmeDoc) { history.back(); return; }
+  closeModalNow();
+}
+function closeModalNow() {
   document.getElementById('docModal').classList.remove('open');
-  document.getElementById('modalIframe').src = '';
+  bmeSetFrame('');
   document.body.style.overflow = '';
 }
 
