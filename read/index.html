@@ -16,6 +16,7 @@ button:hover,a.b:hover{border-color:var(--ac);color:var(--ac)}button:disabled{op
 #find.on{display:flex}#q{flex:1;min-width:0;height:32px;border:1px solid var(--bd);border-radius:8px;padding:0 10px;background:transparent;color:var(--tx);font:inherit}#fr{color:var(--mu);font-size:.8rem;white-space:nowrap}
 #stage{flex:1;min-height:0;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}
 .pg{margin:10px auto;background:#fff;box-shadow:0 2px 14px rgba(10,31,60,.18);position:relative}.pg canvas{display:block;width:100%;height:100%}
+#stage .tl{position:absolute;inset:0;overflow:hidden;line-height:1;-webkit-user-select:text;user-select:text;z-index:1}#stage .tl span,#stage .tl br{color:transparent;position:absolute;white-space:pre;cursor:text;transform-origin:0 0}#stage .tl ::selection{background:rgba(59,111,232,.38)}
 #stage.inv .pg canvas{filter:invert(.92) hue-rotate(180deg)}#stage.inv .pg{background:#222}
 .pg .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa;font-size:.8rem}
 iframe{border:0;width:100%;height:100%;display:block}.err,.note{padding:30px 20px;text-align:center;color:var(--mu)}.err a{color:var(--ac)}
@@ -24,12 +25,12 @@ iframe{border:0;width:100%;height:100%;display:block}.err,.note{padding:30px 20p
 #bk{font-weight:600}
 @media(max-width:520px){#bk span{display:none}#of,#dk,#zf{display:none}button,a.b{min-width:30px;padding:0 7px}}
 </style></head><body>
-<div id="bar"><button id="bk" title="ফিরে যান">←<span>&nbsp;ফিরে যান</span></button><span id="ttl">Document</span>
- <span id="tools"><button id="pv" title="আগের পেইজ">‹</button><input id="pn" inputmode="numeric" value="1" aria-label="Page"><span id="of">/ 1</span><button id="nx" title="পরের পেইজ">›</button>
- <button id="zo" title="ছোট">−</button><button id="zf" title="প্রস্থ অনুযায়ী">⤢</button><button id="zi" title="বড়">+</button><button id="sr" title="খুঁজুন">🔍</button><button id="dk" title="ডার্ক">🌓</button></span>
- <a class="b" id="dl" title="ডাউনলোড" target="_blank" rel="noopener">⬇</a><a class="b" id="og" title="মূল ফাইল" target="_blank" rel="noopener">↗</a></div>
-<div id="prog"></div><div id="ctx"></div><div id="find"><input id="q" placeholder="PDF-এর ভেতরে খুঁজুন…" autocomplete="off"><button id="fp">▲</button><button id="fn">▼</button><span id="fr"></span></div>
-<div id="stage"><div class="err" id="ld">লোড হচ্ছে…</div></div>
+<div id="bar"><button id="bk" title="Back">←<span>&nbsp;Back</span></button><span id="ttl">Document</span>
+ <span id="tools"><button id="pv" title="Previous page">‹</button><input id="pn" inputmode="numeric" value="1" aria-label="Page"><span id="of">/ 1</span><button id="nx" title="Next page">›</button>
+ <button id="zo" title="Zoom out">−</button><button id="zf" title="Fit width">⤢</button><button id="zi" title="Zoom in">+</button><button id="sr" title="Search">🔍</button><button id="dk" title="Dark mode">🌓</button></span>
+ <a class="b" id="dl" title="Download" target="_blank" rel="noopener">⬇</a><a class="b" id="og" title="Open original" target="_blank" rel="noopener">↗</a></div>
+<div id="prog"></div><div id="ctx"></div><div id="find"><input id="q" placeholder="Search in this PDF…" autocomplete="off"><button id="fp">▲</button><button id="fn">▼</button><span id="fr"></span></div>
+<div id="stage"><div class="err" id="ld">Loading…</div></div>
 <script>window.BME_DRIVE_KEY="AIzaSyDRfi8JjRUBAySumP_hLzuL5yJXGE4Bc7E";</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
@@ -45,29 +46,30 @@ $('og').href=ID?'https://drive.google.com/file/d/'+ID+'/view':U;$('dl').href=ID?
 var emb=window.self!==window.top,CTXU='';if(emb)$('ttl').style.visibility='hidden';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 $('bk').onclick=function(){if(emb){try{parent.closeModal();return}catch(e){}}if(CTXU){location.href=CTXU;return}if(history.length>1&&document.referrer)history.back();else location.href='../'};
-if(!emb){$('bk').title='সাইটে ফিরুন'}
+if(!emb){$('bk').title='Back to site'}
 try{fetch(new URL('../assets/docs.json',location.href)).then(function(r){return r.json()}).then(function(D){var o=ID&&D[ID];if(!o)return;
   var l1='<span>🎓 <b>'+esc(o.sl)+'</b> <i>('+esc(o.sh)+')</i></span><span class="sep">›</span><span>📚 '+(emb||!o.u?'<b>':'<a href="'+esc(o.u)+'"><b>')+esc(o.c)+' · '+esc(o.ct)+(emb||!o.u?'</b>':'</b></a>')+'</span>',l2='';
   if(o.k==='book')l2='<span class="hl">📘 Course Book</span><span class="sep">›</span><span>'+esc(o.t)+'</span>';
   else{l2='<span>📖 <b>Chapter '+esc(o.cn)+'</b>'+(o.cm?' · '+esc(o.cm):'')+'</span><span class="sep">›</span>';
     l2+=o.k==='lecture'?'<span class="hl">🎞 '+esc(o.ln)+'</span>'+(o.lt?'<span>— '+esc(o.lt)+'</span>':''):'<span class="hl">📎 '+esc(o.t)+'</span>'}
-  var c=$('ctx');c.innerHTML='<div class="l1">'+l1+'</div><div class="l2">'+l2+'</div>';c.classList.add('on');if(o.u&&!emb){CTXU=o.u;$('bk').title='কোর্সে ফিরুন';$('bk').lastChild.innerHTML='&nbsp;কোর্সে ফিরুন'}
+  var c=$('ctx');c.innerHTML='<div class="l1">'+l1+'</div><div class="l2">'+l2+'</div>';c.classList.add('on');if(o.u&&!emb){CTXU=o.u;$('bk').title='Back to course';$('bk').lastChild.innerHTML='&nbsp;Back to course'}
   var nm=o.k==='book'?(o.t||''):(o.ln||o.t||'');document.title=(nm?nm+' · ':'')+o.c+' · PDF Reader'}).catch(function(){})}catch(e){}
 var stage=$('stage');
 function fallback(msg){$('tools').classList.add('off');if(ID){stage.innerHTML='<iframe src="https://drive.google.com/file/d/'+ID+'/preview" allowfullscreen></iframe>';if(msg){var n=document.createElement('div');n.className='note';n.textContent=msg;document.body.appendChild(n);setTimeout(function(){n.remove()},4500)}}
- else stage.innerHTML='<div class="err">'+(msg||'ফাইল খোলা যায়নি')+'<br><br><a href="'+$('og').href+'" target="_blank" rel="noopener">মূল ফাইল খুলুন ↗</a></div>'}
+ else stage.innerHTML='<div class="err">'+(msg||'Could not open this file')+'<br><br><a href="'+$('og').href+'" target="_blank" rel="noopener">Open original file ↗</a></div>'}
 if(!U||!src||!window.pdfjsLib){fallback('');return}
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 var task=pdfjsLib.getDocument({url:src,rangeChunkSize:262144});task.onProgress=function(p){if(p.total)$('prog').style.width=Math.min(100,p.loaded/p.total*100)+'%'};
 var doc,N=0,base,zoom=1,io,wr=[],texts={},hits=[],hi=-1,KEYS='bmeRd:'+U;
 task.promise.then(function(d){doc=d;N=d.numPages;return d.getPage(1)}).then(function(p1){base=p1.getViewport({scale:1});$('prog').style.width='0';stage.innerHTML='';build();$('of').textContent='/ '+N;
-  try{var s=+localStorage.getItem(KEYS);if(s>1&&s<=N)setTimeout(function(){go(s)},60)}catch(e){}}).catch(function(){fallback('রিডারে খোলা যায়নি — Drive প্রিভিউ দেখানো হচ্ছে')});
+  try{var s=+localStorage.getItem(KEYS);if(s>1&&s<=N)setTimeout(function(){go(s)},60)}catch(e){}}).catch(function(){fallback('Could not open in the reader — showing the Drive preview')});
 function scale(){return Math.min(3,Math.max(.4,(stage.clientWidth-20)/base.width))*zoom}
 function build(){io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)render(+e.target.dataset.n)})},{root:stage,rootMargin:'900px 0px'});
   for(var i=1;i<=N;i++){var w=document.createElement('div');w.className='pg';w.dataset.n=i;w.innerHTML='<div class="ph">'+i+'</div>';stage.appendChild(w);wr[i]=w}layout()}
-function layout(){var s=scale();io.disconnect();for(var i=1;i<=N;i++){var w=wr[i];w.style.width=Math.round(base.width*s)+'px';w.style.height=Math.round(base.height*s)+'px';var c=w.querySelector('canvas');if(c)c.remove();delete w.dataset.s;io.observe(w)}}
+function layout(){var s=scale();io.disconnect();for(var i=1;i<=N;i++){var w=wr[i];w.style.width=Math.round(base.width*s)+'px';w.style.height=Math.round(base.height*s)+'px';var c=w.querySelector('canvas');if(c)c.remove();var tl=w.querySelector('.tl');if(tl)tl.remove();delete w.dataset.s;io.observe(w)}}
 function render(n){var w=wr[n],s=scale();if(w.dataset.s==s+'')return;w.dataset.s=s+'';doc.getPage(n).then(function(pg){var dpr=Math.min(window.devicePixelRatio||1,2.5),vp=pg.getViewport({scale:s*dpr}),c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;
-  w.style.width=Math.round(vp.width/dpr)+'px';w.style.height=Math.round(vp.height/dpr)+'px';pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise.then(function(){if(w.dataset.s!==s+'')return;var o=w.querySelector('canvas');if(o)o.remove();var ph=w.querySelector('.ph');if(ph)ph.remove();w.appendChild(c)}).catch(function(){})})}
+  w.style.width=Math.round(vp.width/dpr)+'px';w.style.height=Math.round(vp.height/dpr)+'px';pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise.then(function(){if(w.dataset.s!==s+'')return;var o=w.querySelector('canvas');if(o)o.remove();var ot=w.querySelector('.tl');if(ot)ot.remove();var ph=w.querySelector('.ph');if(ph)ph.remove();w.appendChild(c);addText(pg,w,s)}).catch(function(){})})}
+function addText(pg,w,s){if(!pdfjsLib.renderTextLayer)return;pg.getTextContent().then(function(tc){if(w.dataset.s!==s+'')return;var old=w.querySelector('.tl');if(old)old.remove();var d=document.createElement('div');d.className='tl';w.appendChild(d);pdfjsLib.renderTextLayer({textContentSource:tc,container:d,viewport:pg.getViewport({scale:s}),textDivs:[]})}).catch(function(){})}
 function go(n){n=Math.max(1,Math.min(N,n));stage.scrollTop=wr[n].offsetTop-8}
 function cur(){var y=stage.scrollTop+stage.clientHeight*.3,c=1;for(var i=1;i<=N;i++){if(wr[i].offsetTop<=y)c=i;else break}return c}
 var tk=0;stage.addEventListener('scroll',function(){if(tk)return;tk=requestAnimationFrame(function(){tk=0;var c=cur();if(document.activeElement!==$('pn'))$('pn').value=c;try{localStorage.setItem(KEYS,c)}catch(e){}})},{passive:true});
@@ -79,9 +81,9 @@ var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(funct
 $('dk').onclick=function(){stage.classList.toggle('inv')};if(document.documentElement.getAttribute('data-theme')==='dark')stage.classList.add('inv');
 $('sr').onclick=function(){var f=$('find');f.classList.toggle('on');if(f.classList.contains('on'))$('q').focus()};
 async function search(){var q=$('q').value.trim().toLowerCase();hits=[];hi=-1;if(!q){$('fr').textContent='';return}
-  for(var i=1;i<=N;i++){$('fr').textContent='খোঁজা হচ্ছে '+i+'/'+N;var t=texts[i];if(t===undefined){try{var pg=await doc.getPage(i),c=await pg.getTextContent();t=texts[i]=c.items.map(function(s){return s.str}).join(' ').toLowerCase()}catch(e){t=texts[i]=''}}if(t.indexOf(q)>-1)hits.push(i)}
-  $('fr').textContent=hits.length?hits.length+' টি পেইজে মিলেছে':'কিছু পাওয়া যায়নি';if(hits.length)step(1)}
-function step(d){if(!hits.length)return;var c=cur();if(hi<0){hi=d>0?hits.findIndex(function(h){return h>=c}):hits.length-1;if(hi<0)hi=0}else hi=(hi+d+hits.length)%hits.length;go(hits[hi]);$('fr').textContent=(hi+1)+'/'+hits.length+' · পেইজ '+hits[hi]}
+  for(var i=1;i<=N;i++){$('fr').textContent='Searching '+i+'/'+N;var t=texts[i];if(t===undefined){try{var pg=await doc.getPage(i),c=await pg.getTextContent();t=texts[i]=c.items.map(function(s){return s.str}).join(' ').toLowerCase()}catch(e){t=texts[i]=''}}if(t.indexOf(q)>-1)hits.push(i)}
+  $('fr').textContent=hits.length?hits.length+' pages match':'No results';if(hits.length)step(1)}
+function step(d){if(!hits.length)return;var c=cur();if(hi<0){hi=d>0?hits.findIndex(function(h){return h>=c}):hits.length-1;if(hi<0)hi=0}else hi=(hi+d+hits.length)%hits.length;go(hits[hi]);$('fr').textContent=(hi+1)+'/'+hits.length+' · page '+hits[hi]}
 $('q').addEventListener('keydown',function(e){if(e.key==='Enter'){if(hits.length&&e.shiftKey)step(-1);else if(hits.length&&this.dataset.last===this.value)step(1);else{this.dataset.last=this.value;search()}}});
 $('fn').onclick=function(){step(1)};$('fp').onclick=function(){step(-1)};
 })();
