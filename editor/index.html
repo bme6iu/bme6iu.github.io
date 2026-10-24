@@ -1592,7 +1592,7 @@ async function genSite(log){
   if(miss.length)throw new Error('সাইটের কোডে এই অংশ পাওয়া যায়নি: '+miss.join(', ')+' — generator আপডেট দরকার');
   [['SEMESTERS','[]','[',']'],['QUESTIONS_DATA','[]','[',']'],['RETAKE_QUESTIONS','[]','[',']'],['GALLERY_DATA','[]','[',']'],['PAGE_META','{}','{','}']].forEach(function(a){main=replaceVar(main,a[0],a[1],a[2],a[3])});
   var css=(html.match(/<style>[\s\S]*?<\/style>/g)||[]).map(function(s){return s.slice(7,-8)}).join('\n')+'\n.no-intro #introOverlay{display:none!important}'+EXTRA_CSS;
-  var ver=(await gitSha(css+main+fx)).slice(0,8);
+  var ver=(await gitSha(css+main+fx+SEARCH_JS+BME_READER_JS+READER_HTML)).slice(0,8);
   log('পেইজ রেন্ডার হচ্ছে…');
   var fr=document.createElement('iframe');fr.style.cssText='position:fixed;left:-9999px;top:0;width:1280px;height:900px;border:0';document.body.appendChild(fr);
   await new Promise(function(r){fr.onload=r;fr.srcdoc=html});await sleep(1200);
