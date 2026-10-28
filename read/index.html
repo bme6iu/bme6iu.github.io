@@ -36,6 +36,7 @@ iframe{border:0;width:100%;height:100%;display:block}.err,.note{padding:30px 20p
 <div id="find"><input id="q" placeholder="Search in this PDF…" autocomplete="off"><button id="fp" title="Previous match">▲</button><button id="fn" title="Next match">▼</button><span id="fr"></span></div>
 <div id="sw"><div id="stage"><div id="viewer" class="pdfViewer"></div></div></div>
 <script>window.BME_DRIVE_KEY="AIzaSyDRfi8JjRUBAySumP_hLzuL5yJXGE4Bc7E";</script>
+<script data-goatcounter="https://bme6iu.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/web/pdf_viewer.js"></script>
 <script>
@@ -47,17 +48,18 @@ $('ttl').textContent=T;document.title=T+' · PDF Reader';
 var m=U.match(/\/d\/([\w-]{10,})/)||U.match(/[?&]id=([\w-]{10,})/),ID=(/drive\.google\.com|docs\.google\.com/.test(U)&&m)?m[1]:'';
 var src=ID?(KEY?'https://www.googleapis.com/drive/v3/files/'+ID+'?alt=media&supportsAllDrives=true&key='+encodeURIComponent(KEY):''):U;
 $('og').href=ID?'https://drive.google.com/file/d/'+ID+'/view':U;$('dl').href=ID?'https://drive.google.com/uc?export=download&id='+ID:U;if(!ID)$('dl').setAttribute('download','');
+var gcDone=false;function gcHit(p,t){if(gcDone)return;gcDone=true;var n=0;(function tr(){if(window.goatcounter&&window.goatcounter.count){try{window.goatcounter.count({path:p,title:t,event:false})}catch(e){}}else if(n++<25)setTimeout(tr,300)})()}
 var emb=window.self!==window.top,CTXU='';if(emb)$('ttl').style.visibility='hidden';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 $('bk').onclick=function(){if(emb){try{parent.closeModal();return}catch(e){}}if(CTXU){location.href=CTXU;return}if(history.length>1&&document.referrer)history.back();else location.href='../'};
 if(!emb)$('bk').title='Back to site';
-try{fetch(new URL('../assets/docs.json',location.href)).then(function(r){return r.json()}).then(function(D){var o=ID&&D[ID];if(!o)return;
+try{fetch(new URL('../assets/docs.json',location.href)).then(function(r){return r.json()}).then(function(D){var o=ID&&D[ID];if(!o){gcHit('read/'+(ID||decodeURIComponent((U.split('/').pop()||'file').split('?')[0])),document.title);return}gcHit('read/'+o.c+'/'+(o.k==='book'?'book':(o.ln||o.k)).replace(/\s+/g,'-'),(o.k==='book'?(o.t||'Book'):((o.ln||o.k)+(o.lt?' — '+o.lt:'')))+' · '+o.c);
   var l1='<span>🎓 <b>'+esc(o.sl)+'</b> <i>('+esc(o.sh)+')</i></span><span class="sep">›</span><span>📚 '+(emb||!o.u?'<b>':'<a href="'+esc(o.u)+'"><b>')+esc(o.c)+' · '+esc(o.ct)+(emb||!o.u?'</b>':'</b></a>')+'</span>',l2='';
   if(o.k==='book')l2='<span class="hl">📘 Course Book</span><span class="sep">›</span><span>'+esc(o.t)+'</span>';
   else{l2='<span>📖 <b>Chapter '+esc(o.cn)+'</b>'+(o.cm?' · '+esc(o.cm):'')+'</span><span class="sep">›</span>';
     l2+=o.k==='lecture'?'<span class="hl">🎞 '+esc(o.ln)+'</span>'+(o.lt?'<span>— '+esc(o.lt)+'</span>':''):'<span class="hl">📎 '+esc(o.t)+'</span>'}
   var c=$('ctx');c.innerHTML='<div class="l1">'+l1+'</div><div class="l2">'+l2+'</div>';c.classList.add('on');if(o.u&&!emb){CTXU=o.u;$('bk').title='Back to course';$('bk').lastChild.innerHTML='&nbsp;Back to course'}
-  var nm=o.k==='book'?(o.t||''):(o.ln||o.t||'');document.title=(nm?nm+' · ':'')+o.c+' · PDF Reader'}).catch(function(){})}catch(e){}
+  var nm=o.k==='book'?(o.t||''):(o.ln||o.t||'');document.title=(nm?nm+' · ':'')+o.c+' · PDF Reader'}).catch(function(){gcHit('read/'+(ID||'file'),document.title)})}catch(e){}
 var sw=$('sw');
 function fallback(msg){$('tools').classList.add('off');$('find').classList.remove('on');if(ID){sw.innerHTML='<iframe src="https://drive.google.com/file/d/'+ID+'/preview" allowfullscreen></iframe>';if(msg){var n=document.createElement('div');n.className='note';n.textContent=msg;sw.appendChild(n);setTimeout(function(){n.remove()},4500)}}
  else sw.innerHTML='<div class="err">'+(msg||'Could not open this file')+'<br><br><a href="'+$('og').href+'" target="_blank" rel="noopener">Open original file ↗</a></div>'}

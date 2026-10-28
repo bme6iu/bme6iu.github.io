@@ -1,5 +1,5 @@
 window.bmeSetFrame=function(u){var f=document.getElementById('modalIframe');try{f.contentWindow.location.replace(u?new URL(u,document.baseURI).href:'about:blank')}catch(e){f.src=u||''}};window.addEventListener('popstate',function(){var m=document.getElementById('docModal');if(m&&m.classList.contains('open')&&typeof closeModalNow==='function')closeModalNow()});window.bmeReaderUrl=function(u,t,prev){u=String(u||'');var drive=/drive\.google\.com\/file\/d\//.test(u),pdf=/^(?!https?:|\/\/)[^?#]*\.pdf(?:[?#].*)?$/i.test(u);if(!drive&&!pdf)return prev;return 'read/?u='+encodeURIComponent(pdf?new URL(u,document.baseURI).href:u)+'&t='+encodeURIComponent(t||'')};
-window.BME_V="c9e65634";window.BME_MPA=true;window.BME_ROUTES={"home":"/","courses-overview":"/courses/","course-1101":"/courses/bme-1101/","course-1103":"/courses/bme-1103/","course-1105":"/courses/bme-1105/","course-1107":"/courses/bme-1107/","course-1109":"/courses/bme-1109/","course-1201":"/courses/bme-1201/","course-1203":"/courses/bme-1203/","course-1205":"/courses/bme-1205/","course-1207":"/courses/bme-1207/","course-1209":"/courses/bme-1209/","course-2101":"/courses/bme-2101/","course-2103":"/courses/bme-2103/","course-2105":"/courses/bme-2105/","course-2107":"/courses/bme-2107/","course-2109":"/courses/bme-2109/","course-2201":"/courses/bme-2201/","course-2203":"/courses/bme-2203/","course-2205":"/courses/bme-2205/","course-2207":"/courses/bme-2207/","course-2209":"/courses/bme-2209/","course-3101":"/courses/bme-3101/","course-3103":"/courses/bme-3103/","course-3105":"/courses/bme-3105/","course-3107":"/courses/bme-3107/","course-3109":"/courses/bme-3109/","questions-overview":"/questions/","q-bme11":"/questions/bme11/","q-bme12":"/questions/bme12/","q-bme21":"/questions/bme21/","q-bme22":"/questions/bme22/","q-bme31":"/questions/bme31/","q-bme32":"/questions/bme32/","q-retake":"/retake/","teachers":"/teachers/","gallery":"/gallery/","syllabus":"/syllabus/","important-files":"/files/","course-3201":"/courses/bme-3201/","course-3203":"/courses/bme-3203/","course-3205":"/courses/bme-3205/","course-3207":"/courses/bme-3207/","course-3209":"/courses/bme-3209/"};
+window.BME_V="d57668e6";window.BME_MPA=true;window.BME_ROUTES={"home":"/","courses-overview":"/courses/","course-1101":"/courses/bme-1101/","course-1103":"/courses/bme-1103/","course-1105":"/courses/bme-1105/","course-1107":"/courses/bme-1107/","course-1109":"/courses/bme-1109/","course-1201":"/courses/bme-1201/","course-1203":"/courses/bme-1203/","course-1205":"/courses/bme-1205/","course-1207":"/courses/bme-1207/","course-1209":"/courses/bme-1209/","course-2101":"/courses/bme-2101/","course-2103":"/courses/bme-2103/","course-2105":"/courses/bme-2105/","course-2107":"/courses/bme-2107/","course-2109":"/courses/bme-2109/","course-2201":"/courses/bme-2201/","course-2203":"/courses/bme-2203/","course-2205":"/courses/bme-2205/","course-2207":"/courses/bme-2207/","course-2209":"/courses/bme-2209/","course-3101":"/courses/bme-3101/","course-3103":"/courses/bme-3103/","course-3105":"/courses/bme-3105/","course-3107":"/courses/bme-3107/","course-3109":"/courses/bme-3109/","questions-overview":"/questions/","q-bme11":"/questions/bme11/","q-bme12":"/questions/bme12/","q-bme21":"/questions/bme21/","q-bme22":"/questions/bme22/","q-bme31":"/questions/bme31/","q-bme32":"/questions/bme32/","q-retake":"/retake/","teachers":"/teachers/","gallery":"/gallery/","syllabus":"/syllabus/","important-files":"/files/","course-3201":"/courses/bme-3201/","course-3203":"/courses/bme-3203/","course-3205":"/courses/bme-3205/","course-3207":"/courses/bme-3207/","course-3209":"/courses/bme-3209/"};
 (function(){var h=location.hash.slice(1);if(h&&BME_ROUTES[h])location.replace(BME_ROUTES[h])})();
 var ANNOUNCEMENT = ``;
 
@@ -141,7 +141,7 @@ function closeMobileMenu() {
 // ══════════════════════════════════════════════
 // PARTICLES
 // ══════════════════════════════════════════════
-(function createParticles() {
+(function createParticles() { if (window.BME_MPA) return;
   const container = document.getElementById('particles');
   for (let i = 0; i < 20; i++) {
     const p = document.createElement('div');
@@ -335,488 +335,7 @@ function togglePause(){
 function openGallery(src,cap){ document.getElementById('galleryLightboxImg').src=src; document.getElementById('galleryLightboxCap').textContent=cap||''; document.getElementById('galleryLightbox').classList.add('open'); document.body.style.overflow='hidden'; }
 
 // ══ AUTO-RENDER ═══════════════════════════════════════════════════
-(function () {if(window.BME_MPA){try{updateSlideCounter();startAutoplay();}catch(e){}return;}
-  var cur = CURRENT_SEM_ID;
-  if (!SEMESTERS.some(function(s){ return s.id === cur; })) console.warn('[AUTO-RENDER] CURRENT_SEM_ID "' + cur + '" matches no semester id in SEMESTERS');
-
-  // nav() helper: returns onclick attribute string safely
-  function nav(page) { return "navigate('" + page + "')"; }
-  function navClose(page) { return "navigate('" + page + "');closeMobileMenu()"; }
-
-  // qcard helper
-  function qcard(icon, title, sub, url) {
-    return '<div class="qcard"><div class="qcard-icon">' + icon + '</div>' +
-      '<div class="qcard-info"><div class="qcard-title">' + title + '</div><div class="qcard-sub">' + sub + '</div></div>' +
-      '<button class="view-btn" onclick="openDoc(\'' + url + '\',\'' + title.replace(/'/g,'&#39;') + '\')">📄 View</button></div>';
-  }
-
-  var totalCourses = 0;
-  SEMESTERS.forEach(function(s){ totalCourses += s.courses.length; });
-
-  try {
-  // 1. Homepage stats
-  var sc = document.getElementById('statCourses');
-  var ss = document.getElementById('statSemesters');
-  if (sc) sc.textContent = totalCourses;
-  if (ss) ss.textContent = SEMESTERS.length;
-  } catch (err) { console.error('[AUTO-RENDER] step 1 stats failed:', err); }
-
-  try {
-  // 2. Nav courses dropdown
-  var navDrop = document.querySelector('.nav-dropdown-menu[data-nav="courses"]');
-  if (navDrop) {
-    var nd = '';
-    SEMESTERS.forEach(function(sem) {
-      var isCur = sem.id === cur;
-      var bs = isCur ? ' style="background:rgba(0,255,157,0.08);color:var(--accent2);"' : '';
-      var as = isCur ? ' style="color:var(--accent2);"' : '';
-      var lbl = sem.label + (isCur ? ' (Running)' : '');
-      nd += '<div class="nav-sem-group"><button class="nav-sem-btn" onclick="toggleNavSem(this)"' + bs + '>';
-      nd += sem.icon + ' ' + lbl + ' <span class="nsb-arrow"' + as + '>&#9660;</span></button>';
-      nd += '<div class="nav-sem-courses">';
-      sem.courses.forEach(function(c){ nd += '<button class="dropdown-item" onclick="' + nav('course-'+c.num) + '">' + c.num + ' - ' + c.title + '</button>'; });
-      nd += '</div></div>';
-    });
-    navDrop.innerHTML = nd;
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 2 nav courses failed:', err); }
-
-  try {
-  // 3. Nav questions dropdown
-  var navQDrop = document.querySelector('.nav-dropdown-menu[data-nav="questions"]');
-  if (navQDrop) {
-    var nq = '';
-    SEMESTERS.forEach(function(sem){ nq += '<button class="dropdown-item" onclick="' + nav(sem.qId) + '">' + sem.short + ' Questions</button>'; });
-    nq += '<button class="dropdown-item" onclick="' + nav('q-retake') + '">Retake Exams Questions</button>';
-    navQDrop.innerHTML = nq;
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 3 nav questions failed:', err); }
-
-  try {
-  // 4. Mobile courses menu
-  var mobLabel = document.querySelector('#mobileMenu .mob-courses-label');
-  if (mobLabel) {
-    var wrap = mobLabel.parentElement;
-    wrap.querySelectorAll('.mob-sem-group').forEach(function(g){ g.remove(); });
-    SEMESTERS.forEach(function(sem) {
-      var isCur = sem.id === cur;
-      var div = document.createElement('div');
-      div.className = 'mob-sem-group';
-      var bs = isCur ? ' style="background:rgba(0,255,157,0.08);color:var(--accent2);"' : '';
-      var items = '';
-      sem.courses.forEach(function(c){ items += '<div class="mobile-link" onclick="' + navClose('course-'+c.num) + '">' + c.num + ' - ' + c.title + '</div>'; });
-      div.innerHTML = '<button class="mob-sem-btn" onclick="toggleMobSem(this)"' + bs + '>' +
-        sem.icon + ' ' + sem.short + ' \u2014 ' + sem.label.replace('BME ','') + (isCur?' (Running)':'') + ' <span class="msb-arrow">&#9660;</span></button>' +
-        '<div class="mob-sem-courses">' + items + '</div>';
-      wrap.appendChild(div);
-    });
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 4 mobile courses failed:', err); }
-
-  try {
-  // 5. Mobile questions menu
-  var mobQC = document.querySelector('#mobileMenu .mob-q-courses');
-  if (mobQC) {
-    var mq = '';
-    SEMESTERS.forEach(function(sem){ mq += '<div class="mobile-link" onclick="' + navClose(sem.qId) + '">' + sem.short + ' Questions</div>'; });
-    mq += '<div class="mobile-link" onclick="' + navClose('q-retake') + '">Retake Exams Questions</div>';
-    mobQC.innerHTML = mq;
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 5 mobile questions failed:', err); }
-
-  try {
-  // 6. Courses overview
-  var ovSec = document.querySelector('#page-courses-overview .section');
-  if (ovSec) {
-    var ov = '';
-    SEMESTERS.forEach(function(sem) {
-      var isCur = sem.id === cur;
-      var hc = isCur ? ' running' : '';
-      var lbl = sem.label + (isCur ? ' (Running)' : '');
-      ov += '<div class="sem-acc-block' + (isCur ? ' open' : '') + '">';
-      ov += '<div class="sem-acc-header' + hc + '" onclick="toggleSem(this)"><span>' + sem.icon + '</span><span class="sem-acc-title">' + lbl + '</span><span class="sem-acc-chevron">&#9660;</span></div>';
-      ov += '<div class="sem-acc-body"><div class="card-grid">';
-      sem.courses.forEach(function(c){
-        var meta = [c.teacher, c.chapters ? c.chapters + (c.chapters !== 1 ? ' Chapters' : ' Chapter') : ''].filter(Boolean).join(' \u00b7 ');
-        ov += '<div class="card" onclick="' + nav('course-'+c.num) + '"><div class="card-code">' + c.prefix + '-' + c.num + '</div><div class="card-title">' + c.title + '</div><div class="card-meta">' + meta + '</div><div class="card-arrow">\u2192</div></div>';
-      });
-      ov += '</div></div></div>';
-    });
-    ovSec.innerHTML = ov;
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 6 courses overview failed:', err); }
-
-  // Helper: rebuild .course-teacher-info inside a course page from latest course data
-  // Works for both pre-existing static pages and dynamically created ones.
-  // Helper: rebuild book buttons from SEMESTERS data
-  function updateCourseBooks(page, c) {
-    if(!page) return;
-    var hero=page.querySelector('.course-hero-inner');
-    if(!hero)return;
-    // Always remove ALL existing book containers to prevent duplication
-    hero.querySelectorAll('.course-books-container').forEach(function(el){el.remove();});
-    // Also remove any legacy book anchors/buttons left in static HTML
-    hero.querySelectorAll('a[href*="drive.google.com/file"]').forEach(function(a){
-      if(a.textContent.indexOf('About')===-1){
-        var wrap=a.parentElement;
-        if(wrap&&wrap!==hero)wrap.remove(); else a.remove();
-      }
-    });
-    if(!c.books||!c.books.length) return;
-    // Build fresh book buttons
-    var div=document.createElement('div');
-    div.className='course-books-container';
-    div.style.marginTop='16px';
-    c.books.forEach(function(b){
-      if(!b.url||!b.title)return;
-      var btn=document.createElement('button');
-      btn.className='btn btn-ghost';
-      btn.style.marginRight='8px';
-      btn.style.marginBottom='6px';
-      btn.textContent=(b.label||('📘 '+b.title));
-      btn.setAttribute('onclick','openDoc('+JSON.stringify(b.url)+','+JSON.stringify(b.title)+')');
-      div.appendChild(btn);
-    });
-    if(div.children.length>0){
-      var insertAfter=hero.querySelector('.course-teacher-info')||hero.querySelector('h2.course-title');
-      if(insertAfter&&insertAfter.nextSibling){hero.insertBefore(div,insertAfter.nextSibling);}
-      else{hero.appendChild(div);}
-    }
-  }
-
-  function updateCourseTeacherInfo(page, c) {
-    if (!page || !c.teacher) return;
-    var hero = page.querySelector('.course-hero-inner');
-    if (!hero) return;
-    var ph = c.teacherPhoto || '';
-    var rl = c.teacherRole || (c.guestRole ? c.guestRole + (c.guestDept ? ', ' + c.guestDept : '') : '');
-    var ab = c.teacherAbout || '';
-    var imgTag = ph ? '<img src="' + ph + '" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display=\'none\'" alt="' + c.teacher + '">' : '<div class="teacher-avatar">👨\u200d🏫</div>';
-    var roleLine = rl ? '<div style="font-size:0.78rem;color:var(--text-muted);">' + rl + (ab ? ' · <a href="' + ab + '" target="_blank" style="color:var(--accent);">About ↗</a>' : '') + '</div>' : (ab ? '<div style="font-size:0.78rem;"><a href="' + ab + '" target="_blank" style="color:var(--accent);">About ↗</a></div>' : '');
-    var newHtml = imgTag + '<div><div style="font-weight:600;color:var(--text)">' + c.teacher + '</div>' + roleLine + '</div>';
-    var existing = hero.querySelector('.course-teacher-info');
-    if (existing) {
-      existing.innerHTML = newHtml;
-    } else {
-      var div = document.createElement('div');
-      div.className = 'course-teacher-info';
-      div.innerHTML = newHtml;
-      // Insert after the description <p> if present, else after the <h2> title
-      var descEl = hero.querySelector('h2.course-title');
-      if (descEl && descEl.nextElementSibling && descEl.nextElementSibling.tagName === 'P') {
-        descEl.nextElementSibling.insertAdjacentElement('afterend', div);
-      } else if (descEl) {
-        descEl.insertAdjacentElement('afterend', div);
-      } else {
-        hero.appendChild(div);
-      }
-    }
-  }
-
-  try {
-  // 6b. Auto-inject chapters & lectures from SEMESTERS chapterData
-  // If a course has chapterData array, inject them into the existing course page.
-  // If the page doesn't exist at all, create it dynamically.
-  SEMESTERS.forEach(function(sem) {
-    var isCur = sem.id === cur;
-    sem.courses.forEach(function(c) { try {
-      var pageId = 'page-course-' + c.num;
-      var page = document.getElementById(pageId);
-
-      // If page doesn't exist, create it
-      if (!page) {
-        page = document.createElement('div');
-        page.className = 'page';
-        page.id = pageId;
-        page.innerHTML =
-          '<div class="course-hero"><div class="course-hero-inner">' +
-          '<div class="course-crumb"><button onclick="' + nav('courses-overview') + '">Courses</button> / ' + sem.short + ' / <span style="color:var(--text-muted)">' + c.prefix + '-' + c.num + '</span></div>' +
-          '<div class="course-badge">' + c.prefix + '-' + c.num + ' · ' + sem.label.replace('BME ','') + '</div>' +
-          '<h2 class="course-title">' + c.title + '</h2>' +
-          (c.desc ? '<p style="color:var(--text-muted);font-size:0.88rem;margin:8px 0 4px;">' + c.desc + '</p>' : '') +
-          (c.teacher ? (function() {
-            var ph = c.teacherPhoto || '';
-            var rl = c.teacherRole || (c.guestRole ? c.guestRole + (c.guestDept ? ', ' + c.guestDept : '') : '');
-            var ab = c.teacherAbout || '';
-            var imgTag = ph ? '<img src="' + ph + '" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;" onerror="this.style.display=\'none\'" alt="' + c.teacher + '">' : '<div class="teacher-avatar">👨‍🏫</div>';
-            var roleLine = rl ? '<div style="font-size:0.78rem;color:var(--text-muted);">' + rl + (ab ? ' · <a href="' + ab + '" target="_blank" style="color:var(--accent);">About ↗</a>' : '') + '</div>' : (ab ? '<div style="font-size:0.78rem;"><a href="' + ab + '" target="_blank" style="color:var(--accent);">About ↗</a></div>' : '');
-            return '<div class="course-teacher-info">' + imgTag + '<div><div style="font-weight:600;color:var(--text)">' + c.teacher + '</div>' + roleLine + '</div></div>';
-          })() : '') +
-          (c.driveFolder ? '<div style="margin-top:12px;"><a href="' + c.driveFolder + '" target="_blank" class="btn btn-ghost" style="font-size:0.78rem;padding:6px 12px;display:inline-flex;">📁 Download Full Folder</a></div>' : '') +
-          '</div></div>' +
-          '<div class="section"><div class="section-title" style="margin-bottom:24px;">Chapter-wise <span>Lectures</span></div><div class="chapters-container"></div></div>';
-        var app = document.getElementById('app');
-        if (app) app.appendChild(page);
-      }
-
-      // FIX: Update running badge on ALL pages (static + dynamic)
-      if (page) {
-        var oldBadge = page.querySelector('[data-run-badge]');
-        if (oldBadge) oldBadge.remove();
-        if (isCur) {
-          var hero = page.querySelector('.course-hero-inner');
-          if (hero) {
-            var nb = document.createElement('div');
-            nb.setAttribute('data-run-badge','1');
-            nb.style.cssText = 'display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:0.82rem;color:var(--accent2);';
-            nb.innerHTML = '<span>🟢</span> Currently Running Semester';
-            hero.appendChild(nb);
-          }
-        }
-      }
-
-      if (!c.chapterData || !c.chapterData.length) {
-        // No chapters yet: keep page valid and show a placeholder (only if the page has no static chapters)
-        if (page && !page.querySelector('.chapter-block')) {
-          var _cc = page.querySelector('.chapters-container');
-          if (!_cc) {
-            var _sec = page.querySelector('.section');
-            if (_sec) { _cc = document.createElement('div'); _cc.className = 'chapters-container'; _sec.appendChild(_cc); }
-          }
-          if (_cc && !_cc.children.length) {
-            _cc.innerHTML = '<div style="padding:22px;border:1px dashed var(--border);border-radius:12px;color:var(--text-muted);font-size:0.88rem;text-align:center;">📚 Lectures will be added soon.</div>';
-          }
-        }
-        updateCourseTeacherInfo(page, c);
-        updateCourseBooks(page, c);
-        return;
-      }
-
-
-      // Inject chapters into the page (replace existing if already injected)
-      var container = page.querySelector('.chapters-container');
-      if (!container) {
-        // fallback: find .section and add container
-        var sec = page.querySelector('.section');
-        if (!sec) return;
-        container = document.createElement('div');
-        container.className = 'chapters-container';
-        sec.appendChild(container);
-      }
-      var ch = '';
-      c.chapterData.forEach(function(chap, ci) {
-        var isFirst = ci === 0;
-        var chapNum = chap.chNum || ('Chapter ' + (ci + 1));
-        ch += '<div class="chapter-block' + (isFirst ? ' open' : '') + '">';
-        ch += '<div class="chapter-header" onclick="toggleChapter(this)">';
-        ch += '<span class="chapter-num">' + chapNum + '</span>';
-        ch += '<span class="chapter-name">' + chap.name + '</span>';
-        ch += '<span class="chapter-toggle">▼</span>';
-        ch += '</div><div class="chapter-lectures">';
-        // Lectures
-        (chap.lectures || []).forEach(function(lec, li) {
-          var lecNum = lec.num || ('Lecture ' + (li + 1));
-          var lecLabel = lec.label || chap.name;
-          var lecUrl = lec.url || '';
-          var title = (c.prefix + '-' + c.num) + ' – ' + lecLabel;
-          ch += '<div class="lecture-row">';
-          ch += '<span class="lec-num">' + lecNum + '</span>';
-          ch += '<span class="lec-label">' + lecLabel + '</span>';
-          if (lecUrl) {
-            ch += '<button class="view-btn" onclick="openDoc(\'' + lecUrl + '\',\'' + title.replace(/'/g, '&#39;') + '\')">📄 View</button>';
-          } else {
-            ch += '<span style="font-size:0.75rem;color:var(--text-dim);padding:6px 10px;">Coming soon</span>';
-          }
-          ch += '</div>';
-        });
-        // Notes
-        if (chap.notes && chap.notes.length) {
-          ch += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">';
-          ch += '<div style="font-size:0.72rem;font-weight:600;color:var(--accent2);margin-bottom:6px">📝 Notes</div>';
-          chap.notes.forEach(function(n) {
-            ch += '<div class="lecture-row">';
-            ch += '<span class="lec-num" style="color:var(--accent2)">Note</span>';
-            ch += '<span class="lec-label">' + (n.label||'Note') + '</span>';
-            if (n.url) {
-              var ntitle = (c.prefix+'-'+c.num)+' – '+(n.label||'Note');
-              ch += '<button class="view-btn" style="background:rgba(0,255,157,0.12);color:var(--accent2)" onclick="openDoc(\'' + n.url + '\',\'' + ntitle.replace(/'/g,'&#39;') + '\')">📝 View</button>';
-            }
-            ch += '</div>';
-          });
-          ch += '</div>';
-        }
-        // Reference Books / Resources
-        if (chap.resources && chap.resources.length) {
-          ch += '<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">';
-          ch += '<div style="font-size:0.72rem;font-weight:600;color:var(--accent3,#ffd166);margin-bottom:6px">📖 Reference</div>';
-          chap.resources.forEach(function(r) {
-            ch += '<div class="lecture-row">';
-            ch += '<span class="lec-num" style="color:var(--accent3,#ffd166)">Book</span>';
-            ch += '<span class="lec-label">' + (r.label||'Resource') + '</span>';
-            if (r.url) {
-              var rtitle = (c.prefix+'-'+c.num)+' – '+(r.label||'Resource');
-              ch += '<button class="view-btn" style="background:rgba(255,209,102,0.12);color:#ffd166" onclick="openDoc(\'' + r.url + '\',\'' + rtitle.replace(/'/g,'&#39;') + '\')">📖 View</button>';
-            }
-            ch += '</div>';
-          });
-          ch += '</div>';
-        }
-        ch += '</div></div>';
-      });
-      container.innerHTML = ch;
-      updateCourseTeacherInfo(page, c);
-      updateCourseBooks(page, c);
-    } catch (err) { console.error('[AUTO-RENDER] course ' + c.num + ' failed:', err); }
-    });
-  });
-  } catch (err) { console.error('[AUTO-RENDER] step 6b course pages failed:', err); }
-
-  try {
-  // 7. Questions overview page (create if missing)
-  var qOvPage = document.getElementById('page-questions-overview');
-  if (!qOvPage) {
-    qOvPage = document.createElement('div');
-    qOvPage.className = 'page';
-    qOvPage.id = 'page-questions-overview';
-    qOvPage.innerHTML = '<div class="page-top-banner"><div class="page-top-banner-inner"><h1>Exam <span>Questions</span></h1><p>Tutorial &amp; Semester Final Questions \u2014 All Semesters</p></div></div><div class="section" style="padding-top:36px;"></div>';
-    var firstQ = document.getElementById('page-q-bme11');
-    if (firstQ) firstQ.parentNode.insertBefore(qOvPage, firstQ);
-  }
-  var qOvSec = qOvPage.querySelector('.section');
-  if (qOvSec) {
-    var qov = '<div class="card-grid">';
-    SEMESTERS.forEach(function(sem) {
-      var isCur = sem.id === cur;
-      var bs = isCur ? ' style="border-color:rgba(0,255,157,0.3);"' : '';
-      var cs = isCur ? ' style="color:var(--accent2);"' : '';
-      var meta = isCur ? '<div class="card-meta" style="color:var(--accent2);">Running Semester</div>' : '<div class="card-meta">Tutorial &amp; Semester Final Questions</div>';
-      qov += '<div class="card" onclick="' + nav(sem.qId) + '"' + bs + '><div class="card-code"' + cs + '>' + sem.short + (isCur ? ' \ud83d\udfe2' : '') + '</div><div class="card-title">' + sem.label.replace('BME ','') + '</div>' + meta + '<div class="card-arrow">\u2192</div></div>';
-    });
-    qov += '<div class="card" onclick="' + nav('q-retake') + '"><div class="card-code">Retake</div><div class="card-title">Retake Exams</div><div class="card-meta">Previous Retake &amp; Improvement Papers</div><div class="card-arrow">\u2192</div></div>';
-    qov += '</div>';
-    qOvSec.innerHTML = qov;
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 7 questions overview failed:', err); }
-
-  try {
-  // 8. Question pages (fill content + back button)
-  // FIX: map qId -> semester for running banner check
-  var semQIdMap = {};
-  SEMESTERS.forEach(function(sem) { semQIdMap[sem.qId || ('q-' + sem.id)] = sem; });
-
-  // Every semester must have a questions page, even if QUESTIONS_DATA has no entry for it yet
-  var _qList = QUESTIONS_DATA.slice();
-  SEMESTERS.forEach(function(sem) {
-    var qid = sem.qId || ('q-' + sem.id);
-    if (!_qList.some(function(q){ return q.semId === qid; })) {
-      var yr = sem.label ? sem.label.replace('BME ', '').replace(/\u2014/, ',') : '';
-      _qList.push({ semId: qid, semLabel: sem.short, yearLabel: yr, tutorial: [], final: [] });
-    }
-  });
-
-  _qList.forEach(function(q) {
-    var page = document.getElementById('page-' + q.semId);
-    if (!page) {
-      page = document.createElement('div');
-      page.className = 'page';
-      page.id = 'page-' + q.semId;
-      page.innerHTML = '<div class="page-top-banner"><div class="page-top-banner-inner"></div></div><div class="section" style="padding-top:36px;"></div>';
-      var rp = document.getElementById('page-q-retake');
-      if (rp) rp.parentNode.insertBefore(page, rp);
-    }
-    var bi = page.querySelector('.page-top-banner-inner');
-    if (bi && !bi.querySelector('.course-crumb')) {
-      bi.innerHTML = '<div class="course-crumb" style="margin-bottom:10px;"><button onclick="' + nav('questions-overview') + '">\u2190 All Questions</button></div>' +
-        '<h1>Questions \u2014 <span>' + q.semLabel + '</span></h1><p>' + q.yearLabel + ' \u2014 Tutorial &amp; Semester Final Questions</p>';
-    }
-    var sec = page.querySelector('.section');
-    if (!sec) return;
-    var h = '';
-    // FIX: show running banner only for the CURRENT running semester
-    var matchedSem = semQIdMap[q.semId];
-    if (matchedSem && matchedSem.id === cur) {
-      var bannerText = (q.infoBanner && q.infoBanner.trim()) ? q.infoBanner : 'Currently running semester.';
-      h += '<div class="info-banner"><span class="info-banner-icon">\ud83d\udfe2</span><span>' + bannerText + '</span></div>';
-    }
-    if (q.tutorial && q.tutorial.length) {
-      h += '<div class="q-section-title">\ud83d\udcdd Tutorial Questions</div>';
-      q.tutorial.forEach(function(p){ h += qcard('\ud83d\udcc4', p.title, p.sub, p.url); });
-    }
-    if (q.final && q.final.length) {
-      h += '<div class="q-section-title">\ud83c\udf93 Semester Final Questions</div>';
-      q.final.forEach(function(p){ h += qcard('\ud83d\udcda', p.title, p.sub, p.url); });
-    }
-    if ((!q.tutorial || !q.tutorial.length) && (!q.final || !q.final.length)) {
-      h += '<div style="padding:22px;border:1px dashed var(--border);border-radius:12px;color:var(--text-muted);font-size:0.88rem;text-align:center;">\ud83d\udcda Questions will be added soon.</div>';
-    }
-    sec.innerHTML = h;
-  });
-  } catch (err) { console.error('[AUTO-RENDER] step 8 question pages failed:', err); }
-
-  try {
-  // Retake back button
-  var rp2 = document.getElementById('page-q-retake');
-  if (rp2) {
-    var bi2 = rp2.querySelector('.page-top-banner-inner');
-    if (bi2 && !bi2.querySelector('.course-crumb')) {
-      bi2.insertAdjacentHTML('afterbegin', '<div class="course-crumb" style="margin-bottom:10px;"><button onclick="' + nav('questions-overview') + '">\u2190 All Questions</button></div>');
-    }
-    var rs = rp2.querySelector('.section');
-    if (rs) {
-      var rh = '<div class="q-section-title">\ud83d\udd04 Retake Questions</div>';
-      RETAKE_QUESTIONS.forEach(function(p){ rh += qcard('\ud83d\udcc4', p.title, p.sub, p.url); });
-      rs.innerHTML = rh;
-    }
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step retake failed:', err); }
-
-  try {
-  // 9. Gallery
-  var gg = document.getElementById('galleryGrid');
-  var gs = document.getElementById('gallerySlideshow');
-  var gc = document.getElementById('slideshowControls');
-  var gd = document.getElementById('slideshowDots');
-  if (gg) {
-    if (!GALLERY_DATA.length) {
-      gg.innerHTML = '<div class="gallery-item" style="background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--text-muted);"><div style="font-size:2rem">\ud83d\uddbc\ufe0f</div><div style="font-size:0.8rem;text-align:center;">Upload photos to<br><code style="font-family:\'JetBrains Mono\',monospace;color:var(--accent)">images/gallery/</code></div></div>';
-      if (gs) gs.style.display = 'none';
-    } else {
-      if (gs) {
-        gs.innerHTML = GALLERY_DATA.map(function(item,i){ return '<div class="slideshow-slide'+(i?'':' active')+'" data-index="'+i+'"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="slideshow-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
-        if (gc) gc.style.display = 'flex';
-        if (gd) gd.innerHTML = GALLERY_DATA.map(function(_,i){ return '<button class="slideshow-dot'+(i?'':' active')+'" onclick="goToSlide('+i+')"></button>'; }).join('');
-        updateSlideCounter();
-        startAutoplay();
-      }
-      var showBtn='<div style="text-align:center;margin:18px 0 8px"><button class="gallery-toggle-btn" onclick="toggleGalleryGrid(this)">📷 Show All Photos ('+GALLERY_DATA.length+')</button></div>';
-      var gridHTML=GALLERY_DATA.map(function(item){ return '<div class="gallery-item" onclick="openGallery(\''+item.src+'\',\''+((item.caption||'').replace(/'/g,'&#39;'))+'\')"><img src="'+item.src+'" alt="'+(item.caption||'')+'" loading="lazy">'+(item.caption?'<div class="gallery-caption">'+item.caption+'</div>':'')+'</div>'; }).join('');
-      gg.innerHTML=showBtn+'<div class="gallery-grid-inner" style="display:none">'+gridHTML+'</div>';
-    }
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 9 gallery failed:', err); }
-
-  try {
-  // 9b. Syllabus page — update running badge based on CURRENT_SEM_ID
-  document.querySelectorAll('.syl-card').forEach(function(card) {
-    var sid = card.getAttribute('data-semid');
-    card.classList.remove('running');
-    var badge = card.querySelector('.syl-running-badge');
-    if (badge) badge.remove();
-    if (sid && sid === cur) {
-      card.classList.add('running');
-      var b = document.createElement('div');
-      b.className = 'syl-running-badge';
-      b.textContent = '🟢 Running';
-      card.appendChild(b);
-    }
-  });
-  } catch (err) { console.error('[AUTO-RENDER] step 9b syllabus failed:', err); }
-
-  try {
-  // 10. PAGE_META for new semesters
-  if (typeof PAGE_META !== 'undefined') {
-    PAGE_META['questions-overview'] = {title:'Exam Questions | BME 6th Batch, IU', desc:'All semester questions.'};
-    SEMESTERS.forEach(function(sem) {
-      if (!PAGE_META[sem.qId]) PAGE_META[sem.qId] = {title:sem.short+' Questions | BME 6th Batch, IU', desc:sem.label+' questions.'};
-      sem.courses.forEach(function(c) {
-        var k = 'course-'+c.num;
-        if (!PAGE_META[k]) PAGE_META[k] = {title:c.title+' | '+c.prefix+'-'+c.num, desc:c.title+', '+sem.label+'.'};
-      });
-    });
-  }
-  } catch (err) { console.error('[AUTO-RENDER] step 10 PAGE_META failed:', err); }
-
-})();
+(function(){try{updateSlideCounter();startAutoplay();}catch(e){}})();
 
 
 function toggleGalleryGrid(btn){
@@ -844,27 +363,27 @@ var PAGE_NOTES = {};
  var hero=$('.hero');
  if(hero&&!RM){
   var cv=document.createElement('canvas');cv.className='fx-canvas';hero.insertBefore(cv,hero.firstChild);
-  var cx=cv.getContext('2d'),W=0,H=0,D=Math.min(devicePixelRatio||1,2),t0=performance.now(),vis=true,cells=[],trace=[];
+  var cx=cv.getContext('2d'),W=0,H=0,D=Math.min(devicePixelRatio||1,1.5),t0=performance.now(),vis=true,cells=[],trace=[];
   function size(){W=hero.clientWidth;H=hero.clientHeight;cv.width=W*D;cv.height=H*D;cx.setTransform(D,0,0,D,0,0);
-   cells=[];for(var i=0;i<Math.round(W/60);i++)cells.push({x:Math.random()*W,y:Math.random()*H,r:6+Math.random()*16,s:.1+Math.random()*.3,p:Math.random()*6})}
+   cells=[];for(var i=0;i<Math.round(W/110);i++)cells.push({x:Math.random()*W,y:Math.random()*H,r:6+Math.random()*16,s:.1+Math.random()*.3,p:Math.random()*6})}
   function beat(x){var m=x%260;if(m<30)return 0;if(m<50)return Math.sin((m-30)/20*Math.PI)*-6;if(m<80)return 0;if(m<90)return (m-80)*1.2;if(m<100)return -(100-m)*0+(-(m-90)*9+12);if(m<112)return (m-100)*7.5-78;if(m<130)return (130-m)*.3;if(m<170)return Math.sin((m-130)/40*Math.PI)*-14;return 0}
   function draw(now){
-   if(!vis){requestAnimationFrame(draw);return}
+   if(!vis||now-(window.__fxL||0)<30){requestAnimationFrame(draw);return}window.__fxL=now;
    var t=(now-t0)/1000;cx.clearRect(0,0,W,H);var L=document.documentElement.getAttribute('data-theme')==='light',P=L?{cs:'rgba(14,124,134,.26)',cf:'rgba(179,32,47,.14)',s0:'rgba(14,124,134,.8)',s1:'rgba(179,32,47,.7)',r:'rgba(10,31,60,',d0:'rgba(14,124,134,.95)',d1:'rgba(179,32,47,.9)',t:'14,124,134',c:'179,32,47',sh:'rgba(14,124,134,.25)'}:{cs:'rgba(143,227,218,.16)',cf:'rgba(229,72,77,.14)',s0:'rgba(143,227,218,.55)',s1:'rgba(229,72,77,.5)',r:'rgba(255,255,255,',d0:'rgba(143,227,218,.9)',d1:'rgba(229,72,77,.85)',t:'43,179,166',c:'229,72,77',sh:'rgba(43,179,166,.6)'};
    cells.forEach(function(c){var y=(c.y-t*c.s*40+H*2)%(H+40)-20,x=c.x+Math.sin(t*c.s+c.p)*14;
     cx.beginPath();cx.arc(x,y,c.r,0,6.283);cx.strokeStyle=P.cs;cx.lineWidth=1.2;cx.stroke();
     cx.beginPath();cx.arc(x+c.r*.25,y-c.r*.15,c.r*.34,0,6.283);cx.fillStyle=P.cf;cx.fill()});
-   cx.globalAlpha=W>820?1:.28;var hx=W>820?W*.8:W*.86,hh=Math.min(H*.78,520),top=(H-hh)/2,n=34;
+   cx.globalAlpha=W>820?1:.28;var hx=W>820?W*.8:W*.86,hh=Math.min(H*.78,520),top=(H-hh)/2,n=26;
    for(var s=0;s<2;s++){cx.beginPath();for(var i=0;i<=n;i++){var u=i/n,y=top+u*hh,ph=u*9+t*1.1+s*Math.PI,x=hx+Math.sin(ph)*58;
      i?cx.lineTo(x,y):cx.moveTo(x,y)}cx.strokeStyle=s?P.s1:P.s0;cx.lineWidth=2;cx.stroke()}
    for(var i=0;i<=n;i+=1){var u=i/n,y=top+u*hh,ph=u*9+t*1.1,a=Math.sin(ph)*58,b=Math.sin(ph+Math.PI)*58,dp=Math.cos(ph);
     cx.strokeStyle=P.r+(.08+Math.abs(dp)*.12+(L?.08:0))+')';cx.lineWidth=1;cx.beginPath();cx.moveTo(hx+a,y);cx.lineTo(hx+b,y);cx.stroke();
     cx.fillStyle=dp>0?P.d0:P.d1;cx.beginPath();cx.arc(hx+a,y,2.6+dp*1.2,0,6.283);cx.fill()}
-   cx.globalAlpha=1;var by=H-62,off=t*120,g=cx.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba('+P.t+',0)');g.addColorStop(.35,'rgba('+P.t+',.9)');g.addColorStop(.85,'rgba('+P.c+',1)');g.addColorStop(1,'rgba('+P.c+',0)');
-   cx.beginPath();for(var x=0;x<=W;x+=3){var yy=by+beat(x+off);x?cx.lineTo(x,yy):cx.moveTo(x,yy)}
-   cx.strokeStyle=g;cx.lineWidth=2;cx.shadowColor=P.sh;cx.shadowBlur=8;cx.stroke();cx.shadowBlur=0;
+   cx.globalAlpha=1;var dt=Math.min(.05,(now-(window.__fxT||now))/1000);window.__fxT=now;window.__fxOff=(window.__fxOff||0)+120*dt*(1+(window.__fxBoost||0));var by=H-62,off=window.__fxOff,g=cx.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba('+P.t+',0)');g.addColorStop(.35,'rgba('+P.t+',.9)');g.addColorStop(.85,'rgba('+P.c+',1)');g.addColorStop(1,'rgba('+P.c+',0)');
+   cx.beginPath();for(var x=0;x<=W;x+=5){var yy=by+beat(x+off);x?cx.lineTo(x,yy):cx.moveTo(x,yy)}
+   cx.strokeStyle=g;cx.lineWidth=2;cx.globalAlpha=.2;cx.lineWidth=7;cx.stroke();cx.globalAlpha=1;cx.lineWidth=2;cx.stroke();
    requestAnimationFrame(draw)}
-  size();addEventListener('resize',size);requestAnimationFrame(draw);
+  size();addEventListener('resize',size);setTimeout(function(){requestAnimationFrame(draw)},700);
   if('IntersectionObserver' in window)new IntersectionObserver(function(e){vis=e[0].isIntersecting&&!document.hidden}).observe(hero);
   document.addEventListener('visibilitychange',function(){vis=!document.hidden});
  }
@@ -910,3 +429,6 @@ function build(){ov=document.createElement('div');ov.id='fxSearch';ov.innerHTML=
 var tb=document.getElementById('themeSwitchBtn');if(tb){var b=document.createElement('button');b.id='fxSearchBtn';b.type='button';b.title='Search (/)';b.setAttribute('aria-label','Search');b.textContent='🔍';b.addEventListener('click',open);tb.parentNode.insertBefore(b,tb)}
 document.addEventListener('keydown',function(e){var t=(e.target.tagName||'');if(e.key==='Escape')close();else if((e.key==='/'&&!/INPUT|TEXTAREA/.test(t))||((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k')){e.preventDefault();open()}});
 })();
+(function(){if(!window.BME_MPA)return;var last=window.scrollY||0,v=0,run=false;window.__fxBoost=0;
+function decay(){v*=.93;if(v<.02){v=0;run=false}window.__fxBoost=v;if(run)requestAnimationFrame(decay)}
+addEventListener('scroll',function(){var y=window.scrollY||0;v=Math.min(5,v+Math.abs(y-last)/90);last=y;if(!run){run=true;requestAnimationFrame(decay)}},{passive:true})})();
