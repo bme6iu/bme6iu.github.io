@@ -49,6 +49,8 @@ var m=U.match(/\/d\/([\w-]{10,})/)||U.match(/[?&]id=([\w-]{10,})/),ID=(/drive\.g
 var src=ID?(KEY?'https://www.googleapis.com/drive/v3/files/'+ID+'?alt=media&supportsAllDrives=true&key='+encodeURIComponent(KEY):''):U;
 $('og').href=ID?'https://drive.google.com/file/d/'+ID+'/view':U;$('dl').href=ID?'https://drive.google.com/uc?export=download&id='+ID:U;if(!ID)$('dl').setAttribute('download','');
 var gcDone=false;function gcHit(p,t){if(gcDone)return;gcDone=true;var n=0;(function tr(){if(window.goatcounter&&window.goatcounter.count){try{window.goatcounter.count({path:p,title:t,event:false})}catch(e){}}else if(n++<25)setTimeout(tr,300)})()}
+function gcEv(p,t){var n=0;(function tr(){if(window.goatcounter&&window.goatcounter.count){try{window.goatcounter.count({path:p,title:t,event:true})}catch(e){}}else if(n++<10)setTimeout(tr,300)})()}
+var GCC='';
 var emb=window.self!==window.top,CTXU='';if(emb)$('ttl').style.visibility='hidden';
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 $('bk').onclick=function(){if(emb){try{parent.closeModal();return}catch(e){}}if(CTXU){location.href=CTXU;return}if(history.length>1&&document.referrer)history.back();else location.href='../'};
@@ -58,8 +60,9 @@ try{fetch(new URL('../assets/docs.json',location.href)).then(function(r){return 
   if(o.k==='book')l2='<span class="hl">📘 Course Book</span><span class="sep">›</span><span>'+esc(o.t)+'</span>';
   else{l2='<span>📖 <b>Chapter '+esc(o.cn)+'</b>'+(o.cm?' · '+esc(o.cm):'')+'</span><span class="sep">›</span>';
     l2+=o.k==='lecture'?'<span class="hl">🎞 '+esc(o.ln)+'</span>'+(o.lt?'<span>— '+esc(o.lt)+'</span>':''):'<span class="hl">📎 '+esc(o.t)+'</span>'}
-  var c=$('ctx');c.innerHTML='<div class="l1">'+l1+'</div><div class="l2">'+l2+'</div>';c.classList.add('on');if(o.u&&!emb){CTXU=o.u;$('bk').title='Back to course';$('bk').lastChild.innerHTML='&nbsp;Back to course'}
+  GCC=o.c+'/'+(o.k==='book'?'book':(o.ln||o.k)).replace(/\s+/g,'-');var c=$('ctx');c.innerHTML='<div class="l1">'+l1+'</div><div class="l2">'+l2+'</div>';c.classList.add('on');if(o.u&&!emb){CTXU=o.u;$('bk').title='Back to course';$('bk').lastChild.innerHTML='&nbsp;Back to course'}
   var nm=o.k==='book'?(o.t||''):(o.ln||o.t||'');document.title=(nm?nm+' · ':'')+o.c+' · PDF Reader'}).catch(function(){gcHit('read/'+(ID||'file'),document.title)})}catch(e){}
+$('dl').addEventListener('click',function(){gcEv('click/download/'+(GCC||ID||'file'),'Download clicked')});$('og').addEventListener('click',function(){gcEv('click/original/'+(GCC||ID||'file'),'Open original clicked')});
 var sw=$('sw');
 function fallback(msg){$('tools').classList.add('off');$('find').classList.remove('on');if(ID){sw.innerHTML='<iframe src="https://drive.google.com/file/d/'+ID+'/preview" allowfullscreen></iframe>';if(msg){var n=document.createElement('div');n.className='note';n.textContent=msg;sw.appendChild(n);setTimeout(function(){n.remove()},4500)}}
  else sw.innerHTML='<div class="err">'+(msg||'Could not open this file')+'<br><br><a href="'+$('og').href+'" target="_blank" rel="noopener">Open original file ↗</a></div>'}
