@@ -431,7 +431,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="ect">🔑 সংযোগ (একবারই লাগবে)</div>
     <div class="ig"><div class="igt">GoatCounter code: <b id="stCodeShow">—</b> (Settings-এর "Visitor Statistics" ঘরে বদলানো যায়)</div></div>
     <div class="fg"><label class="fl">GoatCounter API Token (শুধু "Read statistics" অনুমতি)</label><input class="fi2" id="stToken" type="password" autocomplete="off" autocapitalize="off" placeholder="token এখানে বসান"></div>
-    <button class="btn bp bsm" onclick="stSave()">সংরক্ষণ করে দেখুন</button>
+    <button class="btn bp bsm" onclick="stSave()">সংরক্ষণ করে দেখুন</button> <button class="btn bg2 bsm" onclick="stTest()">🔍 সংযোগ যাচাই</button>
     <details style="margin-top:10px;font-size:.74rem;color:var(--tm);line-height:1.8"><summary style="cursor:pointer;color:var(--ac)">Token কীভাবে বানাবেন?</summary>
       ১) আপনার GoatCounter ড্যাশবোর্ডে ঢুকুন। ২) উপরের মেনু থেকে <b>Settings</b> → <b>API</b>। ৩) <b>Create new token</b> চাপুন। ৪) নাম দিন <b>BME6 Editor</b>। ৫) অনুমতিতে শুধু <b>Read statistics</b> টিক রাখুন (বাকিগুলো বন্ধ)। ৬) তৈরি হলে token কপি করে উপরে বসান। token শুধু এই ডিভাইসের ব্রাউজারে থাকে।</details>
   </div>
@@ -1754,8 +1754,18 @@ function stTok(){try{return localStorage.getItem('bme_gc_token')||''}catch(e){re
 function stOpen(){var s=document.getElementById('stCodeShow');if(s)s.textContent=CFG.gcCode||'(দেওয়া হয়নি — Settings দেখুন)';var t=document.getElementById('stToken');if(t&&!t.value)t.value=stTok();if(CFG.gcCode&&stTok())stLoad()}
 function stSave(){var v=(document.getElementById('stToken').value||'').trim();try{localStorage.setItem('bme_gc_token',v)}catch(e){}stLoad()}
 function stRange(d){ST.days=d;Array.prototype.forEach.call(document.querySelectorAll('#stRange .stc[data-d]'),function(b){b.classList.toggle('on',+b.dataset.d===d)});stLoad()}
-async function stApi(p,q){var c=CFG.gcCode,t=stTok();var r=await fetch('https://'+c+'.goatcounter.com/api/v0/'+p+'?'+new URLSearchParams(q),{headers:{'Authorization':'Bearer '+t,'Accept':'application/json'}});
-  if(r.status===401||r.status===403){var er=new Error('auth');er.auth=true;throw er}if(r.status===429){var e2=new Error('rate');e2.rate=true;throw e2}if(!r.ok)throw new Error('GoatCounter '+r.status);return r.json()}
+async function stApi(p,q){var c=CFG.gcCode,t=stTok(),url='https://'+c+'.goatcounter.com/api/v0/'+p+'?'+new URLSearchParams(q),r;
+  try{r=await fetch(url,{headers:{'Authorization':'Bearer '+t,'Accept':'application/json'}})}catch(x){var ne=new Error('net');ne.net=true;ne.detail=String(x&&x.message||x);throw ne}
+  if(r.ok)return r.json();var txt='';try{txt=(await r.text()).slice(0,200)}catch(x){}var er=new Error('http '+r.status);er.status=r.status;er.detail=txt;if(r.status===401||r.status===403)er.auth=true;if(r.status===429)er.rate=true;throw er}
+async function stTest(){var c=CFG.gcCode,t=stTok(),out=document.getElementById('stBody');if(!c||!t){out.innerHTML='<div class="stnote">আগে code আর token দিন।</div>';return}
+  var L=[];function add(m,ok){L.push('<div style="margin:4px 0;color:'+(ok?'var(--ac2)':'var(--rd)')+'">'+(ok?'✅ ':'❌ ')+m+'</div>')}
+  out.innerHTML='<div class="stnote">⏳ যাচাই হচ্ছে…</div>';
+  try{var m=await stApi('me',{});add('সংযোগ ও token ঠিক আছে'+(m&&m.user&&m.user.email?' ('+stEsc(m.user.email)+')':''),true)}catch(e){add(stWhy(e),false)}
+  try{var s=await stApi('stats/total',{});add('পরিসংখ্যান পড়া যাচ্ছে (মোট ভিজিটর: '+stN(s.total)+')',true)}catch(e){add('পরিসংখ্যান: '+stWhy(e),false)}
+  out.innerHTML='<div class="stbox" style="text-align:left"><div class="stt">🔍 যাচাইয়ের ফল</div>'+L.join('')+'<div style="font-size:.7rem;color:var(--tm);margin-top:8px">Address: '+stEsc(c)+'.goatcounter.com</div></div>'}
+function stWhy(e){if(e.net)return'ব্রাউজার সংযোগই করতে পারেনি। সম্ভাব্য কারণ: (ক) code ভুল, ঠিক অ্যাড্রেস '+stEsc(CFG.gcCode)+'.goatcounter.com ব্রাউজারে খুলে দেখুন; (খ) বিজ্ঞাপন-ব্লকার বা প্রাইভেসি এক্সটেনশন আটকাচ্ছে, বন্ধ করে দেখুন; (গ) ইন্টারনেট। প্রযুক্তিগত বার্তা: '+stEsc(e.detail||'');
+  if(e.auth)return'Token ভুল, বা "Read statistics" অনুমতি নেই (HTTP '+e.status+')';if(e.rate)return'খুব দ্রুত অনেকবার চেয়েছেন, এক মিনিট পর আবার চেষ্টা করুন (HTTP 429)';
+  return'GoatCounter উত্তর দিয়েছে HTTP '+stEsc(e.status)+(e.detail?' — '+stEsc(e.detail):'')}
 function stBars(title,items,note){if(!items.length)return'<div class="stbox"><div class="stt">'+title+'</div><div class="stnote">এখনো কোনো তথ্য নেই</div></div>';var mx=Math.max.apply(null,items.map(function(i){return i.n}))||1;
   return'<div class="stbox"><div class="stt">'+title+'</div>'+items.map(function(i){return'<div class="str"><div class="stl" title="'+stEsc(i.l)+'">'+stEsc(i.l)+(i.s?'<small>'+stEsc(i.s)+'</small>':'')+'</div><div class="stv">'+stN(i.n)+'</div><div class="stb"><i style="width:'+Math.max(3,i.n/mx*100)+'%"></i></div></div>'}).join('')+(note?'<div class="stnote">'+note+'</div>':'')+'</div>'}
 async function stLoad(){var body=document.getElementById('stBody'),c=CFG.gcCode;
@@ -1764,16 +1774,19 @@ async function stLoad(){var body=document.getElementById('stBody'),c=CFG.gcCode;
   body.innerHTML='<div class="stnote">⏳ ডেটা আনা হচ্ছে…</div>';
   var end=new Date();end.setMinutes(0,0,0);end=new Date(end.getTime()+3600e3);var st=new Date();st.setHours(0,0,0,0);st=new Date(st.getTime()-(ST.days-1)*864e5);
   var q={start:st.toISOString().replace(/\.\d+Z$/,'Z'),end:end.toISOString().replace(/\.\d+Z$/,'Z')};
-  try{var R=await Promise.all([stApi('stats/total',q),stApi('stats/hits',Object.assign({limit:100},q))].concat(['locations','systems','browsers','sizes','languages','toprefs'].map(function(k){return stApi('stats/'+k,Object.assign({limit:10},q))})));
+  try{var names=['stats/total','stats/hits'].concat(['locations','systems','browsers','sizes','languages','toprefs'].map(function(k){return'stats/'+k})),S=await Promise.allSettled(names.map(function(n,i){return stApi(n,i===1?Object.assign({limit:100},q):(i>1?Object.assign({limit:10},q):q))})),firstErr=null;
+    var R=S.map(function(s){if(s.status==='fulfilled')return s.value;if(!firstErr)firstErr=s.reason;return {}});
+    if(S[0].status==='rejected'&&S[1].status==='rejected')throw firstErr;
+    if(!R[0].stats&&R[0].total===undefined&&!(R[1].hits))throw firstErr||new Error('empty');
     var tot=R[0],hits=(R[1].hits||[]),pages=[],reads=[],evs=[],courses={};
     hits.forEach(function(h){var p=stNorm(h.path),o={l:h.title||('/'+p),s:'/'+p,n:h.count||0};if(h.event)evs.push({l:({'click/download':'ডাউনলোড বাটন','click/original':'মূল ফাইল (Drive) বাটন','click/search-open':'সার্চ খোলা'}[p.split('/').slice(0,2).join('/')])||p,s:p.indexOf('click/download/')===0||p.indexOf('click/original/')===0?p.split('/').slice(2).join('/'):'',n:o.n});else if(/^read\//.test(p)){reads.push(o);var m=p.match(/^read\/([^\/]+)\//);if(m)courses[m[1]]=(courses[m[1]]||0)+o.n}else pages.push(o)});
     var crs=Object.keys(courses).map(function(k){return{l:k,n:courses[k]}}).sort(function(a,b){return b.n-a.n}).slice(0,10),sumR=reads.reduce(function(a,b){return a+b.n},0);
-    var lists=R.slice(2).map(function(r){return(r.stats||[]).map(function(s){return{l:s.name||'—',n:s.count||0}})});
+    var lists=R.slice(2).map(function(r){return(r.stats||[]).map(function(s){return{l:s.name||'—',n:s.count||0}})});var failed=S.filter(function(s){return s.status==='rejected'}).length;
     var days=(tot.stats||[]).filter(function(d){return d.day}).slice(-ST.days),mxd=Math.max.apply(null,days.map(function(d){return d.daily||0}).concat([1]));
     var chart='<div class="stbox stwide"><div class="stt">দিন অনুযায়ী ভিজিটর</div><div class="stch">'+days.map(function(d){var v=d.daily||0;return'<div class="stcol" title="'+stEsc(d.day)+': '+v+'"><i style="height:'+Math.max(2,v/mxd*100)+'%"></i><b>'+(v||'')+'</b><span>'+stEsc(String(d.day).slice(5))+'</span></div>'}).join('')+'</div></div>';
     var cards='<div class="stcards"><div class="stcard"><b>'+stN(tot.total)+'</b><span>ভিজিটর</span></div><div class="stcard"><b>'+stN(sumR)+'</b><span>লেকচার/বই খোলা</span></div><div class="stcard"><b>'+stN(tot.total_events)+'</b><span>ক্লিক (ইভেন্ট)</span></div><div class="stcard"><b>'+stEsc((lists[0][0]||{l:'—'}).l)+'</b><span>শীর্ষ দেশ</span></div></div>';
-    body.innerHTML=cards+chart+'<div class="stgrid">'+stBars('📖 সবচেয়ে বেশি পড়া লেকচার ও বই',reads.slice(0,15))+stBars('📚 কোর্স অনুযায়ী পড়া',crs)+stBars('🌐 সবচেয়ে বেশি দেখা পেইজ',pages.slice(0,12))+stBars('👆 ক্লিক (ডাউনলোড, সার্চ ইত্যাদি)',evs)+stBars('🌍 দেশ',lists[0])+stBars('📱 ডিভাইস / সিস্টেম',lists[1])+stBars('🧭 ব্রাউজার',lists[2])+stBars('🖥 স্ক্রিন সাইজ',lists[3])+stBars('🗣 ভাষা',lists[4])+stBars('🔗 কোথা থেকে এসেছে',lists[5])+'</div><div class="stnote">GoatCounter প্রতিটা পেইজে দিনে একজন ভিজিটরকে একবার গোনে। বিজ্ঞাপন-ব্লকার ব্যবহারকারীরা গোনা হয় না, তাই আসল সংখ্যা কিছুটা বেশি হতে পারে। নতুন ভিজিট দেখাতে কয়েক মিনিট লাগতে পারে।</div>'}
-  catch(e){body.innerHTML='<div class="stnote sterr">'+(e.auth?'❌ Token ভুল, বা "Read statistics" অনুমতি নেই। নতুন token বানিয়ে আবার বসান।':e.rate?'⏳ খুব দ্রুত অনেকবার চেয়েছেন, এক মিনিট পর আবার চেষ্টা করুন।':'❌ ডেটা আনা যায়নি। দেখুন: (১) code ঠিক আছে কিনা ('+stEsc(c)+'), (২) ইন্টারনেট, (৩) বিজ্ঞাপন-ব্লকার বন্ধ আছে কিনা। সমস্যা থাকলে goatcounter.com-এর নিজস্ব ড্যাশবোর্ডেও দেখতে পারেন।')+'</div>'}}
+    body.innerHTML=cards+chart+'<div class="stgrid">'+stBars('📖 সবচেয়ে বেশি পড়া লেকচার ও বই',reads.slice(0,15))+stBars('📚 কোর্স অনুযায়ী পড়া',crs)+stBars('🌐 সবচেয়ে বেশি দেখা পেইজ',pages.slice(0,12))+stBars('👆 ক্লিক (ডাউনলোড, সার্চ ইত্যাদি)',evs)+stBars('🌍 দেশ',lists[0])+stBars('📱 ডিভাইস / সিস্টেম',lists[1])+stBars('🧭 ব্রাউজার',lists[2])+stBars('🖥 স্ক্রিন সাইজ',lists[3])+stBars('🗣 ভাষা',lists[4])+stBars('🔗 কোথা থেকে এসেছে',lists[5])+'</div>'+(failed?'<div class="stnote sterr">⚠️ '+failed+'টি অংশ আনা যায়নি, বাকিগুলো দেখানো হলো।</div>':'')+'<div class="stnote">GoatCounter প্রতিটা পেইজে দিনে একজন ভিজিটরকে একবার গোনে। বিজ্ঞাপন-ব্লকার ব্যবহারকারীরা গোনা হয় না, তাই আসল সংখ্যা কিছুটা বেশি হতে পারে। নতুন ভিজিট দেখাতে কয়েক মিনিট লাগতে পারে।</div>'}
+  catch(e){body.innerHTML='<div class="stnote sterr">❌ '+stWhy(e)+'<br><br><button class="btn bg2 bsm" onclick="stTest()">🔍 সমস্যা যাচাই করুন</button></div>'}}
 
 function pwaInstall(){if(_bip){_bip.prompt();_bip=null;pwaBtns(false)}else toast('Android Chrome: ⋮ মেনু → "Install app"। iPhone: Share → "Add to Home Screen"')}
 function pwaBtns(on){['pwaBtn','pwaBtn2'].forEach(function(i){var e=document.getElementById(i);if(e)e.style.display=on?'':'none'})}
