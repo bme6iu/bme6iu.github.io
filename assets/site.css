@@ -1826,4 +1826,13 @@ html{color-scheme:light}html[data-theme="dark"]{color-scheme:dark}
 @keyframes fxEcg{to{background-position:-80px 50%}}
 #introOverlay{animation:introFadeOut .45s ease 1.7s forwards}
 .intro-logo{animation-delay:.1s}.intro-byline{animation-delay:.3s}.intro-ecg{animation-delay:.25s}.intro-ecg-path{animation-duration:.8s;animation-delay:.4s}.intro-bar{animation-delay:.5s}.intro-bar-fill{animation-duration:1s;animation-delay:.6s}
+.hero-stats{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0!important;max-width:980px!important}
+.hero-stats .stat-card{flex:none!important;min-width:0}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-stats .stat-card{flex:none!important;padding:18px 12px 0 0!important}.hero-stats .stat-card:last-child:nth-child(odd){grid-column:1/-1}}
+.hero-stats .stat-card{text-align:center}
+#page-home .card-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#page-home .card-grid .card:last-child:nth-child(3n+1){grid-column:1/-1}
+#page-home .card-grid .card:last-child:nth-child(3n+2){grid-column:span 2}
+@media(max-width:900px){#page-home .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#page-home .card-grid .card:last-child:nth-child(3n+1),#page-home .card-grid .card:last-child:nth-child(3n+2){grid-column:auto}#page-home .card-grid .card:last-child:nth-child(2n+1){grid-column:1/-1}}
+@media(max-width:560px){#page-home .card-grid{grid-template-columns:1fr!important}#page-home .card-grid .card:last-child:nth-child(odd){grid-column:auto}}
 @media(prefers-reduced-motion:reduce){.page:not(#page-home) .card:hover::after{animation:none}@view-transition{navigation:none}}

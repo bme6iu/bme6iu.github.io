@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Private</title>
+<style>
+:root{--bd:rgba(148,163,184,.22);--tm:#9AA9BF;--ac:#00c8ff;--ac2:#00ff9d;--rd:#ff7b7b;--s1:rgba(13,27,46,.75)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#060f1c;color:#E6ECF5;font:14px/1.5 system-ui,-apple-system,'Segoe UI','Noto Sans Bengali',sans-serif}
+#lock{max-width:340px;margin:14vh auto 0;padding:26px 22px;border:1px solid var(--bd);border-radius:16px;background:var(--s1);text-align:center}
+#lock h1{font-size:1.15rem;margin:0 0 4px}#lock p{margin:0 0 16px;color:var(--tm);font-size:.82rem}
+#lock input[type=password]{width:100%;height:42px;border-radius:10px;border:1px solid var(--bd);background:transparent;color:inherit;padding:0 12px;font:inherit;margin-bottom:10px}
+#lock label{display:flex;gap:6px;align-items:center;justify-content:center;color:var(--tm);font-size:.78rem;margin:2px 0 12px}
+button.p{width:100%;height:42px;border:0;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#04202c;font:700 .95rem inherit;cursor:pointer}
+#err{color:var(--rd);font-size:.8rem;min-height:1.2em;margin-top:10px}
+#wrap{display:none;max-width:1080px;margin:0 auto;padding:16px 14px 40px}
+#top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}#top h1{font-size:1.2rem;margin:0}#top h1 span{color:var(--ac)}
+#top button{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--tm);cursor:pointer;font:inherit}
+.btn{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:inherit;cursor:pointer;font:inherit}
+#panel-stats .stchips { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0px 12px; }
+#panel-stats .stc { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--bd); background: transparent; color: var(--tm); font: 600 0.78rem "DM Sans", sans-serif; cursor: pointer; }
+#panel-stats .stc.on { background: var(--ac); border-color: var(--ac); color: rgb(4, 32, 44); }
+#panel-stats .stcards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+#panel-stats .stcard { background: var(--s1,rgba(13,27,46,.7)); border: 1px solid var(--bd); border-radius: 12px; padding: 14px 12px; text-align: center; min-width: 0px; }
+#panel-stats .stcard b { display: block; font-size: 1.6rem; line-height: 1.1; color: var(--ac); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#panel-stats .stcard span { font-size: 0.7rem; color: var(--tm); }
+#panel-stats .stgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+#panel-stats .stbox { background: var(--s1,rgba(13,27,46,.7)); border: 1px solid var(--bd); border-radius: 12px; padding: 14px; min-width: 0px; }
+#panel-stats .stwide { margin-bottom: 12px; }
+#panel-stats .stt { font-weight: 700; font-size: 0.84rem; margin-bottom: 10px; }
+#panel-stats .str { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; margin-bottom: 9px; }
+#panel-stats .stl { font-size: 0.78rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#panel-stats .stl small { display: block; color: var(--tm); font-size: 0.66rem; overflow: hidden; text-overflow: ellipsis; }
+#panel-stats .stv { font-weight: 700; font-size: 0.8rem; color: var(--ac); }
+#panel-stats .stb { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.07); }
+#panel-stats .stb i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, rgb(0, 200, 255), rgb(0, 255, 157)); }
+#panel-stats .stch { display: flex; align-items: flex-end; gap: 4px; height: 130px; }
+#panel-stats .stcol { flex: 1 1 0%; min-width: 0px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; }
+#panel-stats .stcol i { width: 100%; max-width: 26px; background: linear-gradient(rgb(0, 255, 157), rgb(0, 200, 255)); border-radius: 4px 4px 0px 0px; display: block; }
+#panel-stats .stcol b { font-size: 0.62rem; color: var(--tm); position: absolute; top: 0px; }
+#panel-stats .stcol span { font-size: 0.58rem; color: var(--tm); margin-top: 3px; white-space: nowrap; }
+#panel-stats .stnote { padding: 16px; text-align: center; color: var(--tm); font-size: 0.78rem; line-height: 1.7; }
+#panel-stats .sterr { color: var(--rd); }
+@media (max-width: 700px) {
+  #panel-stats .stcards { grid-template-columns: repeat(2, 1fr); }
+  #panel-stats .stgrid { grid-template-columns: 1fr; }
+}
+
+</style></head><body>
+<div id="lock"><h1>🔒 Private Stats</h1><p>Enter the password to continue</p><input id="pw" type="password" placeholder="Password" autocomplete="current-password" autofocus><label><input type="checkbox" id="rm"> Remember on this device</label><button class="p" id="go">Unlock</button><div id="err"></div></div>
+<div id="wrap"><div id="top"><h1>Visitor <span>Stats</span></h1><button id="lk">Lock</button></div>
+<div id="panel-stats"><div class="stchips" id="stRange"><button class="stc" data-d="1" onclick="stRange(1)">আজ</button><button class="stc on" data-d="7" onclick="stRange(7)">৭ দিন</button><button class="stc" data-d="30" onclick="stRange(30)">৩০ দিন</button><button class="stc" data-d="90" onclick="stRange(90)">৯০ দিন</button><button class="stc" onclick="stLoad()" title="Refresh">⟳</button></div><div id="stBody"></div></div></div>
+<script>
+var PK={"s":"uerY8IygBWb5D2b4BRpVYg==","i":"Pj3rjkgqtwm2hCgv","c":"5qwYjJGpf4JRM4K9y2YkciE7HG0axWm3wbxf0slFr5cI5OpqejOQl2dsxZ8Oedj5f+5lwvxYfdHuaXTtXL0NA+XG2xTJDKlJch3G3GP27N4l1QOa7Xo8Ew==","n":200000},CFG={gcCode:''},TOK='';
+var ST={days:7};
+function stEsc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function stN(n){return Number(n||0).toLocaleString('en-US')}
+function stNorm(p){return String(p||'').replace(/^\/+/,'')}
+async function stApi(p,q){var c=CFG.gcCode,t=stTok(),url='https://'+c+'.goatcounter.com/api/v0/'+p+'?'+new URLSearchParams(q),r;
+  try{r=await fetch(url,{headers:{'Authorization':'Bearer '+t,'Accept':'application/json'}})}catch(x){var ne=new Error('net');ne.net=true;ne.detail=String(x&&x.message||x);throw ne}
+  if(r.ok)return r.json();var txt='';try{txt=(await r.text()).slice(0,200)}catch(x){}var er=new Error('http '+r.status);er.status=r.status;er.detail=txt;if(r.status===401||r.status===403)er.auth=true;if(r.status===429)er.rate=true;throw er}
+async function stTest(){var c=CFG.gcCode,t=stTok(),out=document.getElementById('stBody');if(!c||!t){out.innerHTML='<div class="stnote">আগে code আর token দিন।</div>';return}
+  var L=[];function add(m,ok){L.push('<div style="margin:4px 0;color:'+(ok?'var(--ac2)':'var(--rd)')+'">'+(ok?'✅ ':'❌ ')+m+'</div>')}
+  out.innerHTML='<div class="stnote">⏳ যাচাই হচ্ছে…</div>';
+  try{var m=await stApi('me',{});add('সংযোগ ও token ঠিক আছে'+(m&&m.user&&m.user.email?' ('+stEsc(m.user.email)+')':''),true)}catch(e){add(stWhy(e),false)}
+  try{var s=await stApi('stats/total',{});add('পরিসংখ্যান পড়া যাচ্ছে (মোট ভিজিটর: '+stN(s.total)+')',true)}catch(e){add('পরিসংখ্যান: '+stWhy(e),false)}
+  out.innerHTML='<div class="stbox" style="text-align:left"><div class="stt">🔍 যাচাইয়ের ফল</div>'+L.join('')+'<div style="font-size:.7rem;color:var(--tm);margin-top:8px">Address: '+stEsc(c)+'.goatcounter.com</div></div>'}
+function stWhy(e){if(e.net)return'ব্রাউজার সংযোগই করতে পারেনি। সম্ভাব্য কারণ: (ক) code ভুল, ঠিক অ্যাড্রেস '+stEsc(CFG.gcCode)+'.goatcounter.com ব্রাউজারে খুলে দেখুন; (খ) বিজ্ঞাপন-ব্লকার বা প্রাইভেসি এক্সটেনশন আটকাচ্ছে, বন্ধ করে দেখুন; (গ) ইন্টারনেট। প্রযুক্তিগত বার্তা: '+stEsc(e.detail||'');
+  if(e.auth)return'Token ভুল, বা "Read statistics" অনুমতি নেই (HTTP '+e.status+')';if(e.rate)return'খুব দ্রুত অনেকবার চেয়েছেন, এক মিনিট পর আবার চেষ্টা করুন (HTTP 429)';
+  return'GoatCounter উত্তর দিয়েছে HTTP '+stEsc(e.status)+(e.detail?' — '+stEsc(e.detail):'')}
+function stBars(title,items,note){if(!items.length)return'<div class="stbox"><div class="stt">'+title+'</div><div class="stnote">এখনো কোনো তথ্য নেই</div></div>';var mx=Math.max.apply(null,items.map(function(i){return i.n}))||1;
+  return'<div class="stbox"><div class="stt">'+title+'</div>'+items.map(function(i){return'<div class="str"><div class="stl" title="'+stEsc(i.l)+'">'+stEsc(i.l)+(i.s?'<small>'+stEsc(i.s)+'</small>':'')+'</div><div class="stv">'+stN(i.n)+'</div><div class="stb"><i style="width:'+Math.max(3,i.n/mx*100)+'%"></i></div></div>'}).join('')+(note?'<div class="stnote">'+note+'</div>':'')+'</div>'}
+async function stLoad(){var body=document.getElementById('stBody'),c=CFG.gcCode;
+  if(!c){body.innerHTML='<div class="stnote">আগে Settings → "Visitor Statistics" ঘরে GoatCounter code লিখুন।</div>';return}
+  if(!stTok()){body.innerHTML='<div class="stnote">উপরে token বসিয়ে "সংরক্ষণ করে দেখুন" চাপুন।</div>';return}
+  body.innerHTML='<div class="stnote">⏳ ডেটা আনা হচ্ছে…</div>';
+  var end=new Date();end.setMinutes(0,0,0);end=new Date(end.getTime()+3600e3);var st=new Date();st.setHours(0,0,0,0);st=new Date(st.getTime()-(ST.days-1)*864e5);
+  var q={start:st.toISOString().replace(/\.\d+Z$/,'Z'),end:end.toISOString().replace(/\.\d+Z$/,'Z')};
+  try{var names=['stats/total','stats/hits'].concat(['locations','systems','browsers','sizes','languages','toprefs'].map(function(k){return'stats/'+k})),S=await Promise.allSettled(names.map(function(n,i){return stApi(n,i===1?Object.assign({limit:100},q):(i>1?Object.assign({limit:10},q):q))})),firstErr=null;
+    var R=S.map(function(s){if(s.status==='fulfilled')return s.value;if(!firstErr)firstErr=s.reason;return {}});
+    if(S[0].status==='rejected'&&S[1].status==='rejected')throw firstErr;
+    if(!R[0].stats&&R[0].total===undefined&&!(R[1].hits))throw firstErr||new Error('empty');
+    var tot=R[0],hits=(R[1].hits||[]),pages=[],reads=[],evs=[],courses={};
+    hits.forEach(function(h){var p=stNorm(h.path),o={l:h.title||('/'+p),s:'/'+p,n:h.count||0};if(h.event)evs.push({l:({'click/download':'ডাউনলোড বাটন','click/original':'মূল ফাইল (Drive) বাটন','click/search-open':'সার্চ খোলা'}[p.split('/').slice(0,2).join('/')])||p,s:p.indexOf('click/download/')===0||p.indexOf('click/original/')===0?p.split('/').slice(2).join('/'):'',n:o.n});else if(/^read\//.test(p)){reads.push(o);var m=p.match(/^read\/([^\/]+)\//);if(m)courses[m[1]]=(courses[m[1]]||0)+o.n}else pages.push(o)});
+    var crs=Object.keys(courses).map(function(k){return{l:k,n:courses[k]}}).sort(function(a,b){return b.n-a.n}).slice(0,10),sumR=reads.reduce(function(a,b){return a+b.n},0);
+    var lists=R.slice(2).map(function(r){return(r.stats||[]).map(function(s){return{l:s.name||'—',n:s.count||0}})});var failed=S.filter(function(s){return s.status==='rejected'}).length;
+    var days=(tot.stats||[]).filter(function(d){return d.day}).slice(-ST.days),mxd=Math.max.apply(null,days.map(function(d){return d.daily||0}).concat([1]));
+    var chart='<div class="stbox stwide"><div class="stt">দিন অনুযায়ী ভিজিটর</div><div class="stch">'+days.map(function(d){var v=d.daily||0;return'<div class="stcol" title="'+stEsc(d.day)+': '+v+'"><i style="height:'+Math.max(2,v/mxd*100)+'%"></i><b>'+(v||'')+'</b><span>'+stEsc(String(d.day).slice(5))+'</span></div>'}).join('')+'</div></div>';
+    var cards='<div class="stcards"><div class="stcard"><b>'+stN(tot.total)+'</b><span>ভিজিটর</span></div><div class="stcard"><b>'+stN(sumR)+'</b><span>লেকচার/বই খোলা</span></div><div class="stcard"><b>'+stN(tot.total_events)+'</b><span>ক্লিক (ইভেন্ট)</span></div><div class="stcard"><b>'+stEsc((lists[0][0]||{l:'—'}).l)+'</b><span>শীর্ষ দেশ</span></div></div>';
+    body.innerHTML=cards+chart+'<div class="stgrid">'+stBars('📖 সবচেয়ে বেশি পড়া লেকচার ও বই',reads.slice(0,15))+stBars('📚 কোর্স অনুযায়ী পড়া',crs)+stBars('🌐 সবচেয়ে বেশি দেখা পেইজ',pages.slice(0,12))+stBars('👆 ক্লিক (ডাউনলোড, সার্চ ইত্যাদি)',evs)+stBars('🌍 দেশ',lists[0])+stBars('📱 ডিভাইস / সিস্টেম',lists[1])+stBars('🧭 ব্রাউজার',lists[2])+stBars('🖥 স্ক্রিন সাইজ',lists[3])+stBars('🗣 ভাষা',lists[4])+stBars('🔗 কোথা থেকে এসেছে',lists[5])+'</div>'+(failed?'<div class="stnote sterr">⚠️ '+failed+'টি অংশ আনা যায়নি, বাকিগুলো দেখানো হলো।</div>':'')+'<div class="stnote">GoatCounter প্রতিটা পেইজে দিনে একজন ভিজিটরকে একবার গোনে। বিজ্ঞাপন-ব্লকার ব্যবহারকারীরা গোনা হয় না, তাই আসল সংখ্যা কিছুটা বেশি হতে পারে। নতুন ভিজিট দেখাতে কয়েক মিনিট লাগতে পারে।</div>'}
+  catch(e){body.innerHTML='<div class="stnote sterr">❌ '+stWhy(e)+'<br><br><button class="btn bg2 bsm" onclick="stTest()">🔍 সমস্যা যাচাই করুন</button></div>'}}
+function stRange(d){ST.days=d;Array.prototype.forEach.call(document.querySelectorAll('#stRange .stc[data-d]'),function(b){b.classList.toggle('on',+b.dataset.d===d)});stLoad()}
+var stTok=function(){return TOK};
+stTok=function(){return TOK};
+(function(){var $=function(i){return document.getElementById(i)};
+function b2u(s){var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+async function unlock(pw){var enc=new TextEncoder(),km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']),key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b2u(PK.s),iterations:PK.n,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b2u(PK.i)},key,b2u(PK.c));return JSON.parse(new TextDecoder().decode(pt))}
+async function enter(pw,remember,silent){$('err').textContent='';$('go').disabled=true;$('go').textContent='…';
+  try{var d=await unlock(pw);CFG.gcCode=d.c;TOK=d.t;if(remember){try{localStorage.setItem('bme_st_pw',pw)}catch(e){}}$('lock').style.display='none';$('wrap').style.display='block';document.title='Stats';stLoad()}
+  catch(e){if(!silent)$('err').textContent='Wrong password';try{localStorage.removeItem('bme_st_pw')}catch(x){}}finally{$('go').disabled=false;$('go').textContent='Unlock'}}
+$('go').onclick=function(){enter($('pw').value,$('rm').checked,false)};$('pw').addEventListener('keydown',function(e){if(e.key==='Enter')$('go').click()});
+$('lk').onclick=function(){try{localStorage.removeItem('bme_st_pw')}catch(e){}location.reload()};
+var saved='';try{saved=localStorage.getItem('bme_st_pw')||''}catch(e){}if(saved)enter(saved,true,true);
+})();
+</script></body></html>

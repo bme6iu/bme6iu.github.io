@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>PDF Reader</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/web/pdf_viewer.css">
+<link rel="stylesheet" href="/assets/pdfjs/pdf_viewer.css">
 <style>
 :root{--bg:#EEF1F5;--bar:#FFFFFF;--tx:#172033;--mu:#64748B;--bd:#E2E8F0;--ac:#B3202F;--ac2:#0E7C86}
 [data-theme="dark"]{--bg:#0B1220;--bar:#0D1B2E;--tx:#E6ECF5;--mu:#9AA9BF;--bd:rgba(148,163,184,.2);--ac:#FF7D86;--ac2:#4FD1C5}
@@ -22,6 +22,7 @@ button:hover,a.b:hover{border-color:var(--ac);color:var(--ac)}button:disabled{op
 #stage .pdfViewer .page{margin:10px auto;border:0;box-shadow:0 2px 14px rgba(10,31,60,.18);background:#fff}
 #stage .pdfViewer .page canvas{margin:0;display:block}
 #stage.inv .pdfViewer .canvasWrapper canvas{filter:invert(.92) hue-rotate(180deg)}#stage.inv .pdfViewer .page{background:#222}
+#stage .textLayer{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}#stage{touch-action:pan-x pan-y pinch-zoom}
 #stage .textLayer ::selection{background:rgba(59,111,232,.38)}
 #stage .textLayer .highlight{background:rgba(255,213,0,.45);border-radius:2px}#stage .textLayer .highlight.selected{background:rgba(255,120,0,.6)}
 iframe{border:0;width:100%;height:100%;display:block}.err,.note{padding:30px 20px;text-align:center;color:var(--mu)}.err a{color:var(--ac)}
@@ -37,8 +38,8 @@ iframe{border:0;width:100%;height:100%;display:block}.err,.note{padding:30px 20p
 <div id="sw"><div id="stage"><div id="viewer" class="pdfViewer"></div></div></div>
 <script>window.BME_DRIVE_KEY="AIzaSyDRfi8JjRUBAySumP_hLzuL5yJXGE4Bc7E";</script>
 <script data-goatcounter="https://bme6iu.goatcounter.com/count" data-goatcounter-settings='{"no_onload":true}' async src="//gc.zgo.at/count.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/web/pdf_viewer.js"></script>
+<script src="/assets/pdfjs/pdf.min.js"></script>
+<script src="/assets/pdfjs/pdf_viewer.js"></script>
 <script>
 (function(){
 var P=new URLSearchParams(location.search),U=P.get('u')||'',T=P.get('t')||'Document',KEY=window.BME_DRIVE_KEY||'';
@@ -64,16 +65,16 @@ try{fetch(new URL('../assets/docs.json',location.href)).then(function(r){return 
   var nm=o.k==='book'?(o.t||''):(o.ln||o.t||'');document.title=(nm?nm+' · ':'')+o.c+' · PDF Reader'}).catch(function(){gcHit('read/'+(ID||'file'),document.title)})}catch(e){}
 $('dl').addEventListener('click',function(){gcEv('click/download/'+(GCC||ID||'file'),'Download clicked')});$('og').addEventListener('click',function(){gcEv('click/original/'+(GCC||ID||'file'),'Open original clicked')});
 var sw=$('sw');
-function fallback(msg){$('tools').classList.add('off');$('find').classList.remove('on');if(ID){sw.innerHTML='<iframe src="https://drive.google.com/file/d/'+ID+'/preview" allowfullscreen></iframe>';if(msg){var n=document.createElement('div');n.className='note';n.textContent=msg;sw.appendChild(n);setTimeout(function(){n.remove()},4500)}}
+function fallback(msg,why){why=why||'unknown';try{gcEv('read-fallback/'+why,'Reader fallback: '+why)}catch(x){}$('tools').classList.add('off');$('find').classList.remove('on');if(ID){sw.innerHTML='<iframe src="https://drive.google.com/file/d/'+ID+'/preview" allowfullscreen></iframe>';var n=document.createElement('div');n.className='note';n.textContent=(msg||'Reader could not start')+' ['+why+']';sw.appendChild(n);setTimeout(function(){n.remove()},9000)}
  else sw.innerHTML='<div class="err">'+(msg||'Could not open this file')+'<br><br><a href="'+$('og').href+'" target="_blank" rel="noopener">Open original file ↗</a></div>'}
-if(!U||!src||!window.pdfjsLib||!window.pdfjsViewer){fallback('');return}
-pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+if(!U||!src||!window.pdfjsLib||!window.pdfjsViewer){fallback('Could not start the PDF reader',!U?'no-url':!src?'no-api-key':!window.pdfjsLib?'pdfjs-not-loaded':'viewer-not-loaded');return}
+pdfjsLib.GlobalWorkerOptions.workerSrc='/assets/pdfjs/pdf.worker.min.js';
 var stage=$('stage'),eventBus=new pdfjsViewer.EventBus(),linkService=new pdfjsViewer.PDFLinkService({eventBus:eventBus}),findController=new pdfjsViewer.PDFFindController({eventBus:eventBus,linkService:linkService});
 var viewer=new pdfjsViewer.PDFViewer({container:stage,viewer:$('viewer'),eventBus:eventBus,linkService:linkService,findController:findController,textLayerMode:1,removePageBorders:true});
 linkService.setViewer(viewer);
 var KEYS='bmeRd:'+U,fit=true,ready=false;
 var task=pdfjsLib.getDocument({url:src,rangeChunkSize:262144});task.onProgress=function(p){if(p.total)$('prog').style.width=Math.min(100,p.loaded/p.total*100)+'%'};
-task.promise.then(function(d){viewer.setDocument(d);linkService.setDocument(d,null)}).catch(function(){fallback('Could not open in the reader — showing the Drive preview')});
+task.promise.then(function(d){viewer.setDocument(d);linkService.setDocument(d,null)}).catch(function(er){fallback('Could not open in the reader — showing the Drive preview','load-failed-'+((er&&(er.status||er.name))||'x'))});
 eventBus.on('pagesinit',function(){ready=true;$('prog').style.width='0';viewer.currentScaleValue='page-width';$('of').textContent='/ '+viewer.pagesCount;
   try{var s=+localStorage.getItem(KEYS);if(s>1&&s<=viewer.pagesCount)setTimeout(function(){viewer.currentPageNumber=s},60)}catch(e){}});
 eventBus.on('pagechanging',function(e){if(document.activeElement!==$('pn'))$('pn').value=e.pageNumber;try{localStorage.setItem(KEYS,e.pageNumber)}catch(er){}});
