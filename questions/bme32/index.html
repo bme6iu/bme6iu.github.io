@@ -566,11 +566,11 @@
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-frame-wrap">
-      <div class="modal-loading" id="modalLoading">
+      <div class="modal-loading" id="modalLoading" style="display: none;">
         <div class="spinner"></div>
         <span>Loading document…</span>
       </div>
-      <iframe class="modal-iframe" id="modalIframe" onload="window.hideModalLoading?hideModalLoading():0" allowfullscreen=""></iframe>
+      <iframe class="modal-iframe" id="modalIframe" onload="window.hideModalLoading?hideModalLoading():0" allowfullscreen="" style="display: block;"></iframe>
     </div>
     <div class="modal-bottom-bar">
       <span style="font-size:0.78rem;color:var(--text-muted)">Viewing inside BME Portal</span>
